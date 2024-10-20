@@ -24,16 +24,13 @@ impl Label {
 
     pub fn canonicalise(label: &str, current_package: &str) -> Result<Label, String> {
         if label.is_empty() && current_package.is_empty() {
-            return Err(String::from("Label or current package must be specified"));
+            return Err(String::from("label or current package must be specified"));
         }
 
         let re =
             Regex::new(r"^((?P<absolute>//)(?P<package>[^:]*))?:?(?P<target>[^:]+)?$").unwrap();
-        let captures = match re.captures(label) {
-            Some(captures) => captures,
-            None => {
-                return Err(format!("Invalid label '{}'", label));
-            }
+        let Some(captures) = re.captures(label) else {
+            return Err(format!("invalid label '{label}'"));
         };
 
         let absolute = captures.name("absolute").is_some();
@@ -44,10 +41,10 @@ impl Label {
         Self::validate_target(target)?;
 
         if package.is_empty() && target.is_empty() {
-            return Err(String::from("Either package or target must be specified"));
+            return Err(String::from("either package or target must be specified"));
         }
         if !package.is_empty() && target.is_empty() {
-            target = package.split("/").last().expect("Should never happen");
+            target = package.split("/").last().expect("should never happen");
         }
         if !target.is_empty() && package.is_empty() && !absolute {
             package = current_package;
@@ -63,18 +60,18 @@ impl Label {
 
         for c in package.chars() {
             if !valid(c) {
-                return Err(format!("Invalid character '{}' in package: {}", c, package));
+                return Err(format!("invalid character '{c}' in package: {package}"));
             }
         }
 
         if package.starts_with('/') {
-            return Err(format!("Packages must not start with a '/': {}", package));
+            return Err(format!("packages must not start with a '/': {package}"));
         }
         if package.ends_with('/') {
-            return Err(format!("Packages must not end with a '/': {}", package));
+            return Err(format!("packages must not end with a '/': {package}"));
         }
         if package.contains("//") {
-            return Err(format!("Packages must not contain '//': {}", package));
+            return Err(format!("packages must not contain '//': {package}"));
         }
 
         Ok(())
@@ -90,29 +87,27 @@ impl Label {
 
         for c in target.chars() {
             if !valid(c) {
-                return Err(format!("Invalid character '{}' in target: {}", c, target));
+                return Err(format!("invalid character '{c}' in target: {target}"));
             }
         }
 
         if target.starts_with('/') {
-            return Err(format!("Targets must not start with a '/': {}", target));
+            return Err(format!("targets must not start with a '/': {target}"));
         }
         if target.ends_with('/') {
-            return Err(format!("Targets must not end with a '/': {}", target));
+            return Err(format!("targets must not end with a '/': {target}"));
         }
         if target.contains("//") {
-            return Err(format!("Targets must not contain '//': {}", target));
+            return Err(format!("targets must not contain '//': {target}"));
         }
         if target.split('/').any(|i| i == "..") {
             return Err(format!(
-                "Targets must not contain up-level references '..': {}",
-                target
+                "targets must not contain up-level references '..': {target}"
             ));
         }
         if target.split('/').any(|i| i == ".") {
             return Err(format!(
-                "Targets must not contain current-directory references '.': {}",
-                target
+                "targets must not contain current-directory references '.': {target}",
             ));
         }
 

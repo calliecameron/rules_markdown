@@ -26,8 +26,7 @@ struct InFile {
 }
 
 fn from_version_file(path: &str) -> Result<Version, Box<dyn Error>> {
-    let data = read_to_string(path)?;
-    let version: Version = from_str(&data)?;
+    let version: Version = from_str(&read_to_string(path)?)?;
     Ok(version)
 }
 
@@ -59,7 +58,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     } else if let Some(path) = args.in_file.info_file {
         from_info_file(&path)?
     } else {
-        return Err("Neither version file specified".into());
+        return Err("neither version file specified".into());
     };
 
     version.write(args.out_file)

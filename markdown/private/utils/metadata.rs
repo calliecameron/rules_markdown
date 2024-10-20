@@ -1,11 +1,9 @@
-use crate::{json::Json, publications::Publications};
+use crate::{json, json::Json, publications::Publications};
 use chrono::naive::NaiveDate;
 use regex::Regex;
-use serde::de;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
-use std::fmt;
-use std::{collections::HashSet, hash::RandomState};
+use std::collections::HashSet;
 use validator::{Validate, ValidationError, ValidationErrors};
 
 #[derive(Serialize, Deserialize, Validate)]
@@ -79,23 +77,23 @@ impl ParsedDateSet {
         let month = caps.name("month").map_or("01", |m| m.as_str());
         let day = caps.name("day").map_or("01", |m| m.as_str());
 
-        let d = format!("{}/{}/{}", year, month, day);
+        let d = format!("{year}/{month}/{day}");
         NaiveDate::parse_from_str(&d, "%Y/%m/%d").is_ok()
     }
 
     fn validate_sorted_date_set(parsed_dates: &Vec<String>) -> Result<(), ValidationError> {
         if !parsed_dates.iter().all(|s| Self::valid_date(s)) {
             return Err(ValidationError::new(
-                "All entries must be in YYYY, YYYY/MM or YYYY/MM/DD format",
+                "all entries must be in YYYY, YYYY/MM or YYYY/MM/DD format",
             ));
         }
 
-        let set: HashSet<&String, RandomState> = HashSet::from_iter(parsed_dates.iter());
+        let set: HashSet<&String> = parsed_dates.iter().collect();
         let mut values: Vec<String> = set.into_iter().cloned().collect();
         values.sort();
 
         if *parsed_dates != values {
-            return Err(ValidationError::new("Elements must be unique and sorted"));
+            return Err(ValidationError::new("elements must be unique and sorted"));
         }
 
         Ok(())
@@ -144,41 +142,6 @@ impl Identifier {
 
 impl Json for Identifier {}
 
-fn is_false(b: &bool) -> bool {
-    !b
-}
-
-fn deserialize_authors<'de, D>(deserializer: D) -> Result<Vec<String>, D::Error>
-where
-    D: de::Deserializer<'de>,
-{
-    struct AuthorsVisitor;
-
-    impl<'de> de::Visitor<'de> for AuthorsVisitor {
-        type Value = Vec<String>;
-
-        fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-            formatter.write_str("a string or a list of strings")
-        }
-
-        fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
-        where
-            E: de::Error,
-        {
-            Ok(vec![String::from(v)])
-        }
-
-        fn visit_seq<A>(self, seq: A) -> Result<Self::Value, A::Error>
-        where
-            A: de::SeqAccess<'de>,
-        {
-            Deserialize::deserialize(de::value::SeqAccessDeserializer::new(seq))
-        }
-    }
-
-    deserializer.deserialize_any(AuthorsVisitor)
-}
-
 #[derive(Serialize, Deserialize, Default, Validate)]
 #[serde(deny_unknown_fields)]
 #[serde(rename_all = "kebab-case")]
@@ -189,7 +152,7 @@ pub struct InputMetadata {
 
     #[serde(default)]
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    #[serde(deserialize_with = "deserialize_authors")]
+    #[serde(deserialize_with = "json::deserialize::str_or_seq")]
     author: Vec<String>,
 
     #[serde(default)]
@@ -201,7 +164,7 @@ pub struct InputMetadata {
     notes: Option<String>,
 
     #[serde(default)]
-    #[serde(skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "json::is_false")]
     finished: bool,
 
     #[serde(default)]
@@ -269,43 +232,6 @@ impl InputMetadata {
 
 impl Json for InputMetadata {}
 
-fn deserialize_int_str<'de, D>(deserializer: D) -> Result<u32, D::Error>
-where
-    D: de::Deserializer<'de>,
-{
-    struct IntStrVisitor;
-
-    impl<'de> de::Visitor<'de> for IntStrVisitor {
-        type Value = u32;
-
-        fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-            formatter.write_str("an int or a string containing an int")
-        }
-
-        fn visit_u64<E>(self, val: u64) -> Result<Self::Value, E>
-        where
-            E: de::Error,
-        {
-            match val.try_into() {
-                Ok(val) => Ok(val),
-                Err(_) => Err(E::custom("invalid int value")),
-            }
-        }
-
-        fn visit_str<E>(self, val: &str) -> Result<Self::Value, E>
-        where
-            E: de::Error,
-        {
-            match val.parse() {
-                Ok(val) => self.visit_u64(val),
-                Err(_) => Err(E::custom("must contin an int")),
-            }
-        }
-    }
-
-    deserializer.deserialize_any(IntStrVisitor)
-}
-
 #[derive(Serialize, Deserialize, Validate)]
 #[serde(deny_unknown_fields)]
 #[serde(rename_all = "kebab-case")]
@@ -316,7 +242,7 @@ pub struct OutputMetadata {
 
     #[serde(default)]
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    #[serde(deserialize_with = "deserialize_authors")]
+    #[serde(deserialize_with = "json::deserialize::str_or_seq")]
     author: Vec<String>,
 
     #[serde(default)]
@@ -328,7 +254,7 @@ pub struct OutputMetadata {
     notes: Option<String>,
 
     #[serde(default)]
-    #[serde(skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "json::is_false")]
     finished: bool,
 
     #[serde(default)]
@@ -341,10 +267,10 @@ pub struct OutputMetadata {
     #[validate(nested)]
     identifier: Vec<Identifier>,
 
-    #[serde(deserialize_with = "deserialize_int_str")]
+    #[serde(deserialize_with = "json::deserialize::int_or_str")]
     wordcount: u32,
 
-    #[serde(deserialize_with = "deserialize_int_str")]
+    #[serde(deserialize_with = "json::deserialize::int_or_str")]
     poetry_lines: u32,
 
     lang: String,
@@ -588,15 +514,7 @@ mod parsed_dates_test {
 }"#,
         )
         .unwrap();
-        assert_eq!(
-            *pd.dates(),
-            vec![
-                String::from("2020/01/01"),
-                String::from("2021"),
-                String::from("2021/03"),
-                String::from("2024/06/23")
-            ]
-        );
+        assert_eq!(pd.dates(), &["2020/01/01", "2021", "2021/03", "2024/06/23"]);
     }
 
     #[test]
@@ -788,7 +706,7 @@ mod input_metadata_test {
     fn test_deserialization_single_author() {
         let m: InputMetadata = from_str(r#"{"author": "foo"}"#).unwrap();
         assert!(m.title().is_none());
-        assert_eq!(*m.authors(), vec![String::from("foo")]);
+        assert_eq!(m.authors(), &["foo"]);
         assert!(m.date().is_none());
         assert!(m.notes().is_none());
         assert!(!m.finished());
@@ -848,7 +766,7 @@ mod input_metadata_test {
         .unwrap();
 
         assert_eq!(m.title().unwrap(), "foo");
-        assert_eq!(*m.authors(), vec![String::from("bar"), String::from("baz")]);
+        assert_eq!(m.authors(), &["bar", "baz"]);
         assert_eq!(m.date().unwrap(), "quux");
         assert_eq!(m.notes().unwrap(), "blah");
         assert!(m.finished());
@@ -867,7 +785,7 @@ mod input_metadata_test {
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
         assert_eq!(p.published().copied(), ymd(2023, 5, 18));
-        assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
+        assert_eq!(p.urls(), &["foo", "bar"]);
         assert_eq!(p.notes().unwrap(), "baz");
         assert_eq!(p.paid().unwrap(), "quux");
 
@@ -880,13 +798,13 @@ mod input_metadata_test {
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
         assert!(p.published().is_none());
-        assert_eq!(*p.urls(), vec![String::from("foo2"), String::from("bar2")]);
+        assert_eq!(p.urls(), &["foo2", "bar2"]);
         assert_eq!(p.notes().unwrap(), "baz2");
         assert_eq!(p.paid().unwrap(), "quux2");
 
         assert_eq!(
-            *m.identifiers(),
-            vec![Identifier::new("a", "b"), Identifier::new("c", "d")]
+            m.identifiers(),
+            &[Identifier::new("a", "b"), Identifier::new("c", "d")]
         );
     }
 }
@@ -1023,7 +941,7 @@ mod output_metadata_test {
         )
         .unwrap();
         assert!(m.title().is_none());
-        assert_eq!(*m.authors(), vec![String::from("foo")]);
+        assert_eq!(m.authors(), &["foo"]);
         assert!(m.date().is_none());
         assert!(m.notes().is_none());
         assert!(!m.finished());
@@ -1054,7 +972,7 @@ mod output_metadata_test {
         )
         .unwrap();
         assert!(m.title().is_none());
-        assert_eq!(*m.authors(), vec![String::from("foo")]);
+        assert_eq!(m.authors(), &["foo"]);
         assert!(m.date().is_none());
         assert!(m.notes().is_none());
         assert!(!m.finished());
@@ -1131,7 +1049,7 @@ mod output_metadata_test {
         .unwrap();
 
         assert_eq!(m.title().unwrap(), "foo");
-        assert_eq!(*m.authors(), vec![String::from("bar"), String::from("baz")]);
+        assert_eq!(m.authors(), &["bar", "baz"]);
         assert_eq!(m.date().unwrap(), "quux");
         assert_eq!(m.notes().unwrap(), "blah");
         assert!(m.finished());
@@ -1150,7 +1068,7 @@ mod output_metadata_test {
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
         assert_eq!(p.published().copied(), ymd(2023, 5, 18));
-        assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
+        assert_eq!(p.urls(), &["foo", "bar"]);
         assert_eq!(p.notes().unwrap(), "baz");
         assert_eq!(p.paid().unwrap(), "quux");
 
@@ -1163,13 +1081,13 @@ mod output_metadata_test {
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
         assert!(p.published().is_none());
-        assert_eq!(*p.urls(), vec![String::from("foo2"), String::from("bar2")]);
+        assert_eq!(p.urls(), &["foo2", "bar2"]);
         assert_eq!(p.notes().unwrap(), "baz2");
         assert_eq!(p.paid().unwrap(), "quux2");
 
         assert_eq!(
-            *m.identifiers(),
-            vec![Identifier::new("a", "b"), Identifier::new("c", "d")]
+            m.identifiers(),
+            &[Identifier::new("a", "b"), Identifier::new("c", "d")]
         );
 
         assert_eq!(m.wordcount(), 10);
@@ -1179,10 +1097,7 @@ mod output_metadata_test {
         assert_eq!(m.repo(), "blah3");
         assert_eq!(m.source_hash(), "blah4");
 
-        assert_eq!(
-            *m.parsed_dates().dates(),
-            vec![String::from("2020"), String::from("2020/01")]
-        );
+        assert_eq!(m.parsed_dates().dates(), &["2020", "2020/01"]);
     }
 }
 

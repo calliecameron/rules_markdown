@@ -152,10 +152,10 @@ impl Publication {
     }
 
     pub fn latest(&self) -> Date {
-        if let Some(d) = self.dates().last() {
-            return *d;
+        if let Some(d) = self.dates().into_iter().last() {
+            return d;
         }
-        panic!("Validation should ensure this never happens");
+        panic!("validation should ensure this never happens");
     }
 
     pub fn active(&self) -> bool {
@@ -163,7 +163,7 @@ impl Publication {
     }
 
     fn bad_end_dates(&self) -> Vec<Option<Date>> {
-        Self::filter_dates(vec![
+        Self::filter_dates(&[
             (State::Abandoned, self.abandoned()),
             (State::Withdrawn, self.withdrawn()),
             (State::Rejected, self.rejected()),
@@ -171,7 +171,7 @@ impl Publication {
     }
 
     fn good_end_dates(&self) -> Vec<Option<Date>> {
-        Self::filter_dates(vec![
+        Self::filter_dates(&[
             (State::SelfPublished, self.self_published()),
             (State::Published, self.published()),
         ])
@@ -184,7 +184,7 @@ impl Publication {
     }
 
     fn intermediate_dates(&self) -> Vec<Option<Date>> {
-        Self::filter_dates(vec![
+        Self::filter_dates(&[
             (State::Submitted, self.submitted()),
             (State::Accepted, self.accepted()),
         ])
@@ -196,11 +196,11 @@ impl Publication {
         out
     }
 
-    fn filter_dates(dates: Vec<(State, Option<&NaiveDate>)>) -> Vec<Option<Date>> {
+    fn filter_dates(dates: &[(State, Option<&NaiveDate>)]) -> Vec<Option<Date>> {
         let mut out = Vec::new();
-        for (s, d) in dates.into_iter() {
-            if let Some(d) = d {
-                out.push(Some(Date { state: s, date: *d }));
+        for (s, d) in dates {
+            if let Some(&d) = d {
+                out.push(Some(Date { state: *s, date: d }));
             } else {
                 out.push(None);
             }
@@ -210,22 +210,22 @@ impl Publication {
 
     fn validate_contents(&self) -> Result<(), ValidationError> {
         if self.all_dates().iter().flatten().count() == 0 {
-            return Err(ValidationError::new("At least one date must be set"));
+            return Err(ValidationError::new("at least one date must be set"));
         }
 
         if self.end_dates().iter().flatten().count() > 1 {
-            return Err(ValidationError::new("At most one end date can be set"));
+            return Err(ValidationError::new("at most one end date can be set"));
         }
 
         if self.self_published.is_some() && self.intermediate_dates().iter().flatten().count() > 0 {
             return Err(ValidationError::new(
-                "Intermediate dates cannot be used with self_published",
+                "intermediate dates cannot be used with self_published",
             ));
         }
 
         if self.accepted.is_some() && self.bad_end_dates().iter().flatten().count() > 0 {
             return Err(ValidationError::new(
-                "Bad end dates cannot be used with accepted",
+                "bad end dates cannot be used with accepted",
             ));
         }
 
@@ -238,13 +238,13 @@ impl Publication {
                 > 0
         {
             return Err(ValidationError::new(
-                "All intermediate dates must be set when published is set",
+                "all intermediate dates must be set when published is set",
             ));
         }
 
         if self.bad_end_dates().iter().flatten().count() > 0 && self.submitted.is_none() {
             return Err(ValidationError::new(
-                "Submitted must be set if any bad end dates are set",
+                "submitted must be set if any bad end dates are set",
             ));
         }
 
@@ -257,7 +257,7 @@ impl Publication {
         let mut sorted = dates.clone();
         sorted.sort();
         if dates != sorted {
-            return Err(ValidationError::new("Dates must be in increasing order"));
+            return Err(ValidationError::new("dates must be in increasing order"));
         }
 
         Ok(())
@@ -302,8 +302,8 @@ impl Publications {
             .map(|p| p.latest().state)
             .collect();
         states.sort();
-        if let Some(s) = states.last() {
-            return Some(*s);
+        if let Some(&s) = states.last() {
+            return Some(s);
         }
         None
     }
@@ -363,7 +363,7 @@ mod publication_test {
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
         assert!(p.published().is_none());
-        assert_eq!(p.dates(), vec![date(State::Submitted, (2023, 5, 16))]);
+        assert_eq!(p.dates(), [date(State::Submitted, (2023, 5, 16))]);
         assert_eq!(p.latest(), date(State::Submitted, (2023, 5, 16)));
         assert!(p.active());
     }
@@ -385,7 +385,7 @@ mod publication_test {
         )
         .unwrap();
         assert_eq!(p.venue(), "foo");
-        assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
+        assert_eq!(p.urls(), &["foo", "bar"]);
         assert_eq!(p.notes().unwrap(), "baz");
         assert_eq!(p.paid().unwrap(), "quux");
         assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
@@ -395,7 +395,7 @@ mod publication_test {
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
         assert!(p.published().is_none());
-        assert_eq!(p.dates(), vec![date(State::Submitted, (2023, 5, 16))]);
+        assert_eq!(p.dates(), [date(State::Submitted, (2023, 5, 16))]);
         assert_eq!(p.latest(), date(State::Submitted, (2023, 5, 16)));
         assert!(p.active());
     }
@@ -417,7 +417,7 @@ mod publication_test {
         )
         .unwrap();
         assert_eq!(p.venue(), "foo");
-        assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
+        assert_eq!(p.urls(), &["foo", "bar"]);
         assert_eq!(p.notes().unwrap(), "baz");
         assert_eq!(p.paid().unwrap(), "quux");
         assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
@@ -429,7 +429,7 @@ mod publication_test {
         assert!(p.published().is_none());
         assert_eq!(
             p.dates(),
-            vec![
+            [
                 date(State::Submitted, (2023, 5, 16)),
                 date(State::Accepted, (2023, 5, 17))
             ]
@@ -455,7 +455,7 @@ mod publication_test {
         )
         .unwrap();
         assert_eq!(p.venue(), "foo");
-        assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
+        assert_eq!(p.urls(), &["foo", "bar"]);
         assert_eq!(p.notes().unwrap(), "baz");
         assert_eq!(p.paid().unwrap(), "quux");
         assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
@@ -467,7 +467,7 @@ mod publication_test {
         assert!(p.published().is_none());
         assert_eq!(
             p.dates(),
-            vec![
+            [
                 date(State::Submitted, (2023, 5, 16)),
                 date(State::Rejected, (2023, 5, 17))
             ]
@@ -493,7 +493,7 @@ mod publication_test {
         )
         .unwrap();
         assert_eq!(p.venue(), "foo");
-        assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
+        assert_eq!(p.urls(), &["foo", "bar"]);
         assert_eq!(p.notes().unwrap(), "baz");
         assert_eq!(p.paid().unwrap(), "quux");
         assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
@@ -505,7 +505,7 @@ mod publication_test {
         assert!(p.published().is_none());
         assert_eq!(
             p.dates(),
-            vec![
+            [
                 date(State::Submitted, (2023, 5, 16)),
                 date(State::Withdrawn, (2023, 5, 17))
             ]
@@ -531,7 +531,7 @@ mod publication_test {
         )
         .unwrap();
         assert_eq!(p.venue(), "foo");
-        assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
+        assert_eq!(p.urls(), &["foo", "bar"]);
         assert_eq!(p.notes().unwrap(), "baz");
         assert_eq!(p.paid().unwrap(), "quux");
         assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
@@ -543,7 +543,7 @@ mod publication_test {
         assert!(p.published().is_none());
         assert_eq!(
             p.dates(),
-            vec![
+            [
                 date(State::Submitted, (2023, 5, 16)),
                 date(State::Abandoned, (2023, 5, 17))
             ]
@@ -569,7 +569,7 @@ mod publication_test {
         )
         .unwrap();
         assert_eq!(p.venue(), "foo");
-        assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
+        assert_eq!(p.urls(), &["foo", "bar"]);
         assert_eq!(p.notes().unwrap(), "baz");
         assert_eq!(p.paid().unwrap(), "quux");
         assert!(p.submitted().is_none());
@@ -579,7 +579,7 @@ mod publication_test {
         assert!(p.abandoned().is_none());
         assert_eq!(p.self_published().copied(), ymd(2023, 5, 16));
         assert!(p.published().is_none());
-        assert_eq!(p.dates(), vec![date(State::SelfPublished, (2023, 5, 16)),]);
+        assert_eq!(p.dates(), [date(State::SelfPublished, (2023, 5, 16)),]);
         assert_eq!(p.latest(), date(State::SelfPublished, (2023, 5, 16)));
         assert!(p.active());
     }
@@ -601,7 +601,7 @@ mod publication_test {
         )
         .unwrap();
         assert_eq!(p.venue(), "foo");
-        assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
+        assert_eq!(p.urls(), &["foo", "bar"]);
         assert_eq!(p.notes().unwrap(), "baz");
         assert_eq!(p.paid().unwrap(), "quux");
         assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
@@ -613,7 +613,7 @@ mod publication_test {
         assert_eq!(p.published().copied(), ymd(2023, 5, 18));
         assert_eq!(
             p.dates(),
-            vec![
+            [
                 date(State::Submitted, (2023, 5, 16)),
                 date(State::Accepted, (2023, 5, 17)),
                 date(State::Published, (2023, 5, 18))
@@ -825,7 +825,7 @@ mod publication_test {
         )
         .unwrap();
         assert_eq!(p.venue(), "foo");
-        assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
+        assert_eq!(p.urls(), &["foo", "bar"]);
         assert_eq!(p.notes().unwrap(), "baz");
         assert_eq!(p.paid().unwrap(), "quux");
         assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
@@ -837,7 +837,7 @@ mod publication_test {
         assert_eq!(p.published().copied(), ymd(2023, 5, 18));
         assert_eq!(
             p.dates(),
-            vec![
+            [
                 date(State::Submitted, (2023, 5, 16)),
                 date(State::Accepted, (2023, 5, 17)),
                 date(State::Published, (2023, 5, 18))
@@ -918,7 +918,7 @@ mod publications_test {
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
         assert_eq!(p.published().copied(), ymd(2023, 5, 18));
-        assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
+        assert_eq!(p.urls(), &["foo", "bar"]);
         assert_eq!(p.notes().unwrap(), "baz");
         assert_eq!(p.paid().unwrap(), "quux");
 
@@ -931,7 +931,7 @@ mod publications_test {
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
         assert!(p.published().is_none());
-        assert_eq!(*p.urls(), vec![String::from("foo2"), String::from("bar2")]);
+        assert_eq!(p.urls(), &["foo2", "bar2"]);
         assert_eq!(p.notes().unwrap(), "baz2");
         assert_eq!(p.paid().unwrap(), "quux2");
     }
@@ -983,7 +983,7 @@ mod publications_test {
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
         assert!(p.published().is_none());
-        assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
+        assert_eq!(p.urls(), &["foo", "bar"]);
         assert_eq!(p.notes().unwrap(), "baz");
         assert_eq!(p.paid().unwrap(), "quux");
 
@@ -996,7 +996,7 @@ mod publications_test {
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
         assert!(p.published().is_none());
-        assert_eq!(*p.urls(), vec![String::from("foo2"), String::from("bar2")]);
+        assert_eq!(*p.urls(), &["foo2", "bar2"]);
         assert_eq!(p.notes().unwrap(), "baz2");
         assert_eq!(p.paid().unwrap(), "quux2");
     }
@@ -1117,7 +1117,7 @@ mod publications_test {
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
         assert_eq!(p.published().copied(), ymd(2023, 5, 18));
-        assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
+        assert_eq!(p.urls(), &["foo", "bar"]);
         assert_eq!(p.notes().unwrap(), "baz");
         assert_eq!(p.paid().unwrap(), "quux");
 
@@ -1130,7 +1130,7 @@ mod publications_test {
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
         assert!(p.published().is_none());
-        assert_eq!(*p.urls(), vec![String::from("foo2"), String::from("bar2")]);
+        assert_eq!(p.urls(), &["foo2", "bar2"]);
         assert_eq!(p.notes().unwrap(), "baz2");
         assert_eq!(p.paid().unwrap(), "quux2");
     }

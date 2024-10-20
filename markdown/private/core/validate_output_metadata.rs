@@ -13,9 +13,6 @@ struct Cli {
 
 fn main() -> Result<(), Box<dyn Error>> {
     let args = Cli::parse();
-
-    let data = read_to_string(args.in_file)?;
-    let metadata: OutputMetadata = from_str(&data)?;
-
+    let metadata: OutputMetadata = from_str(&read_to_string(args.in_file)?)?;
     metadata.write(args.out_file)
 }
