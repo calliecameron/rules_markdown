@@ -49,11 +49,6 @@ class _BaseModel(BaseModel):
     )
 
 
-class Version(_BaseModel):
-    version: str
-    repo: str
-
-
 class SourceHash(_BaseModel):
     source_hash: str
 
