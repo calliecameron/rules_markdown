@@ -3,72 +3,14 @@ import os.path
 import subprocess
 from collections.abc import Mapping, Sequence
 
-from markdown.private.core.version import get_version
 from markdown.private.utils import test_utils
-from markdown.private.utils.metadata import Version
 
 
 class TestVersion(test_utils.ScriptTestCase):
-    def test_get_version(self) -> None:
-        base = Version(version="1", repo="foo")
-        clean = Version(version="2", repo="bar")
-        dirty = Version(version="3-dirty", repo="baz")
-        unversioned = Version(version="unversioned", repo="quux")
-        dirty_same_repo = Version(version="4-dirty", repo="foo")
-        unversioned_same_repo = Version(version="unversioned", repo="foo")
-
-        v = get_version(base, {}, "", "")
-        self.assertEqual(v.version, "1")
-        self.assertEqual(v.repo, "foo")
-
-        v = get_version(base, {"a": clean}, "", "")
-        self.assertEqual(v.version, "1")
-        self.assertEqual(v.repo, "foo")
-
-        v = get_version(
-            base,
-            {"a": clean, "b": dirty_same_repo, "c": unversioned_same_repo},
-            "",
-            "",
-        )
-        self.assertEqual(v.version, "1, dirty deps, unversioned deps")
-        self.assertEqual(v.repo, "foo")
-
-        with self.assertRaises(ValueError):
-            get_version(base, {"a": dirty}, "", "")
-        with self.assertRaises(ValueError):
-            get_version(base, {"a": unversioned}, "", "")
-
-        v = get_version(base, {}, "OVERRIDE", "")
-        self.assertEqual(v.version, "OVERRIDE")
-        self.assertEqual(v.repo, "foo")
-
-        v = get_version(base, {"a": clean}, "OVERRIDE", "")
-        self.assertEqual(v.version, "OVERRIDE")
-        self.assertEqual(v.repo, "foo")
-
-        v = get_version(
-            base,
-            {"a": clean, "b": dirty_same_repo, "c": unversioned_same_repo},
-            "OVERRIDE",
-            "",
-        )
-        self.assertEqual(v.version, "OVERRIDE")
-        self.assertEqual(v.repo, "foo")
-
-        v = get_version(base, {}, "", "OVERRIDE")
-        self.assertEqual(v.version, "1")
-        self.assertEqual(v.repo, "OVERRIDE")
-
-        with self.assertRaises(ValueError):
-            get_version(base, {"a": dirty}, "OVERRIDE", "OVERRIDE")
-        with self.assertRaises(ValueError):
-            get_version(base, {"a": unversioned}, "OVERRIDE", "OVERRIDE")
-
     def run_script(  # type: ignore[override]
         self,
         raw_version: Mapping[str, str],
-        deps_metadata: Mapping[str, Mapping[str, str]],
+        deps_metadata: Mapping[str, Mapping[str, str | Sequence[str]]],
         args: Sequence[str],
     ) -> str:
         raw_version_file = os.path.join(self.tmpdir(), "raw_version.json")
@@ -109,8 +51,24 @@ class TestVersion(test_utils.ScriptTestCase):
         metadata_out = self.run_script(
             {"version": "foo", "repo": "bar"},
             {
-                "dep1": {"version": "2, dirty", "repo": "bar"},
-                "dep2": {"version": "3", "repo": "quux"},
+                "dep1": {
+                    "version": "2, dirty",
+                    "repo": "bar",
+                    "wordcount": "0",
+                    "poetry-lines": "0",
+                    "lang": "",
+                    "source-hash": "",
+                    "parsed-dates": [],
+                },
+                "dep2": {
+                    "version": "3",
+                    "repo": "quux",
+                    "wordcount": "0",
+                    "poetry-lines": "0",
+                    "lang": "",
+                    "source-hash": "",
+                    "parsed-dates": [],
+                },
             },
             [],
         )
@@ -127,8 +85,24 @@ class TestVersion(test_utils.ScriptTestCase):
         metadata_out = self.run_script(
             {"version": "foo", "repo": "bar"},
             {
-                "dep1": {"version": "2, dirty", "repo": "bar"},
-                "dep2": {"version": "3", "repo": "quux"},
+                "dep1": {
+                    "version": "2, dirty",
+                    "repo": "bar",
+                    "wordcount": "0",
+                    "poetry-lines": "0",
+                    "lang": "",
+                    "source-hash": "",
+                    "parsed-dates": [],
+                },
+                "dep2": {
+                    "version": "3",
+                    "repo": "quux",
+                    "wordcount": "0",
+                    "poetry-lines": "0",
+                    "lang": "",
+                    "source-hash": "",
+                    "parsed-dates": [],
+                },
             },
             ["--version_override", "override"],
         )
@@ -145,8 +119,24 @@ class TestVersion(test_utils.ScriptTestCase):
         metadata_out = self.run_script(
             {"version": "foo", "repo": "bar"},
             {
-                "dep1": {"version": "2, dirty", "repo": "bar"},
-                "dep2": {"version": "3", "repo": "quux"},
+                "dep1": {
+                    "version": "2, dirty",
+                    "repo": "bar",
+                    "wordcount": "0",
+                    "poetry-lines": "0",
+                    "lang": "",
+                    "source-hash": "",
+                    "parsed-dates": [],
+                },
+                "dep2": {
+                    "version": "3",
+                    "repo": "quux",
+                    "wordcount": "0",
+                    "poetry-lines": "0",
+                    "lang": "",
+                    "source-hash": "",
+                    "parsed-dates": [],
+                },
             },
             ["--repo_override", "override"],
         )
@@ -164,8 +154,24 @@ class TestVersion(test_utils.ScriptTestCase):
             self.run_script(
                 {"version": "foo", "repo": "bar"},
                 {
-                    "dep1": {"version": "2, dirty", "repo": "baz"},
-                    "dep2": {"version": "3", "repo": "quux"},
+                    "dep1": {
+                        "version": "2, dirty",
+                        "repo": "baz",
+                        "wordcount": "0",
+                        "poetry-lines": "0",
+                        "lang": "",
+                        "source-hash": "",
+                        "parsed-dates": [],
+                    },
+                    "dep2": {
+                        "version": "3",
+                        "repo": "quux",
+                        "wordcount": "0",
+                        "poetry-lines": "0",
+                        "lang": "",
+                        "source-hash": "",
+                        "parsed-dates": [],
+                    },
                 },
                 ["--version_override", "override"],
             )

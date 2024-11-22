@@ -1,7 +1,7 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@crates//:defs.bzl", "all_crate_deps")
 load("@pip//:requirements.bzl", "requirement")
-load("@rules_rust//rust:defs.bzl", "rust_binary")
+load("@rules_rust//rust:defs.bzl", "rust_binary", "rust_test")
 load("//markdown/private/support/python:defs.bzl", "py_binary")
 load("//markdown/private/utils:defs.bzl", "script_py_test")
 
@@ -70,18 +70,25 @@ script_py_test(
     script = ":raw_version",
 )
 
-py_binary(
+rust_binary(
     name = "version",
-    srcs = ["version.py"],
-    visibility = ["//visibility:public"],
-    deps = ["//markdown/private/utils:metadata"],
+    srcs = ["version.rs"],
+    deps = [
+        "//markdown/private/utils",
+    ] + all_crate_deps(
+        normal = True,
+    ),
+)
+
+rust_test(
+    name = "version_rs_test",
+    crate = ":version",
 )
 
 script_py_test(
     name = "version_test",
     src = "version_test.py",
     script = ":version",
-    deps = [":version"],
 )
 
 py_binary(

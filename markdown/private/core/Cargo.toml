@@ -15,6 +15,10 @@ path = "validate_input_metadata.rs"
 name = "validate_output_metadata"
 path = "validate_output_metadata.rs"
 
+[[bin]]
+name = "version"
+path = "version.rs"
+
 [dependencies]
 clap.workspace = true
 markdown.workspace = true

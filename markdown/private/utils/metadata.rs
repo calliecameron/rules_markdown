@@ -6,7 +6,7 @@ use std::collections::BTreeMap;
 use std::collections::HashSet;
 use validator::{Validate, ValidationError, ValidationErrors};
 
-#[derive(Serialize, Deserialize, Validate)]
+#[derive(Clone, Serialize, Deserialize, Validate)]
 #[serde(deny_unknown_fields)]
 pub struct Version {
     pub version: String,
