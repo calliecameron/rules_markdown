@@ -8,6 +8,10 @@ name = "raw_version"
 path = "raw_version.rs"
 
 [[bin]]
+name = "source_hash"
+path = "source_hash.rs"
+
+[[bin]]
 name = "validate_input_metadata"
 path = "validate_input_metadata.rs"
 
@@ -22,4 +26,6 @@ path = "version.rs"
 [dependencies]
 clap.workspace = true
 markdown.workspace = true
+md5.workspace = true
+serde.workspace = true
 serde_json.workspace = true

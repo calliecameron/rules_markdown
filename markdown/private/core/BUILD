@@ -41,11 +41,14 @@ script_py_test(
     script = ":validate_input_metadata",
 )
 
-py_binary(
+rust_binary(
     name = "source_hash",
-    srcs = ["source_hash.py"],
-    visibility = ["//visibility:public"],
-    deps = ["//markdown/private/utils:metadata"],
+    srcs = ["source_hash.rs"],
+    deps = [
+        "//markdown/private/utils",
+    ] + all_crate_deps(
+        normal = True,
+    ),
 )
 
 script_py_test(

@@ -49,10 +49,6 @@ class _BaseModel(BaseModel):
     )
 
 
-class SourceHash(_BaseModel):
-    source_hash: str
-
-
 class ParsedDates(_BaseModel):
     parsed_dates: ParsedDateSet
 
