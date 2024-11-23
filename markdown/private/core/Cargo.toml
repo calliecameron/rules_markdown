@@ -26,5 +26,4 @@ path = "version.rs"
 [dependencies]
 clap.workspace = true
 markdown.workspace = true
-md5.workspace = true
-serde.workspace = true
+sha2.workspace = true

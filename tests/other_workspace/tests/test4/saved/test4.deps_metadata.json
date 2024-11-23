@@ -31,7 +31,7 @@
             }
         ],
         "repo": "reproducible",
-        "source-hash": "73310d412aba179c1f378944fdfc6b17",
+        "source-hash": "2c3752db20b98b6f7ee3103d161530f3a005694e9c209d7f9078a0f1eebd7ad9",
         "title": "The Title",
         "version": "reproducible",
         "wordcount": 284
@@ -63,7 +63,7 @@
             }
         ],
         "repo": "reproducible",
-        "source-hash": "72af687631737750e85ffac90f246dcf",
+        "source-hash": "683240ccb013dab2b63472c47f7e1fa18ce1aa3c6fdc179f461e89f962cfcf24",
         "title": "The Title",
         "version": "reproducible",
         "wordcount": 246
@@ -91,7 +91,7 @@
             }
         ],
         "repo": "reproducible",
-        "source-hash": "117f7bb3aeb5d7c200c762e9f4c475a9",
+        "source-hash": "c9bdde8df4de365edb9ff2bda9ac479378d7f92e0160033275f4e9428850904f",
         "title": "The Title Is 'Baz'",
         "version": "reproducible",
         "wordcount": 337
@@ -123,7 +123,7 @@
             }
         ],
         "repo": "reproducible",
-        "source-hash": "77c1626ffdd3fd7a91f02fc3ca786bce",
+        "source-hash": "dd33212836ce841023b78fe550abd449017cabcfe223703b4681372f8adbcbb1",
         "title": "Title",
         "version": "reproducible",
         "wordcount": 10

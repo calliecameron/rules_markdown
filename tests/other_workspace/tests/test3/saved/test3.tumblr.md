@@ -3,7 +3,7 @@ author:
 - An Author
 date: 23 February 2019 baz
 lang: en-GB
-source-hash: 117f7bb3aeb5d7c200c762e9f4c475a9
+source-hash: c9bdde8df4de365edb9ff2bda9ac479378d7f92e0160033275f4e9428850904f
 title: The Title Is ‘Baz’
 version: reproducible
 ---

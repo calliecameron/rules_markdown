@@ -58,7 +58,7 @@ class TestSourceHash(test_utils.ScriptTestCase):
         self.assertEqual(
             metadata_out,
             {
-                "source-hash": "0ce6eeb51f34f9ba235c549dc38f794d",
+                "source-hash": "38e2180846953a64b6c89d7bf13830f2c7899b77e78424e53562748447d59b4a",
             },
         )
 
