@@ -1,12 +1,13 @@
 import os
 import os.path
 from collections.abc import Mapping, Sequence
+from typing import Any
 
 from markdown.private.utils import test_utils
 
 
 class TestCombineDepsMetadata(test_utils.ScriptTestCase):
-    def run_script(self, metadata: Sequence[Mapping[str, str | list[str]]]) -> str:  # type: ignore[override]
+    def run_script(self, metadata: Sequence[Mapping[str, str | list[str]]]) -> dict[str, Any]:  # type: ignore[override]
         metadata_args = []
         for i, d in enumerate(metadata):
             filename = os.path.join(self.tmpdir(), f"metadata_{i+1}.json")
@@ -19,10 +20,10 @@ class TestCombineDepsMetadata(test_utils.ScriptTestCase):
             args=[out_file] + [a for sublist in metadata_args for a in sublist],
         )
 
-        return self.load_file(out_file)
+        return self.load_json(out_file)
 
     def test_empty(self) -> None:
-        self.assertEqual(self.run_script([]), "{}")
+        self.assertEqual(self.run_script([]), {})
 
     def test_non_empty(self) -> None:
         self.assertEqual(
@@ -48,30 +49,26 @@ class TestCombineDepsMetadata(test_utils.ScriptTestCase):
                     },
                 ],
             ),
-            """{
-    "dep1": {
-        "lang": "en-GB",
-        "parsed-dates": [
-            "2020"
-        ],
-        "poetry-lines": 0,
-        "repo": "bar",
-        "source-hash": "quux",
-        "version": "foo",
-        "wordcount": 10
-    },
-    "dep2": {
-        "lang": "en-US",
-        "parsed-dates": [
-            "2023/01/01"
-        ],
-        "poetry-lines": 10,
-        "repo": "yay",
-        "source-hash": "yay2",
-        "version": "blah",
-        "wordcount": 20
-    }
-}""",
+            {
+                "dep1": {
+                    "lang": "en-GB",
+                    "parsed-dates": ["2020"],
+                    "poetry-lines": 0,
+                    "repo": "bar",
+                    "source-hash": "quux",
+                    "version": "foo",
+                    "wordcount": 10,
+                },
+                "dep2": {
+                    "lang": "en-US",
+                    "parsed-dates": ["2023/01/01"],
+                    "poetry-lines": 10,
+                    "repo": "yay",
+                    "source-hash": "yay2",
+                    "version": "blah",
+                    "wordcount": 20,
+                },
+            },
         )
 
 

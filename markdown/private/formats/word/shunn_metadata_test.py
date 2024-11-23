@@ -7,7 +7,7 @@ from markdown.private.utils import test_utils
 
 
 class TestShunnMetadata(test_utils.ScriptTestCase):
-    def run_shunn_metadata(self, metadata: Mapping[str, Any]) -> str:
+    def run_shunn_metadata(self, metadata: Mapping[str, Any]) -> dict[str, Any]:
         in_file = os.path.join(self.tmpdir(), "in.json")
         self.dump_json(in_file, metadata)
 
@@ -20,7 +20,7 @@ class TestShunnMetadata(test_utils.ScriptTestCase):
             ],
         )
 
-        return self.load_file(out_file)
+        return self.load_json(out_file)
 
     def test_shunn_metadata(self) -> None:
         self.assertEqual(
@@ -37,15 +37,15 @@ class TestShunnMetadata(test_utils.ScriptTestCase):
                     "parsed-dates": [],
                 },
             ),
-            """{
-    "author_lastname": "Author",
-    "contact_address": "`\\\\n`{=tex}",
-    "contact_city_state_zip": "`\\\\n`{=tex}",
-    "contact_email": "`\\\\n`{=tex}",
-    "contact_name": "An Author",
-    "contact_phone": "`\\\\n`{=tex}",
-    "short_title": "The Title"
-}""",
+            {
+                "author_lastname": "Author",
+                "contact_address": "`\\n`{=tex}",
+                "contact_city_state_zip": "`\\n`{=tex}",
+                "contact_email": "`\\n`{=tex}",
+                "contact_name": "An Author",
+                "contact_phone": "`\\n`{=tex}",
+                "short_title": "The Title",
+            },
         )
 
     def test_shunn_metadata_no_title(self) -> None:
@@ -62,16 +62,16 @@ class TestShunnMetadata(test_utils.ScriptTestCase):
                     "parsed-dates": [],
                 },
             ),
-            """{
-    "author_lastname": "Author",
-    "contact_address": "`\\\\n`{=tex}",
-    "contact_city_state_zip": "`\\\\n`{=tex}",
-    "contact_email": "`\\\\n`{=tex}",
-    "contact_name": "An Author",
-    "contact_phone": "`\\\\n`{=tex}",
-    "short_title": "[Untitled]",
-    "title": "[Untitled]"
-}""",
+            {
+                "author_lastname": "Author",
+                "contact_address": "`\\n`{=tex}",
+                "contact_city_state_zip": "`\\n`{=tex}",
+                "contact_email": "`\\n`{=tex}",
+                "contact_name": "An Author",
+                "contact_phone": "`\\n`{=tex}",
+                "short_title": "[Untitled]",
+                "title": "[Untitled]",
+            },
         )
 
     def test_shunn_metadata_no_author(self) -> None:
@@ -88,18 +88,16 @@ class TestShunnMetadata(test_utils.ScriptTestCase):
                     "parsed-dates": [],
                 },
             ),
-            """{
-    "author": [
-        "[Unknown]"
-    ],
-    "author_lastname": "[Unknown]",
-    "contact_address": "`\\\\n`{=tex}",
-    "contact_city_state_zip": "`\\\\n`{=tex}",
-    "contact_email": "`\\\\n`{=tex}",
-    "contact_name": "[Unknown]",
-    "contact_phone": "`\\\\n`{=tex}",
-    "short_title": "The Title"
-}""",
+            {
+                "author": ["[Unknown]"],
+                "author_lastname": "[Unknown]",
+                "contact_address": "`\\n`{=tex}",
+                "contact_city_state_zip": "`\\n`{=tex}",
+                "contact_email": "`\\n`{=tex}",
+                "contact_name": "[Unknown]",
+                "contact_phone": "`\\n`{=tex}",
+                "short_title": "The Title",
+            },
         )
 
 
