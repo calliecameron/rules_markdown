@@ -1,9 +1,8 @@
 use clap::{Args, Parser};
-use markdown::json::{from_str, Json};
+use markdown::json::{from_json, JsonSerializable};
 use markdown::metadata::Version;
 use std::error::Error;
 use std::fs::read_to_string;
-use std::io;
 
 const REPO_KEY: &str = "STABLE_WORKSPACE_PARENT_REPO";
 const VERSION_KEY: &str = "STABLE_WORKSPACE_PARENT_VERSION";
@@ -26,11 +25,11 @@ struct InFile {
 }
 
 fn from_version_file(path: &str) -> Result<Version, Box<dyn Error>> {
-    let version: Version = from_str(&read_to_string(path)?)?;
+    let version: Version = from_json(&read_to_string(path)?)?;
     Ok(version)
 }
 
-fn from_info_file(path: &str) -> io::Result<Version> {
+fn from_info_file(path: &str) -> Result<Version, Box<dyn Error>> {
     let mut version = None;
     let mut repo = None;
 
@@ -44,10 +43,10 @@ fn from_info_file(path: &str) -> io::Result<Version> {
     }
 
     if let (Some(version), Some(repo)) = (version, repo) {
-        return Ok(Version::new(version, repo));
+        return Ok(Version::build(version, repo)?);
     }
 
-    Ok(Version::new("unversioned", "unversioned"))
+    Ok(Version::build("unversioned", "unversioned")?)
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -61,5 +60,5 @@ fn main() -> Result<(), Box<dyn Error>> {
         return Err("neither version file specified".into());
     };
 
-    version.write(args.out_file)
+    version.write_json(args.out_file)
 }

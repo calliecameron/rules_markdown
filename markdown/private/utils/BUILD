@@ -45,10 +45,12 @@ rust_library(
     name = "utils",
     srcs = [
         "bazel.rs",
+        "deserializers.rs",
         "json.rs",
         "metadata.rs",
         "publications.rs",
         "utils.rs",
+        "validators.rs",
     ],
     aliases = aliases(),
     crate_name = "markdown",

@@ -12,6 +12,7 @@ rust-version = "1.82.0"
 [workspace.dependencies]
 chrono = { version = "0.4.38", features = ["serde"] }
 clap = { version = "4.5.20", features = ["derive"] }
+derive_builder = "0.20.2"
 markdown = { path = "markdown/private/utils" }
 md5 = "0.7.0"
 regex = "1.11.0"

@@ -1,5 +1,5 @@
 use clap::Parser;
-use markdown::json::{from_str, Json};
+use markdown::json::{from_json, JsonSerializable};
 use markdown::metadata::{MetadataMap, Version};
 use std::collections::HashMap;
 use std::error::Error;
@@ -65,7 +65,7 @@ fn get_version(
         }
     }
 
-    let version = Version::new(
+    let version = Version::build(
         &version_string(
             &raw_version.version,
             version_override,
@@ -73,7 +73,7 @@ fn get_version(
             !unversioned_deps.is_empty(),
         ),
         &raw_version.repo,
-    );
+    )?;
 
     // Dirty or unversioned deps in the same repo are OK
     let bad_dirty_deps: Vec<&String> = dirty_deps
@@ -113,7 +113,7 @@ fn get_version(
     }
 
     if let Some(repo) = repo_override {
-        return Ok(Version::new(&version.version, &repo));
+        return Ok(Version::build(&version.version, &repo)?);
     }
 
     Ok(version)
@@ -122,14 +122,14 @@ fn get_version(
 fn main() -> Result<(), Box<dyn Error>> {
     let args = Cli::parse();
 
-    let raw_version: Version = from_str(&read_to_string(args.raw_version_file)?)?;
-    let dep_metadata: MetadataMap = from_str(&read_to_string(args.deps_metadata_file)?)?;
+    let raw_version: Version = from_json(&read_to_string(args.raw_version_file)?)?;
+    let dep_metadata: MetadataMap = from_json(&read_to_string(args.deps_metadata_file)?)?;
 
     let mut dep_versions: HashMap<String, Version> = HashMap::new();
     for (target, metadata) in dep_metadata.data().iter() {
         dep_versions.insert(
             String::from(target),
-            Version::new(metadata.version(), metadata.repo()),
+            Version::build(metadata.version(), metadata.repo())?,
         );
     }
 
@@ -140,7 +140,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         args.repo_override,
     )?;
 
-    version.write(args.metadata_out_file)
+    version.write_json(args.metadata_out_file)
 }
 
 #[cfg(test)]
@@ -149,12 +149,12 @@ mod version_test {
 
     #[test]
     fn test_version() {
-        let base = Version::new("1", "foo");
-        let clean = Version::new("2", "bar");
-        let dirty = Version::new("3-dirty", "baz");
-        let unversioned = Version::new("unversioned", "quux");
-        let dirty_same_repo = Version::new("4-dirty", "foo");
-        let unversioned_same_repo = Version::new("unversioned", "foo");
+        let base = Version::build("1", "foo").unwrap();
+        let clean = Version::build("2", "bar").unwrap();
+        let dirty = Version::build("3-dirty", "baz").unwrap();
+        let unversioned = Version::build("unversioned", "quux").unwrap();
+        let dirty_same_repo = Version::build("4-dirty", "foo").unwrap();
+        let unversioned_same_repo = Version::build("unversioned", "foo").unwrap();
 
         let v = get_version(&base, &HashMap::new(), None, None).unwrap();
         assert_eq!(v.version, "1");

@@ -1,5 +1,5 @@
 use clap::Parser;
-use markdown::json::{from_str, Json};
+use markdown::json::{from_json, JsonSerializable};
 use markdown::metadata::InputMetadata;
 use std::error::Error;
 use std::fs::read_to_string;
@@ -13,6 +13,6 @@ struct Cli {
 
 fn main() -> Result<(), Box<dyn Error>> {
     let args = Cli::parse();
-    let metadata: InputMetadata = from_str(&read_to_string(args.in_file)?)?;
-    metadata.write(args.out_file)
+    let metadata: InputMetadata = from_json(&read_to_string(args.in_file)?)?;
+    metadata.write_json(args.out_file)
 }

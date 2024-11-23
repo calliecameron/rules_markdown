@@ -16,7 +16,7 @@ fn sort_alphabetically<T: Serialize, S: Serializer>(
 #[derive(Serialize)]
 struct SortAlphabetically<T: Serialize>(#[serde(serialize_with = "sort_alphabetically")] T);
 
-pub trait Json {
+pub trait JsonSerializable {
     fn to_json(&self) -> Result<String, serde_json::Error>
     where
         Self: Serialize,
@@ -26,7 +26,7 @@ pub trait Json {
         Ok(out)
     }
 
-    fn write<P>(&self, path: P) -> Result<(), Box<dyn Error>>
+    fn write_json<P>(&self, path: P) -> Result<(), Box<dyn Error>>
     where
         P: AsRef<Path>,
         Self: Serialize,
@@ -37,88 +37,11 @@ pub trait Json {
     }
 }
 
-pub fn from_str<'a, T>(s: &'a str) -> Result<T, Box<dyn Error>>
+pub fn from_json<'a, T>(s: &'a str) -> Result<T, Box<dyn Error>>
 where
     T: Deserialize<'a> + Validate,
 {
     let out: T = serde_json::from_str(s)?;
     out.validate()?;
     Ok(out)
-}
-
-pub fn is_false(b: &bool) -> bool {
-    !b
-}
-
-pub mod deserialize {
-    use serde::{de, Deserialize};
-    use std::fmt;
-
-    pub fn str_or_seq<'de, D>(deserializer: D) -> Result<Vec<String>, D::Error>
-    where
-        D: de::Deserializer<'de>,
-    {
-        struct StrSeqVisitor;
-
-        impl<'de> de::Visitor<'de> for StrSeqVisitor {
-            type Value = Vec<String>;
-
-            fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-                formatter.write_str("a string or a sequence of strings")
-            }
-
-            fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
-            where
-                E: de::Error,
-            {
-                Ok(vec![String::from(v)])
-            }
-
-            fn visit_seq<A>(self, seq: A) -> Result<Self::Value, A::Error>
-            where
-                A: de::SeqAccess<'de>,
-            {
-                Deserialize::deserialize(de::value::SeqAccessDeserializer::new(seq))
-            }
-        }
-
-        deserializer.deserialize_any(StrSeqVisitor)
-    }
-
-    pub fn int_or_str<'de, D>(deserializer: D) -> Result<u32, D::Error>
-    where
-        D: de::Deserializer<'de>,
-    {
-        struct IntStrVisitor;
-
-        impl<'de> de::Visitor<'de> for IntStrVisitor {
-            type Value = u32;
-
-            fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-                formatter.write_str("an int or a string containing an int")
-            }
-
-            fn visit_u64<E>(self, val: u64) -> Result<Self::Value, E>
-            where
-                E: de::Error,
-            {
-                match val.try_into() {
-                    Ok(val) => Ok(val),
-                    Err(_) => Err(E::custom("invalid int value")),
-                }
-            }
-
-            fn visit_str<E>(self, val: &str) -> Result<Self::Value, E>
-            where
-                E: de::Error,
-            {
-                match val.parse() {
-                    Ok(val) => self.visit_u64(val),
-                    Err(_) => Err(E::custom("must contin an int")),
-                }
-            }
-        }
-
-        deserializer.deserialize_any(IntStrVisitor)
-    }
 }

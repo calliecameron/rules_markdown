@@ -1,47 +1,55 @@
-use crate::{json, json::Json, publications::Publications};
+use crate::{deserializers, json::JsonSerializable, publications::Publications, validators};
 use chrono::naive::NaiveDate;
+use derive_builder::Builder;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 use std::collections::HashSet;
 use validator::{Validate, ValidationError, ValidationErrors};
 
-#[derive(Clone, Serialize, Deserialize, Validate)]
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Validate)]
 #[serde(deny_unknown_fields)]
 pub struct Version {
+    #[validate(custom(function = "validators::non_empty"))]
     pub version: String,
+    #[validate(custom(function = "validators::non_empty"))]
     pub repo: String,
 }
 
 impl Version {
-    pub fn new(version: &str, repo: &str) -> Version {
-        Version {
-            version: String::from(version),
-            repo: String::from(repo),
-        }
+    pub fn build<T: Into<String>>(version: T, repo: T) -> Result<Version, ValidationErrors> {
+        let v = Version {
+            version: version.into(),
+            repo: repo.into(),
+        };
+        v.validate()?;
+        Ok(v)
     }
 }
 
-impl Json for Version {}
+impl JsonSerializable for Version {}
 
-#[derive(Serialize, Deserialize, Validate)]
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Validate)]
 #[serde(deny_unknown_fields)]
 #[serde(rename_all = "kebab-case")]
 pub struct SourceHash {
+    #[validate(custom(function = "validators::non_empty"))]
     pub source_hash: String,
 }
 
 impl SourceHash {
-    pub fn new(source_hash: &str) -> SourceHash {
-        SourceHash {
-            source_hash: String::from(source_hash),
-        }
+    pub fn build<T: Into<String>>(source_hash: T) -> Result<SourceHash, ValidationErrors> {
+        let s = SourceHash {
+            source_hash: source_hash.into(),
+        };
+        s.validate()?;
+        Ok(s)
     }
 }
 
-impl Json for SourceHash {}
+impl JsonSerializable for SourceHash {}
 
-#[derive(Serialize, Deserialize, Validate)]
+#[derive(Clone, PartialEq, Default, Debug, Serialize, Deserialize, Validate)]
 #[serde(deny_unknown_fields)]
 #[serde(transparent)]
 #[serde(rename_all = "kebab-case")]
@@ -51,8 +59,10 @@ pub struct ParsedDateSet {
 }
 
 impl ParsedDateSet {
-    pub fn build(parsed_dates: Vec<String>) -> Result<ParsedDateSet, ValidationErrors> {
-        let pd = ParsedDateSet { parsed_dates };
+    pub fn build<T: Into<Vec<String>>>(parsed_dates: T) -> Result<ParsedDateSet, ValidationErrors> {
+        let pd = ParsedDateSet {
+            parsed_dates: parsed_dates.into(),
+        };
         pd.validate()?;
         Ok(pd)
     }
@@ -100,9 +110,9 @@ impl ParsedDateSet {
     }
 }
 
-impl Json for ParsedDateSet {}
+impl JsonSerializable for ParsedDateSet {}
 
-#[derive(Serialize, Deserialize, Validate)]
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Validate)]
 #[serde(deny_unknown_fields)]
 #[serde(rename_all = "kebab-case")]
 pub struct ParsedDates {
@@ -122,80 +132,127 @@ impl ParsedDates {
     }
 }
 
-impl Json for ParsedDates {}
+impl JsonSerializable for ParsedDates {}
 
-#[derive(Serialize, Deserialize, Validate, PartialEq, Debug)]
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Validate)]
 #[serde(deny_unknown_fields)]
 pub struct Identifier {
+    #[validate(custom(function = "validators::non_empty"))]
     pub scheme: String,
+    #[validate(custom(function = "validators::non_empty"))]
     pub text: String,
 }
 
 impl Identifier {
-    pub fn new(scheme: &str, text: &str) -> Identifier {
-        Identifier {
-            scheme: String::from(scheme),
-            text: String::from(text),
-        }
+    pub fn build<T: Into<String>>(scheme: T, text: T) -> Result<Identifier, ValidationErrors> {
+        let i = Identifier {
+            scheme: scheme.into(),
+            text: text.into(),
+        };
+        i.validate()?;
+        Ok(i)
     }
 }
 
-impl Json for Identifier {}
+impl JsonSerializable for Identifier {}
 
-#[derive(Serialize, Deserialize, Default, Validate)]
+fn is_false(b: &bool) -> bool {
+    !b
+}
+
+#[derive(Clone, Default, Debug, Serialize, Deserialize, Validate, Builder)]
 #[serde(deny_unknown_fields)]
 #[serde(rename_all = "kebab-case")]
+#[builder(setter(into, strip_option), build_fn(validate = "Self::validate"))]
 pub struct InputMetadata {
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(deserialize_with = "deserializers::option_string")]
+    #[validate(custom(function = "validators::non_empty"))]
+    #[builder(default)]
     title: Option<String>,
 
     #[serde(default)]
+    #[serde(rename = "author")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    #[serde(deserialize_with = "json::deserialize::str_or_seq")]
-    author: Vec<String>,
+    #[serde(deserialize_with = "deserializers::str_or_seq")]
+    #[validate(custom(function = "validators::each_non_empty"))]
+    #[builder(default)]
+    authors: Vec<String>,
 
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(deserialize_with = "deserializers::option_string")]
+    #[validate(custom(function = "validators::non_empty"))]
+    #[builder(default)]
     date: Option<String>,
 
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(deserialize_with = "deserializers::option_string")]
+    #[validate(custom(function = "validators::non_empty"))]
+    #[builder(default)]
     notes: Option<String>,
 
     #[serde(default)]
-    #[serde(skip_serializing_if = "json::is_false")]
+    #[serde(skip_serializing_if = "is_false")]
+    #[builder(default)]
     finished: bool,
 
     #[serde(default)]
     #[validate(nested)]
     #[serde(skip_serializing_if = "Publications::is_empty")]
+    #[builder(default)]
     publications: Publications,
 
     #[serde(default)]
+    #[serde(rename = "identifier")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     #[validate(nested)]
-    identifier: Vec<Identifier>,
+    #[builder(default)]
+    identifiers: Vec<Identifier>,
+}
+
+impl InputMetadataBuilder {
+    fn validate(&self) -> Result<(), String> {
+        if let Err(err) = InputMetadata::build(
+            self.title.clone().unwrap_or_default().as_deref(),
+            self.authors.clone().unwrap_or_default(),
+            self.date.clone().unwrap_or_default().as_deref(),
+            self.notes.clone().unwrap_or_default().as_deref(),
+            self.finished.unwrap_or_default(),
+            self.publications.clone().unwrap_or_default(),
+            self.identifiers.clone().unwrap_or_default(),
+        ) {
+            return Err(err.to_string());
+        }
+
+        Ok(())
+    }
 }
 
 impl InputMetadata {
-    pub fn build(
+    fn build<S, I>(
         title: Option<&str>,
-        authors: Vec<String>,
+        authors: S,
         date: Option<&str>,
         notes: Option<&str>,
         finished: bool,
         publications: Publications,
-        identifiers: Vec<Identifier>,
-    ) -> Result<InputMetadata, ValidationErrors> {
+        identifiers: I,
+    ) -> Result<InputMetadata, ValidationErrors>
+    where
+        S: Into<Vec<String>>,
+        I: Into<Vec<Identifier>>,
+    {
         let m = InputMetadata {
             title: title.map(str::to_string),
-            author: authors,
+            authors: authors.into(),
             date: date.map(str::to_string),
             notes: notes.map(str::to_string),
             finished,
             publications,
-            identifier: identifiers,
+            identifiers: identifiers.into(),
         };
         m.validate()?;
         Ok(m)
@@ -206,7 +263,7 @@ impl InputMetadata {
     }
 
     pub fn authors(&self) -> &Vec<String> {
-        &self.author
+        &self.authors
     }
 
     pub fn date(&self) -> Option<&String> {
@@ -226,94 +283,150 @@ impl InputMetadata {
     }
 
     pub fn identifiers(&self) -> &Vec<Identifier> {
-        &self.identifier
+        &self.identifiers
     }
 }
 
-impl Json for InputMetadata {}
+impl JsonSerializable for InputMetadata {}
 
-#[derive(Serialize, Deserialize, Validate)]
+#[derive(Clone, Debug, Serialize, Deserialize, Validate, Builder)]
 #[serde(deny_unknown_fields)]
 #[serde(rename_all = "kebab-case")]
+#[builder(setter(into, strip_option), build_fn(validate = "Self::validate"))]
 pub struct OutputMetadata {
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(deserialize_with = "deserializers::option_string")]
+    #[validate(custom(function = "validators::non_empty"))]
+    #[builder(default)]
     title: Option<String>,
 
     #[serde(default)]
+    #[serde(rename = "author")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    #[serde(deserialize_with = "json::deserialize::str_or_seq")]
-    author: Vec<String>,
+    #[serde(deserialize_with = "deserializers::str_or_seq")]
+    #[validate(custom(function = "validators::each_non_empty"))]
+    #[builder(default)]
+    authors: Vec<String>,
 
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(deserialize_with = "deserializers::option_string")]
+    #[validate(custom(function = "validators::non_empty"))]
+    #[builder(default)]
     date: Option<String>,
 
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(deserialize_with = "deserializers::option_string")]
+    #[validate(custom(function = "validators::non_empty"))]
+    #[builder(default)]
     notes: Option<String>,
 
     #[serde(default)]
-    #[serde(skip_serializing_if = "json::is_false")]
+    #[serde(skip_serializing_if = "is_false")]
+    #[builder(default)]
     finished: bool,
 
     #[serde(default)]
     #[validate(nested)]
     #[serde(skip_serializing_if = "Publications::is_empty")]
+    #[builder(default)]
     publications: Publications,
 
     #[serde(default)]
+    #[serde(rename = "identifier")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     #[validate(nested)]
-    identifier: Vec<Identifier>,
+    #[builder(default)]
+    identifiers: Vec<Identifier>,
 
-    #[serde(deserialize_with = "json::deserialize::int_or_str")]
+    #[serde(deserialize_with = "deserializers::uint_or_str")]
     wordcount: u32,
 
-    #[serde(deserialize_with = "json::deserialize::int_or_str")]
+    #[serde(deserialize_with = "deserializers::uint_or_str")]
     poetry_lines: u32,
 
+    #[validate(custom(function = "validators::non_empty"))]
     lang: String,
+
+    #[validate(custom(function = "validators::non_empty"))]
     version: String,
+
+    #[validate(custom(function = "validators::non_empty"))]
     repo: String,
+
+    #[validate(custom(function = "validators::non_empty"))]
     source_hash: String,
 
+    #[serde(default)]
     #[validate(nested)]
+    #[builder(default)]
     parsed_dates: ParsedDateSet,
+}
+
+impl OutputMetadataBuilder {
+    fn validate(&self) -> Result<(), String> {
+        if let Err(err) = OutputMetadata::build(
+            self.title.clone().unwrap_or_default().as_deref(),
+            self.authors.clone().unwrap_or_default(),
+            self.date.clone().unwrap_or_default().as_deref(),
+            self.notes.clone().unwrap_or_default().as_deref(),
+            self.finished.unwrap_or_default(),
+            self.publications.clone().unwrap_or_default(),
+            self.identifiers.clone().unwrap_or_default(),
+            self.wordcount.unwrap_or_default(),
+            self.poetry_lines.unwrap_or_default(),
+            self.lang.clone().unwrap_or_default(),
+            self.version.clone().unwrap_or_default(),
+            self.repo.clone().unwrap_or_default(),
+            self.source_hash.clone().unwrap_or_default(),
+            self.parsed_dates.clone().unwrap_or_default(),
+        ) {
+            return Err(err.to_string());
+        }
+
+        Ok(())
+    }
 }
 
 impl OutputMetadata {
     #[allow(clippy::too_many_arguments)]
-    pub fn build(
+    fn build<VS, VI, S>(
         title: Option<&str>,
-        authors: Vec<String>,
+        authors: VS,
         date: Option<&str>,
         notes: Option<&str>,
         finished: bool,
         publications: Publications,
-        identifiers: Vec<Identifier>,
+        identifiers: VI,
         wordcount: u32,
         poetry_lines: u32,
-        lang: &str,
-        version: &str,
-        repo: &str,
-        source_hash: &str,
+        lang: S,
+        version: S,
+        repo: S,
+        source_hash: S,
         parsed_dates: ParsedDateSet,
-    ) -> Result<OutputMetadata, ValidationErrors> {
+    ) -> Result<OutputMetadata, ValidationErrors>
+    where
+        VS: Into<Vec<String>>,
+        VI: Into<Vec<Identifier>>,
+        S: Into<String>,
+    {
         let m = OutputMetadata {
             title: title.map(str::to_string),
-            author: authors,
+            authors: authors.into(),
             date: date.map(str::to_string),
             notes: notes.map(str::to_string),
             finished,
             publications,
-            identifier: identifiers,
+            identifiers: identifiers.into(),
             wordcount,
             poetry_lines,
-            lang: String::from(lang),
-            version: String::from(version),
-            repo: String::from(repo),
-            source_hash: String::from(source_hash),
+            lang: lang.into(),
+            version: version.into(),
+            repo: repo.into(),
+            source_hash: source_hash.into(),
             parsed_dates,
         };
         m.validate()?;
@@ -325,7 +438,7 @@ impl OutputMetadata {
     }
 
     pub fn authors(&self) -> &Vec<String> {
-        &self.author
+        &self.authors
     }
 
     pub fn date(&self) -> Option<&String> {
@@ -345,7 +458,7 @@ impl OutputMetadata {
     }
 
     pub fn identifiers(&self) -> &Vec<Identifier> {
-        &self.identifier
+        &self.identifiers
     }
 
     pub fn wordcount(&self) -> u32 {
@@ -377,9 +490,9 @@ impl OutputMetadata {
     }
 }
 
-impl Json for OutputMetadata {}
+impl JsonSerializable for OutputMetadata {}
 
-#[derive(Serialize, Deserialize, Validate)]
+#[derive(Clone, Debug, Serialize, Deserialize, Validate)]
 #[serde(deny_unknown_fields)]
 #[serde(transparent)]
 pub struct MetadataMap {
@@ -388,8 +501,10 @@ pub struct MetadataMap {
 }
 
 impl MetadataMap {
-    pub fn build(data: BTreeMap<String, OutputMetadata>) -> Result<MetadataMap, ValidationErrors> {
-        let m = MetadataMap { data };
+    pub fn build<T: Into<BTreeMap<String, OutputMetadata>>>(
+        data: T,
+    ) -> Result<MetadataMap, ValidationErrors> {
+        let m = MetadataMap { data: data.into() };
         m.validate()?;
         Ok(m)
     }
@@ -399,36 +514,43 @@ impl MetadataMap {
     }
 }
 
-impl Json for MetadataMap {}
+impl JsonSerializable for MetadataMap {}
 
 #[cfg(test)]
 mod test_utils {
     use chrono::NaiveDate;
 
-    pub fn ymd(year: i32, month: u32, day: u32) -> Option<NaiveDate> {
-        NaiveDate::from_ymd_opt(year, month, day)
+    pub fn ymd(year: i32, month: u32, day: u32) -> NaiveDate {
+        NaiveDate::from_ymd_opt(year, month, day).unwrap()
     }
 }
 
 #[cfg(test)]
 mod version_test {
     use super::Version;
-    use crate::json::{from_str, Json};
+    use crate::json::{from_json, JsonSerializable};
+
+    #[test]
+    fn test_build() {
+        assert!(Version::build("", "bar").is_err());
+        assert!(Version::build("foo", "").is_err());
+        assert!(Version::build("", "").is_err());
+    }
 
     #[test]
     fn test_serialization() {
         assert_eq!(
-            Version::new("foo", "bar").to_json().unwrap(),
+            Version::build("foo", "bar").unwrap().to_json().unwrap(),
             r#"{
     "repo": "bar",
     "version": "foo"
 }"#
-        )
+        );
     }
 
     #[test]
     fn test_deserialization() {
-        let v: Version = from_str(
+        let v: Version = from_json(
             r#"{
     "repo": "bar",
     "version": "foo"
@@ -437,18 +559,45 @@ mod version_test {
         .unwrap();
         assert_eq!(v.version, "foo");
         assert_eq!(v.repo, "bar");
+
+        assert!(from_json::<Version>(
+            r#"{
+    "repo": "bar",
+    "version": ""
+}"#
+        )
+        .is_err());
+        assert!(from_json::<Version>(
+            r#"{
+    "repo": "",
+    "version": "foo"
+}"#
+        )
+        .is_err());
+        assert!(from_json::<Version>(
+            r#"{
+    "repo": "",
+    "version": ""
+}"#
+        )
+        .is_err());
     }
 }
 
 #[cfg(test)]
 mod source_hash_test {
     use super::SourceHash;
-    use crate::json::{from_str, Json};
+    use crate::json::{from_json, JsonSerializable};
+
+    #[test]
+    fn test_build() {
+        assert!(SourceHash::build("").is_err());
+    }
 
     #[test]
     fn test_serialization() {
         assert_eq!(
-            SourceHash::new("foo").to_json().unwrap(),
+            SourceHash::build("foo").unwrap().to_json().unwrap(),
             r#"{
     "source-hash": "foo"
 }"#
@@ -457,13 +606,20 @@ mod source_hash_test {
 
     #[test]
     fn test_deserialization() {
-        let h: SourceHash = from_str(
+        let h: SourceHash = from_json(
             r#"{
     "source-hash": "foo"
 }"#,
         )
         .unwrap();
         assert_eq!(h.source_hash, "foo");
+
+        assert!(from_json::<SourceHash>(
+            r#"{
+    "source-hash": "",
+}"#
+        )
+        .is_err());
     }
 }
 
@@ -473,21 +629,21 @@ mod parsed_date_set_test {
 
     #[test]
     fn test_bad() {
-        let pd: Result<ParsedDateSet, _> = ParsedDateSet::build(vec![String::from("foo")]);
-        assert!(pd.is_err());
+        assert!(ParsedDateSet::build([String::from("foo")]).is_err());
+        assert!(ParsedDateSet::build([String::new()]).is_err());
     }
 }
 
 #[cfg(test)]
 mod parsed_dates_test {
     use super::{ParsedDateSet, ParsedDates};
-    use crate::json::{from_str, Json};
+    use crate::json::{from_json, JsonSerializable};
 
     #[test]
     fn test_serialization() {
         assert_eq!(
             ParsedDates::build(
-                ParsedDateSet::build(vec![String::from("2020"), String::from("2020/01")]).unwrap()
+                ParsedDateSet::build([String::from("2020"), String::from("2020/01")]).unwrap()
             )
             .unwrap()
             .to_json()
@@ -503,7 +659,7 @@ mod parsed_dates_test {
 
     #[test]
     fn test_deserialization_good() {
-        let pd: ParsedDates = from_str(
+        let pd: ParsedDates = from_json(
             r#"{
     "parsed-dates": [
         "2020/01/01",
@@ -519,52 +675,68 @@ mod parsed_dates_test {
 
     #[test]
     fn test_deserialization_bad_invalid() {
-        let pd: Result<ParsedDates, _> = from_str(
+        assert!(from_json::<ParsedDates>(
             r#"{
     "parsed-dates": [
         "2020/01/01 10:30:00"
     ]
-}"#,
-        );
-        assert!(pd.is_err());
+}"#
+        )
+        .is_err());
+
+        assert!(from_json::<ParsedDates>(
+            r#"{
+    "parsed-dates": [
+        ""
+    ]
+}"#
+        )
+        .is_err());
     }
 
     #[test]
     fn test_deserialization_bad_duplicates() {
-        let pd: Result<ParsedDates, _> = from_str(
+        assert!(from_json::<ParsedDates>(
             r#"{
     "parsed-dates": [
         "2020/01/01",
         "2020/01/01"
     ]
 }"#,
-        );
-        assert!(pd.is_err());
+        )
+        .is_err());
     }
 
     #[test]
     fn test_deserialization_bad_unordered() {
-        let pd: Result<ParsedDates, _> = from_str(
+        assert!(from_json::<ParsedDates>(
             r#"{
     "parsed-dates": [
         "2024/06/23",
         "2020/01/01"
     ]
 }"#,
-        );
-        assert!(pd.is_err());
+        )
+        .is_err());
     }
 }
 
 #[cfg(test)]
 mod identifier_test {
     use super::Identifier;
-    use crate::json::{from_str, Json};
+    use crate::json::{from_json, JsonSerializable};
+
+    #[test]
+    fn test_build() {
+        assert!(Identifier::build("", "bar").is_err());
+        assert!(Identifier::build("foo", "").is_err());
+        assert!(Identifier::build("", "").is_err());
+    }
 
     #[test]
     fn test_serialization() {
         assert_eq!(
-            Identifier::new("foo", "bar").to_json().unwrap(),
+            Identifier::build("foo", "bar").unwrap().to_json().unwrap(),
             r#"{
     "scheme": "foo",
     "text": "bar"
@@ -574,7 +746,7 @@ mod identifier_test {
 
     #[test]
     fn test_deserialization() {
-        let i: Identifier = from_str(
+        let i: Identifier = from_json(
             r#"{
     "scheme": "foo",
     "text": "bar"
@@ -583,14 +755,36 @@ mod identifier_test {
         .unwrap();
         assert_eq!(i.scheme, "foo");
         assert_eq!(i.text, "bar");
+
+        assert!(from_json::<Identifier>(
+            r#"{
+    "scheme": "",
+    "text": "bar"
+}"#
+        )
+        .is_err());
+        assert!(from_json::<Identifier>(
+            r#"{
+    "scheme": "foo",
+    "text": ""
+}"#
+        )
+        .is_err());
+        assert!(from_json::<Identifier>(
+            r#"{
+    "scheme": "",
+    "text": ""
+}"#
+        )
+        .is_err());
     }
 }
 
 #[cfg(test)]
 mod input_metadata_test {
-    use super::{test_utils::ymd, Identifier, InputMetadata};
-    use crate::json::{from_str, Json};
-    use crate::publications::{Publication, Publications, State};
+    use super::{test_utils::ymd, Identifier, InputMetadata, InputMetadataBuilder};
+    use crate::json::{from_json, JsonSerializable};
+    use crate::publications::{PublicationBuilder, Publications, State};
 
     #[test]
     fn test_serialization_minimal() {
@@ -600,48 +794,44 @@ mod input_metadata_test {
     #[test]
     fn test_serialization_full() {
         assert_eq!(
-            InputMetadata::build(
-                Some("foo"),
-                vec![String::from("bar"), String::from("baz")],
-                Some("quux"),
-                Some("blah"),
-                true,
-                Publications::build(vec![
-                    Publication::build(
-                        "Book",
-                        vec![String::from("foo"), String::from("bar")],
-                        Some("baz"),
-                        Some("quux"),
-                        ymd(2023, 5, 16),
-                        ymd(2023, 5, 17),
-                        None,
-                        None,
-                        None,
-                        None,
-                        ymd(2023, 5, 18),
-                    )
-                    .unwrap(),
-                    Publication::build(
-                        "Book2",
-                        vec![String::from("foo2"), String::from("bar2")],
-                        Some("baz2"),
-                        Some("quux2"),
-                        ymd(2023, 5, 19),
-                        ymd(2023, 5, 20),
-                        None,
-                        None,
-                        None,
-                        None,
-                        None,
-                    )
-                    .unwrap(),
+            InputMetadataBuilder::default()
+                .title("foo")
+                .authors([String::from("bar"), String::from("baz")])
+                .date("quux")
+                .notes("blah")
+                .finished(true)
+                .publications(
+                    Publications::build([
+                        PublicationBuilder::default()
+                            .venue("Book")
+                            .urls([String::from("foo"), String::from("bar")])
+                            .notes("baz")
+                            .paid("quux")
+                            .submitted(ymd(2023, 5, 16))
+                            .accepted(ymd(2023, 5, 17))
+                            .published(ymd(2023, 5, 18))
+                            .build()
+                            .unwrap(),
+                        PublicationBuilder::default()
+                            .venue("Book2")
+                            .urls([String::from("foo2"), String::from("bar2")])
+                            .notes("baz2")
+                            .paid("quux2")
+                            .submitted(ymd(2023, 5, 19))
+                            .accepted(ymd(2023, 5, 20))
+                            .build()
+                            .unwrap(),
+                    ])
+                    .unwrap()
+                )
+                .identifiers([
+                    Identifier::build("a", "b").unwrap(),
+                    Identifier::build("c", "d").unwrap()
                 ])
+                .build()
+                .unwrap()
+                .to_json()
                 .unwrap(),
-                vec![Identifier::new("a", "b"), Identifier::new("c", "d")],
-            )
-            .unwrap()
-            .to_json()
-            .unwrap(),
             r#"{
     "author": [
         "bar",
@@ -692,7 +882,26 @@ mod input_metadata_test {
 
     #[test]
     fn test_deserialization_minimal() {
-        let m: InputMetadata = from_str(r#"{}"#).unwrap();
+        let m = from_json::<InputMetadata>(r#"{}"#).unwrap();
+        assert!(m.title().is_none());
+        assert!(m.authors().is_empty());
+        assert!(m.date().is_none());
+        assert!(m.notes().is_none());
+        assert!(!m.finished());
+        assert!(m.publications().is_empty());
+        assert!(m.identifiers().is_empty());
+    }
+
+    #[test]
+    fn test_deserialization_conversions() {
+        let m = from_json::<InputMetadata>(
+            r#"{
+    "title": "",
+    "date": "",
+    "notes": ""
+}"#,
+        )
+        .unwrap();
         assert!(m.title().is_none());
         assert!(m.authors().is_empty());
         assert!(m.date().is_none());
@@ -704,7 +913,7 @@ mod input_metadata_test {
 
     #[test]
     fn test_deserialization_single_author() {
-        let m: InputMetadata = from_str(r#"{"author": "foo"}"#).unwrap();
+        let m = from_json::<InputMetadata>(r#"{"author": "foo"}"#).unwrap();
         assert!(m.title().is_none());
         assert_eq!(m.authors(), &["foo"]);
         assert!(m.date().is_none());
@@ -716,7 +925,7 @@ mod input_metadata_test {
 
     #[test]
     fn test_deserialization_full() {
-        let m: InputMetadata = from_str(
+        let m = from_json::<InputMetadata>(
             r#"{
             "author": [
                 "bar",
@@ -778,21 +987,21 @@ mod input_metadata_test {
 
         let p = &ps.publications()[0];
         assert_eq!(p.venue(), "Book");
-        assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
-        assert_eq!(p.accepted().copied(), ymd(2023, 5, 17));
+        assert_eq!(p.submitted().copied().unwrap(), ymd(2023, 5, 16));
+        assert_eq!(p.accepted().copied().unwrap(), ymd(2023, 5, 17));
         assert!(p.rejected().is_none());
         assert!(p.withdrawn().is_none());
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
-        assert_eq!(p.published().copied(), ymd(2023, 5, 18));
+        assert_eq!(p.published().copied().unwrap(), ymd(2023, 5, 18));
         assert_eq!(p.urls(), &["foo", "bar"]);
         assert_eq!(p.notes().unwrap(), "baz");
         assert_eq!(p.paid().unwrap(), "quux");
 
         let p = &ps.publications()[1];
         assert_eq!(p.venue(), "Book2");
-        assert_eq!(p.submitted().copied(), ymd(2023, 5, 19));
-        assert_eq!(p.accepted().copied(), ymd(2023, 5, 20));
+        assert_eq!(p.submitted().copied().unwrap(), ymd(2023, 5, 19));
+        assert_eq!(p.accepted().copied().unwrap(), ymd(2023, 5, 20));
         assert!(p.rejected().is_none());
         assert!(p.withdrawn().is_none());
         assert!(p.abandoned().is_none());
@@ -804,69 +1013,72 @@ mod input_metadata_test {
 
         assert_eq!(
             m.identifiers(),
-            &[Identifier::new("a", "b"), Identifier::new("c", "d")]
+            &[
+                Identifier::build("a", "b").unwrap(),
+                Identifier::build("c", "d").unwrap()
+            ]
         );
     }
 }
 
 #[cfg(test)]
 mod output_metadata_test {
-    use super::{test_utils::ymd, Identifier, OutputMetadata, ParsedDateSet};
-    use crate::json::{from_str, Json};
-    use crate::publications::{Publication, Publications, State};
+    use super::{
+        test_utils::ymd, Identifier, OutputMetadata, OutputMetadataBuilder, ParsedDateSet,
+    };
+    use crate::json::{from_json, JsonSerializable};
+    use crate::publications::{PublicationBuilder, Publications, State};
 
     #[test]
     fn test_serialization_full() {
         assert_eq!(
-            OutputMetadata::build(
-                Some("foo"),
-                vec![String::from("bar"), String::from("baz")],
-                Some("quux"),
-                Some("blah"),
-                true,
-                Publications::build(vec![
-                    Publication::build(
-                        "Book",
-                        vec![String::from("foo"), String::from("bar")],
-                        Some("baz"),
-                        Some("quux"),
-                        ymd(2023, 5, 16),
-                        ymd(2023, 5, 17),
-                        None,
-                        None,
-                        None,
-                        None,
-                        ymd(2023, 5, 18),
-                    )
-                    .unwrap(),
-                    Publication::build(
-                        "Book2",
-                        vec![String::from("foo2"), String::from("bar2")],
-                        Some("baz2"),
-                        Some("quux2"),
-                        ymd(2023, 5, 19),
-                        ymd(2023, 5, 20),
-                        None,
-                        None,
-                        None,
-                        None,
-                        None,
-                    )
-                    .unwrap(),
+            OutputMetadataBuilder::default()
+                .title("foo")
+                .authors([String::from("bar"), String::from("baz")])
+                .date("quux")
+                .notes("blah")
+                .finished(true)
+                .publications(
+                    Publications::build([
+                        PublicationBuilder::default()
+                            .venue("Book")
+                            .urls([String::from("foo"), String::from("bar")])
+                            .notes("baz")
+                            .paid("quux")
+                            .submitted(ymd(2023, 5, 16))
+                            .accepted(ymd(2023, 5, 17))
+                            .published(ymd(2023, 5, 18))
+                            .build()
+                            .unwrap(),
+                        PublicationBuilder::default()
+                            .venue("Book2")
+                            .urls([String::from("foo2"), String::from("bar2")])
+                            .notes("baz2")
+                            .paid("quux2")
+                            .submitted(ymd(2023, 5, 19))
+                            .accepted(ymd(2023, 5, 20))
+                            .build()
+                            .unwrap(),
+                    ])
+                    .unwrap()
+                )
+                .identifiers([
+                    Identifier::build("a", "b").unwrap(),
+                    Identifier::build("c", "d").unwrap()
                 ])
+                .wordcount(10u32)
+                .poetry_lines(5u32)
+                .lang("blah1")
+                .version("blah2")
+                .repo("blah3")
+                .source_hash("blah4")
+                .parsed_dates(
+                    ParsedDateSet::build([String::from("2020"), String::from("2020/01")]).unwrap()
+                )
+                .build()
+                .unwrap()
+                .to_json()
                 .unwrap(),
-                vec![Identifier::new("a", "b"), Identifier::new("c", "d")],
-                10,
-                5,
-                "blah1",
-                "blah2",
-                "blah3",
-                "blah4",
-                ParsedDateSet::build(vec![String::from("2020"), String::from("2020/01")]).unwrap(),
-            )
-            .unwrap()
-            .to_json()
-            .unwrap(),
             r#"{
     "author": [
         "bar",
@@ -927,7 +1139,7 @@ mod output_metadata_test {
 
     #[test]
     fn test_deserialization_single_author() {
-        let m: OutputMetadata = from_str(
+        let m = from_json::<OutputMetadata>(
             r#"{
     "author": "foo",
     "lang": "blah1",
@@ -958,7 +1170,7 @@ mod output_metadata_test {
 
     #[test]
     fn test_deserialization_str_numbers() {
-        let m: OutputMetadata = from_str(
+        let m = from_json::<OutputMetadata>(
             r#"{
     "author": "foo",
     "lang": "blah1",
@@ -989,7 +1201,7 @@ mod output_metadata_test {
 
     #[test]
     fn test_deserialization_full() {
-        let m: OutputMetadata = from_str(
+        let m = from_json::<OutputMetadata>(
             r#"{
                 "author": [
                     "bar",
@@ -1061,21 +1273,21 @@ mod output_metadata_test {
 
         let p = &ps.publications()[0];
         assert_eq!(p.venue(), "Book");
-        assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
-        assert_eq!(p.accepted().copied(), ymd(2023, 5, 17));
+        assert_eq!(p.submitted().copied().unwrap(), ymd(2023, 5, 16));
+        assert_eq!(p.accepted().copied().unwrap(), ymd(2023, 5, 17));
         assert!(p.rejected().is_none());
         assert!(p.withdrawn().is_none());
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
-        assert_eq!(p.published().copied(), ymd(2023, 5, 18));
+        assert_eq!(p.published().copied().unwrap(), ymd(2023, 5, 18));
         assert_eq!(p.urls(), &["foo", "bar"]);
         assert_eq!(p.notes().unwrap(), "baz");
         assert_eq!(p.paid().unwrap(), "quux");
 
         let p = &ps.publications()[1];
         assert_eq!(p.venue(), "Book2");
-        assert_eq!(p.submitted().copied(), ymd(2023, 5, 19));
-        assert_eq!(p.accepted().copied(), ymd(2023, 5, 20));
+        assert_eq!(p.submitted().copied().unwrap(), ymd(2023, 5, 19));
+        assert_eq!(p.accepted().copied().unwrap(), ymd(2023, 5, 20));
         assert!(p.rejected().is_none());
         assert!(p.withdrawn().is_none());
         assert!(p.abandoned().is_none());
@@ -1087,7 +1299,10 @@ mod output_metadata_test {
 
         assert_eq!(
             m.identifiers(),
-            &[Identifier::new("a", "b"), Identifier::new("c", "d")]
+            &[
+                Identifier::build("a", "b").unwrap(),
+                Identifier::build("c", "d").unwrap()
+            ]
         );
 
         assert_eq!(m.wordcount(), 10);
@@ -1105,56 +1320,41 @@ mod output_metadata_test {
 mod metadata_map_test {
     use std::collections::BTreeMap;
 
-    use super::{MetadataMap, OutputMetadata, ParsedDateSet};
-    use crate::json::{from_str, Json};
-    use crate::publications::Publications;
+    use super::{MetadataMap, OutputMetadataBuilder};
+    use crate::json::{from_json, JsonSerializable};
 
     #[test]
     fn test_serialization() {
-        let mut data = BTreeMap::new();
-        data.insert(
-            String::from("foo"),
-            OutputMetadata::build(
-                None,
-                Vec::new(),
-                None,
-                None,
-                false,
-                Publications::build(Vec::new()).unwrap(),
-                Vec::new(),
-                10,
-                5,
-                "blah1",
-                "blah2",
-                "blah3",
-                "blah4",
-                ParsedDateSet::build(Vec::new()).unwrap(),
-            )
-            .unwrap(),
-        );
-        data.insert(
-            String::from("bar"),
-            OutputMetadata::build(
-                None,
-                Vec::new(),
-                None,
-                None,
-                false,
-                Publications::build(Vec::new()).unwrap(),
-                Vec::new(),
-                20,
-                8,
-                "quux1",
-                "quux2",
-                "quux3",
-                "quux4",
-                ParsedDateSet::build(Vec::new()).unwrap(),
-            )
-            .unwrap(),
-        );
+        let m = MetadataMap::build(BTreeMap::from([
+            (
+                String::from("foo"),
+                OutputMetadataBuilder::default()
+                    .wordcount(10u32)
+                    .poetry_lines(5u32)
+                    .lang("blah1")
+                    .version("blah2")
+                    .repo("blah3")
+                    .source_hash("blah4")
+                    .build()
+                    .unwrap(),
+            ),
+            (
+                String::from("bar"),
+                OutputMetadataBuilder::default()
+                    .wordcount(20u32)
+                    .poetry_lines(8u32)
+                    .lang("quux1")
+                    .version("quux2")
+                    .repo("quux3")
+                    .source_hash("quux4")
+                    .build()
+                    .unwrap(),
+            ),
+        ]))
+        .unwrap();
 
         assert_eq!(
-            MetadataMap::build(data).unwrap().to_json().unwrap(),
+            m.to_json().unwrap(),
             r#"{
     "bar": {
         "lang": "quux1",
@@ -1180,7 +1380,7 @@ mod metadata_map_test {
 
     #[test]
     fn test_deserialization() {
-        let mm: MetadataMap = from_str(
+        let mm = from_json::<MetadataMap>(
             r#"{
     "bar": {
         "lang": "quux1",

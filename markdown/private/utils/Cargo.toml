@@ -8,6 +8,7 @@ path = "utils.rs"
 
 [dependencies]
 chrono.workspace = true
+derive_builder.workspace = true
 regex.workspace = true
 serde.workspace = true
 serde_json.workspace = true
