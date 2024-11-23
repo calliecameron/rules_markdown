@@ -44,13 +44,14 @@ py_library(
 rust_library(
     name = "utils",
     srcs = [
+        "arg_validators.rs",
         "bazel.rs",
         "deserializers.rs",
+        "field_validators.rs",
         "json.rs",
         "metadata.rs",
         "publications.rs",
         "utils.rs",
-        "validators.rs",
     ],
     aliases = aliases(),
     crate_name = "markdown",

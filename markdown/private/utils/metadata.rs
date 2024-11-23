@@ -1,4 +1,4 @@
-use crate::{deserializers, json::JsonSerializable, publications::Publications, validators};
+use crate::{deserializers, field_validators, json::JsonSerializable, publications::Publications};
 use chrono::naive::NaiveDate;
 use derive_builder::Builder;
 use regex::Regex;
@@ -10,9 +10,9 @@ use validator::{Validate, ValidationError, ValidationErrors};
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Validate)]
 #[serde(deny_unknown_fields)]
 pub struct Version {
-    #[validate(custom(function = "validators::non_empty"))]
+    #[validate(custom(function = "field_validators::non_empty"))]
     pub version: String,
-    #[validate(custom(function = "validators::non_empty"))]
+    #[validate(custom(function = "field_validators::non_empty"))]
     pub repo: String,
 }
 
@@ -33,7 +33,7 @@ impl JsonSerializable for Version {}
 #[serde(deny_unknown_fields)]
 #[serde(rename_all = "kebab-case")]
 pub struct SourceHash {
-    #[validate(custom(function = "validators::non_empty"))]
+    #[validate(custom(function = "field_validators::non_empty"))]
     pub source_hash: String,
 }
 
@@ -137,9 +137,9 @@ impl JsonSerializable for ParsedDates {}
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Validate)]
 #[serde(deny_unknown_fields)]
 pub struct Identifier {
-    #[validate(custom(function = "validators::non_empty"))]
+    #[validate(custom(function = "field_validators::non_empty"))]
     pub scheme: String,
-    #[validate(custom(function = "validators::non_empty"))]
+    #[validate(custom(function = "field_validators::non_empty"))]
     pub text: String,
 }
 
@@ -168,7 +168,7 @@ pub struct InputMetadata {
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(deserialize_with = "deserializers::option_string")]
-    #[validate(custom(function = "validators::non_empty"))]
+    #[validate(custom(function = "field_validators::non_empty"))]
     #[builder(default)]
     title: Option<String>,
 
@@ -176,21 +176,21 @@ pub struct InputMetadata {
     #[serde(rename = "author")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     #[serde(deserialize_with = "deserializers::str_or_seq")]
-    #[validate(custom(function = "validators::each_non_empty"))]
+    #[validate(custom(function = "field_validators::each_non_empty"))]
     #[builder(default)]
     authors: Vec<String>,
 
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(deserialize_with = "deserializers::option_string")]
-    #[validate(custom(function = "validators::non_empty"))]
+    #[validate(custom(function = "field_validators::non_empty"))]
     #[builder(default)]
     date: Option<String>,
 
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(deserialize_with = "deserializers::option_string")]
-    #[validate(custom(function = "validators::non_empty"))]
+    #[validate(custom(function = "field_validators::non_empty"))]
     #[builder(default)]
     notes: Option<String>,
 
@@ -297,7 +297,7 @@ pub struct OutputMetadata {
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(deserialize_with = "deserializers::option_string")]
-    #[validate(custom(function = "validators::non_empty"))]
+    #[validate(custom(function = "field_validators::non_empty"))]
     #[builder(default)]
     title: Option<String>,
 
@@ -305,21 +305,21 @@ pub struct OutputMetadata {
     #[serde(rename = "author")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     #[serde(deserialize_with = "deserializers::str_or_seq")]
-    #[validate(custom(function = "validators::each_non_empty"))]
+    #[validate(custom(function = "field_validators::each_non_empty"))]
     #[builder(default)]
     authors: Vec<String>,
 
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(deserialize_with = "deserializers::option_string")]
-    #[validate(custom(function = "validators::non_empty"))]
+    #[validate(custom(function = "field_validators::non_empty"))]
     #[builder(default)]
     date: Option<String>,
 
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(deserialize_with = "deserializers::option_string")]
-    #[validate(custom(function = "validators::non_empty"))]
+    #[validate(custom(function = "field_validators::non_empty"))]
     #[builder(default)]
     notes: Option<String>,
 
@@ -347,16 +347,16 @@ pub struct OutputMetadata {
     #[serde(deserialize_with = "deserializers::uint_or_str")]
     poetry_lines: u32,
 
-    #[validate(custom(function = "validators::non_empty"))]
+    #[validate(custom(function = "field_validators::non_empty"))]
     lang: String,
 
-    #[validate(custom(function = "validators::non_empty"))]
+    #[validate(custom(function = "field_validators::non_empty"))]
     version: String,
 
-    #[validate(custom(function = "validators::non_empty"))]
+    #[validate(custom(function = "field_validators::non_empty"))]
     repo: String,
 
-    #[validate(custom(function = "validators::non_empty"))]
+    #[validate(custom(function = "field_validators::non_empty"))]
     source_hash: String,
 
     #[serde(default)]

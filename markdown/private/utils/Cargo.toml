@@ -8,6 +8,7 @@ path = "utils.rs"
 
 [dependencies]
 chrono.workspace = true
+clap.workspace = true
 derive_builder.workspace = true
 regex.workspace = true
 serde.workspace = true

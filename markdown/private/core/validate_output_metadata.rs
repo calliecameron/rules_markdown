@@ -1,4 +1,5 @@
 use clap::Parser;
+use markdown::arg_validators;
 use markdown::json::{from_json, JsonSerializable};
 use markdown::metadata::OutputMetadata;
 use std::error::Error;
@@ -7,7 +8,9 @@ use std::fs::read_to_string;
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
 struct Cli {
+    #[arg(value_parser = arg_validators::non_empty())]
     in_file: String,
+    #[arg(value_parser = arg_validators::non_empty())]
     out_file: String,
 }
 

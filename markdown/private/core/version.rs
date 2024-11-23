@@ -1,4 +1,5 @@
 use clap::Parser;
+use markdown::arg_validators;
 use markdown::json::{from_json, JsonSerializable};
 use markdown::metadata::{MetadataMap, Version};
 use std::collections::BTreeMap;
@@ -8,12 +9,17 @@ use std::fs::read_to_string;
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
 struct Cli {
+    #[arg(value_parser = arg_validators::non_empty())]
     raw_version_file: String,
+    #[arg(value_parser = arg_validators::non_empty())]
     deps_metadata_file: String,
+    #[arg(value_parser = arg_validators::non_empty())]
     out_file: String,
     #[arg(long)]
+    #[arg(value_parser = arg_validators::non_empty())]
     version_override: Option<String>,
     #[arg(long)]
+    #[arg(value_parser = arg_validators::non_empty())]
     repo_override: Option<String>,
 }
 

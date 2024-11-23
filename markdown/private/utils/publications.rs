@@ -1,4 +1,4 @@
-use crate::{deserializers, json::JsonSerializable, validators};
+use crate::{deserializers, field_validators, json::JsonSerializable};
 use chrono::naive::NaiveDate;
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
@@ -30,26 +30,26 @@ pub struct Date {
 #[validate(schema(function = "Publication::validate_contents"))]
 #[builder(setter(into, strip_option), build_fn(validate = "Self::validate"))]
 pub struct Publication {
-    #[validate(custom(function = "validators::non_empty"))]
+    #[validate(custom(function = "field_validators::non_empty"))]
     venue: String,
 
     #[serde(default)]
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    #[validate(custom(function = "validators::each_non_empty"))]
+    #[validate(custom(function = "field_validators::each_non_empty"))]
     #[builder(default)]
     urls: Vec<String>,
 
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(deserialize_with = "deserializers::option_string")]
-    #[validate(custom(function = "validators::non_empty"))]
+    #[validate(custom(function = "field_validators::non_empty"))]
     #[builder(default)]
     notes: Option<String>,
 
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(deserialize_with = "deserializers::option_string")]
-    #[validate(custom(function = "validators::non_empty"))]
+    #[validate(custom(function = "field_validators::non_empty"))]
     #[builder(default)]
     paid: Option<String>,
 
