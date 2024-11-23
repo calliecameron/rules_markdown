@@ -1,7 +1,7 @@
 use clap::Parser;
 use markdown::json::{from_json, JsonSerializable};
 use markdown::metadata::{MetadataMap, Version};
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 use std::error::Error;
 use std::fs::read_to_string;
 
@@ -15,15 +15,6 @@ struct Cli {
     version_override: Option<String>,
     #[arg(long)]
     repo_override: Option<String>,
-}
-
-fn sorted_targets(dep_versions: &HashMap<String, Version>) -> Vec<&String> {
-    let mut targets = Vec::new();
-    for target in dep_versions.keys() {
-        targets.push(target);
-    }
-    targets.sort();
-    targets
 }
 
 fn version_string(
@@ -48,15 +39,14 @@ fn version_string(
 
 fn get_version(
     raw_version: &Version,
-    dep_versions: &HashMap<String, Version>,
+    dep_versions: &BTreeMap<String, Version>,
     version_override: Option<String>,
     repo_override: Option<String>,
 ) -> Result<Version, Box<dyn Error>> {
     let mut dirty_deps = Vec::new();
     let mut unversioned_deps = Vec::new();
 
-    for target in sorted_targets(dep_versions) {
-        let version = &dep_versions[target];
+    for (target, version) in dep_versions {
         if version.version.contains("dirty") {
             dirty_deps.push((target, version));
         }
@@ -92,21 +82,11 @@ fn get_version(
 
         if !bad_dirty_deps.is_empty() {
             msg.push(String::from("Dirty deps:"));
-            msg.append(
-                &mut bad_dirty_deps
-                    .iter()
-                    .map(|dep| String::from("  ") + dep.as_str())
-                    .collect(),
-            );
+            msg.extend(bad_dirty_deps.iter().map(|dep| format!("  {}", dep)));
         }
         if !bad_unversioned_deps.is_empty() {
             msg.push(String::from("Unversioned deps:"));
-            msg.append(
-                &mut bad_unversioned_deps
-                    .iter()
-                    .map(|dep| String::from("  ") + dep.as_str())
-                    .collect(),
-            );
+            msg.extend(bad_unversioned_deps.iter().map(|dep| format!("  {}", dep)));
         }
 
         return Err(msg.join("\n").into());
@@ -125,13 +105,16 @@ fn main() -> Result<(), Box<dyn Error>> {
     let raw_version: Version = from_json(&read_to_string(args.raw_version_file)?)?;
     let dep_metadata: MetadataMap = from_json(&read_to_string(args.deps_metadata_file)?)?;
 
-    let mut dep_versions: HashMap<String, Version> = HashMap::new();
-    for (target, metadata) in dep_metadata.data().iter() {
-        dep_versions.insert(
-            String::from(target),
-            Version::build(metadata.version(), metadata.repo())?,
-        );
-    }
+    let dep_versions: BTreeMap<String, Version> = dep_metadata
+        .data()
+        .iter()
+        .map(|(target, metadata)| {
+            Ok((
+                String::from(target),
+                Version::build(metadata.version(), metadata.repo())?,
+            ))
+        })
+        .collect::<Result<BTreeMap<String, Version>, Box<dyn Error>>>()?;
 
     let version = get_version(
         &raw_version,
@@ -145,7 +128,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
 #[cfg(test)]
 mod version_test {
-    use super::{get_version, HashMap, Version};
+    use super::{get_version, BTreeMap, Version};
 
     #[test]
     fn test_version() {
@@ -156,13 +139,13 @@ mod version_test {
         let dirty_same_repo = Version::build("4-dirty", "foo").unwrap();
         let unversioned_same_repo = Version::build("unversioned", "foo").unwrap();
 
-        let v = get_version(&base, &HashMap::new(), None, None).unwrap();
+        let v = get_version(&base, &BTreeMap::new(), None, None).unwrap();
         assert_eq!(v.version, "1");
         assert_eq!(v.repo, "foo");
 
         let v = get_version(
             &base,
-            &HashMap::from([(String::from("a"), clean.clone())]),
+            &BTreeMap::from([(String::from("a"), clean.clone())]),
             None,
             None,
         )
@@ -172,7 +155,7 @@ mod version_test {
 
         let v = get_version(
             &base,
-            &HashMap::from([
+            &BTreeMap::from([
                 (String::from("a"), clean.clone()),
                 (String::from("b"), dirty_same_repo.clone()),
                 (String::from("c"), unversioned_same_repo.clone()),
@@ -186,26 +169,22 @@ mod version_test {
 
         assert!(get_version(
             &base,
-            &HashMap::from([(String::from("a"), dirty.clone())]),
+            &BTreeMap::from([(String::from("a"), dirty.clone())]),
             None,
             None
         )
         .is_err());
         assert!(get_version(
             &base,
-            &HashMap::from([(String::from("a"), unversioned.clone())]),
+            &BTreeMap::from([(String::from("a"), unversioned.clone())]),
             None,
             None
         )
         .is_err());
 
-        let v = get_version(&base, &HashMap::new(), Some(String::from("OVERRIDE")), None).unwrap();
-        assert_eq!(v.version, "OVERRIDE");
-        assert_eq!(v.repo, "foo");
-
         let v = get_version(
             &base,
-            &HashMap::from([(String::from("a"), clean.clone())]),
+            &BTreeMap::new(),
             Some(String::from("OVERRIDE")),
             None,
         )
@@ -215,7 +194,17 @@ mod version_test {
 
         let v = get_version(
             &base,
-            &HashMap::from([
+            &BTreeMap::from([(String::from("a"), clean.clone())]),
+            Some(String::from("OVERRIDE")),
+            None,
+        )
+        .unwrap();
+        assert_eq!(v.version, "OVERRIDE");
+        assert_eq!(v.repo, "foo");
+
+        let v = get_version(
+            &base,
+            &BTreeMap::from([
                 (String::from("a"), clean.clone()),
                 (String::from("b"), dirty_same_repo.clone()),
                 (String::from("c"), unversioned_same_repo.clone()),
@@ -227,20 +216,26 @@ mod version_test {
         assert_eq!(v.version, "OVERRIDE");
         assert_eq!(v.repo, "foo");
 
-        let v = get_version(&base, &HashMap::new(), None, Some(String::from("OVERRIDE"))).unwrap();
+        let v = get_version(
+            &base,
+            &BTreeMap::new(),
+            None,
+            Some(String::from("OVERRIDE")),
+        )
+        .unwrap();
         assert_eq!(v.version, "1");
         assert_eq!(v.repo, "OVERRIDE");
 
         assert!(get_version(
             &base,
-            &HashMap::from([(String::from("a"), dirty.clone())]),
+            &BTreeMap::from([(String::from("a"), dirty.clone())]),
             Some(String::from("OVERRIDE")),
             Some(String::from("OVERRIDE"))
         )
         .is_err());
         assert!(get_version(
             &base,
-            &HashMap::from([(String::from("a"), unversioned.clone())]),
+            &BTreeMap::from([(String::from("a"), unversioned.clone())]),
             Some(String::from("OVERRIDE")),
             Some(String::from("OVERRIDE"))
         )
