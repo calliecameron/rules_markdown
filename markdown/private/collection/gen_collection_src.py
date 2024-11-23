@@ -9,9 +9,9 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("title")
     parser.add_argument("author")
-    parser.add_argument("date")
     parser.add_argument("metadata_file")
     parser.add_argument("out_file")
+    parser.add_argument("--date")
     parser.add_argument("--dep", action="append", default=[])
     args = parser.parse_args()
 

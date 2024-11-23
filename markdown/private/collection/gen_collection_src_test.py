@@ -11,14 +11,18 @@ class TestGenCollectionSrc(test_utils.ScriptTestCase):
         self,
         title: str,
         author: str,
-        date: str,
+        date: str | None,
         metadata: Sequence[tuple[str, Mapping[str, Any]]],
     ) -> str:
         metadata_out = {}
-        dep_args = []
+        args = []
+
+        if date:
+            args += ["--date", date]
+
         for target, data in metadata:
             metadata_out[target] = data
-            dep_args += ["--dep", target]
+            args += ["--dep", target]
 
         metadata_file = os.path.join(self.tmpdir(), "metadata.json")
         self.dump_json(metadata_file, metadata_out)
@@ -27,10 +31,9 @@ class TestGenCollectionSrc(test_utils.ScriptTestCase):
 
         super().run_script(
             args=[
-                *dep_args,
+                *args,
                 title,
                 author,
-                date,
                 metadata_file,
                 out_file,
             ],
@@ -42,7 +45,7 @@ class TestGenCollectionSrc(test_utils.ScriptTestCase):
         out = self.run_script(
             "The Title",
             "The Author",
-            "",
+            None,
             [
                 (
                     "foo",
