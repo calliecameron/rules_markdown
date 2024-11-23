@@ -1,11 +1,16 @@
-load("//markdown/private/support/python:defs.bzl", "py_binary")
+load("@crates//:defs.bzl", "all_crate_deps")
+load("@rules_rust//rust:defs.bzl", "rust_binary")
 load("//markdown/private/utils:defs.bzl", "script_py_test")
 
-py_binary(
+rust_binary(
     name = "combine_deps_metadata",
-    srcs = ["combine_deps_metadata.py"],
-    visibility = ["//visibility:public"],
-    deps = ["//markdown/private/utils:metadata"],
+    srcs = ["combine_deps_metadata.rs"],
+    visibility = ["//markdown/private/core:__pkg__"],
+    deps = [
+        "//markdown/private/utils",
+    ] + all_crate_deps(
+        normal = True,
+    ),
 )
 
 script_py_test(

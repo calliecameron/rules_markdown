@@ -1,0 +1,12 @@
+[package]
+name = "markdown_private_core_group"
+edition.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "combine_deps_metadata"
+path = "combine_deps_metadata.rs"
+
+[dependencies]
+clap.workspace = true
+markdown.workspace = true

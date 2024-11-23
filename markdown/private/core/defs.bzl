@@ -29,9 +29,8 @@ def _md_group_impl(ctx):
     metadata_args = []
     for dep in ctx.attr.deps:
         metadata_args += [
-            "--metadata_file",
-            dep.label.package + ":" + dep.label.name,
-            dep[MdFileInfo].metadata.path,
+            "--metadata-file",
+            dep.label.package + ":" + dep.label.name + "=" + dep[MdFileInfo].metadata.path,
         ]
     ctx.actions.run(
         outputs = [metadata],

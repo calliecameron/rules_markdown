@@ -12,7 +12,7 @@ class TestCombineDepsMetadata(test_utils.ScriptTestCase):
         for i, d in enumerate(metadata):
             filename = os.path.join(self.tmpdir(), f"metadata_{i+1}.json")
             self.dump_json(filename, d)
-            metadata_args.append(("--metadata_file", f"dep{i+1}", filename))
+            metadata_args.append(("--metadata-file", f"dep{i+1}={filename}"))
 
         out_file = os.path.join(self.tmpdir(), "out.json")
 

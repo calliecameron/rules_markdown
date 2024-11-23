@@ -1,11 +1,11 @@
 {
-    "tests/test3:include1": {
-        "lang": "en-GB",
-        "parsed-dates": [],
-        "poetry-lines": 8,
-        "repo": "reproducible",
-        "source-hash": "66baee5177760367c76c9519913fcf730cc3b0b2413b3cb302ce5015187b02c0",
-        "version": "reproducible",
-        "wordcount": 212
-    }
+  "tests/test3:include1": {
+    "lang": "en-GB",
+    "parsed-dates": [],
+    "poetry-lines": 8,
+    "repo": "reproducible",
+    "source-hash": "66baee5177760367c76c9519913fcf730cc3b0b2413b3cb302ce5015187b02c0",
+    "version": "reproducible",
+    "wordcount": 212
+  }
 }

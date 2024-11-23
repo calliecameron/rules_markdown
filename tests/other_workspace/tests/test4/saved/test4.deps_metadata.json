@@ -1,131 +1,131 @@
 {
-    "tests/test1:test1": {
-        "author": [
-            "The Author"
+  "tests/test1:test1": {
+    "author": [
+      "The Author"
+    ],
+    "finished": true,
+    "identifier": [
+      {
+        "scheme": "DOI",
+        "text": "doi:10.234234.234/33"
+      }
+    ],
+    "lang": "en-GB",
+    "notes": "foo",
+    "parsed-dates": [],
+    "poetry-lines": 8,
+    "publications": [
+      {
+        "accepted": "2022-12-12",
+        "published": "2022-12-13",
+        "submitted": "2022-12-11",
+        "urls": [
+          "http://example.com"
         ],
-        "finished": true,
-        "identifier": [
-            {
-                "scheme": "DOI",
-                "text": "doi:10.234234.234/33"
-            }
+        "venue": "Foo"
+      },
+      {
+        "rejected": "2022-11-12",
+        "submitted": "2022-11-11",
+        "venue": "Bar"
+      }
+    ],
+    "repo": "reproducible",
+    "source-hash": "2c3752db20b98b6f7ee3103d161530f3a005694e9c209d7f9078a0f1eebd7ad9",
+    "title": "The Title",
+    "version": "reproducible",
+    "wordcount": 284
+  },
+  "tests/test2:test2": {
+    "author": [
+      "An Author"
+    ],
+    "identifier": [
+      {
+        "scheme": "DOI",
+        "text": "doi:10.234234.234/33"
+      }
+    ],
+    "lang": "en-GB",
+    "parsed-dates": [],
+    "poetry-lines": 8,
+    "publications": [
+      {
+        "accepted": "2022-10-12",
+        "notes": "foo bar baz",
+        "paid": "£10",
+        "published": "2022-10-13",
+        "submitted": "2022-10-11",
+        "urls": [
+          "http://example.com"
         ],
-        "lang": "en-GB",
-        "notes": "foo",
-        "parsed-dates": [],
-        "poetry-lines": 8,
-        "publications": [
-            {
-                "accepted": "2022-12-12",
-                "published": "2022-12-13",
-                "submitted": "2022-12-11",
-                "urls": [
-                    "http://example.com"
-                ],
-                "venue": "Foo"
-            },
-            {
-                "rejected": "2022-11-12",
-                "submitted": "2022-11-11",
-                "venue": "Bar"
-            }
-        ],
-        "repo": "reproducible",
-        "source-hash": "2c3752db20b98b6f7ee3103d161530f3a005694e9c209d7f9078a0f1eebd7ad9",
-        "title": "The Title",
-        "version": "reproducible",
-        "wordcount": 284
-    },
-    "tests/test2:test2": {
-        "author": [
-            "An Author"
-        ],
-        "identifier": [
-            {
-                "scheme": "DOI",
-                "text": "doi:10.234234.234/33"
-            }
-        ],
-        "lang": "en-GB",
-        "parsed-dates": [],
-        "poetry-lines": 8,
-        "publications": [
-            {
-                "accepted": "2022-10-12",
-                "notes": "foo bar baz",
-                "paid": "\u00a310",
-                "published": "2022-10-13",
-                "submitted": "2022-10-11",
-                "urls": [
-                    "http://example.com"
-                ],
-                "venue": "Bar"
-            }
-        ],
-        "repo": "reproducible",
-        "source-hash": "683240ccb013dab2b63472c47f7e1fa18ce1aa3c6fdc179f461e89f962cfcf24",
-        "title": "The Title",
-        "version": "reproducible",
-        "wordcount": 246
-    },
-    "tests/test3:test3": {
-        "author": [
-            "An Author"
-        ],
-        "date": "23 February 2019 baz",
-        "identifier": [
-            {
-                "scheme": "DOI",
-                "text": "doi:10.234234.234/33"
-            }
-        ],
-        "lang": "en-GB",
-        "parsed-dates": [
-            "2019/02/23"
-        ],
-        "poetry-lines": 8,
-        "publications": [
-            {
-                "self-published": "2022-12-12",
-                "venue": "Baz"
-            }
-        ],
-        "repo": "reproducible",
-        "source-hash": "c9bdde8df4de365edb9ff2bda9ac479378d7f92e0160033275f4e9428850904f",
-        "title": "The Title Is 'Baz'",
-        "version": "reproducible",
-        "wordcount": 337
-    },
-    "tests/test4:test4a": {
-        "author": [
-            "The Author"
-        ],
-        "date": "4 January 2022",
-        "lang": "en-GB",
-        "parsed-dates": [
-            "2022/01/04"
-        ],
-        "poetry-lines": 0,
-        "publications": [
-            {
-                "rejected": "2022-10-11",
-                "submitted": "2022-10-10",
-                "venue": "Quux"
-            },
-            {
-                "submitted": "2022-10-10",
-                "venue": "Yay"
-            },
-            {
-                "abandoned": "2022-11-10",
-                "submitted": "2022-10-10",
-                "venue": "Blah"
-            }
-        ],
-        "repo": "reproducible",
-        "source-hash": "dd33212836ce841023b78fe550abd449017cabcfe223703b4681372f8adbcbb1",
-        "title": "Title",
-        "version": "reproducible",
-        "wordcount": 10
-    }
+        "venue": "Bar"
+      }
+    ],
+    "repo": "reproducible",
+    "source-hash": "683240ccb013dab2b63472c47f7e1fa18ce1aa3c6fdc179f461e89f962cfcf24",
+    "title": "The Title",
+    "version": "reproducible",
+    "wordcount": 246
+  },
+  "tests/test3:test3": {
+    "author": [
+      "An Author"
+    ],
+    "date": "23 February 2019 baz",
+    "identifier": [
+      {
+        "scheme": "DOI",
+        "text": "doi:10.234234.234/33"
+      }
+    ],
+    "lang": "en-GB",
+    "parsed-dates": [
+      "2019/02/23"
+    ],
+    "poetry-lines": 8,
+    "publications": [
+      {
+        "self-published": "2022-12-12",
+        "venue": "Baz"
+      }
+    ],
+    "repo": "reproducible",
+    "source-hash": "c9bdde8df4de365edb9ff2bda9ac479378d7f92e0160033275f4e9428850904f",
+    "title": "The Title Is 'Baz'",
+    "version": "reproducible",
+    "wordcount": 337
+  },
+  "tests/test4:test4a": {
+    "author": [
+      "The Author"
+    ],
+    "date": "4 January 2022",
+    "lang": "en-GB",
+    "parsed-dates": [
+      "2022/01/04"
+    ],
+    "poetry-lines": 0,
+    "publications": [
+      {
+        "rejected": "2022-10-11",
+        "submitted": "2022-10-10",
+        "venue": "Quux"
+      },
+      {
+        "submitted": "2022-10-10",
+        "venue": "Yay"
+      },
+      {
+        "abandoned": "2022-11-10",
+        "submitted": "2022-10-10",
+        "venue": "Blah"
+      }
+    ],
+    "repo": "reproducible",
+    "source-hash": "dd33212836ce841023b78fe550abd449017cabcfe223703b4681372f8adbcbb1",
+    "title": "Title",
+    "version": "reproducible",
+    "wordcount": 10
+  }
 }
