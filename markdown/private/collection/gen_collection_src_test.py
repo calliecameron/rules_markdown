@@ -67,9 +67,9 @@ class TestGenCollectionSrc(test_utils.ScriptTestCase):
         self.assertEqual(
             out,
             """---
+title: The Title
 author:
 - The Author
-title: The Title
 ---
 
 ::: nospellcheck
@@ -145,10 +145,10 @@ title: The Title
         self.assertEqual(
             out,
             """---
+title: The Title
 author:
 - The Author
 date: 1 January
-title: The Title
 ---
 
 ::: nospellcheck

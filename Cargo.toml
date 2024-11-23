@@ -1,6 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
+    "markdown/private/collection",
     "markdown/private/core",
     "markdown/private/utils"
 ]
@@ -19,4 +20,5 @@ regex = "1.11.0"
 serde = { version = "1.0.210", features = ["derive"] }
 serde_json = "1.0.128"
 serde-json-fmt = "0.1.0"
+serde_yaml = "0.9.34+deprecated"
 validator = { version = "0.18.1", features = ["derive"] }

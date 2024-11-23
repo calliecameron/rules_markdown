@@ -62,6 +62,7 @@ crate.from_cargo(
     cargo_lockfile = "//:Cargo.lock",
     manifests = [
         "//:Cargo.toml",
+        "//markdown/private/collection:Cargo.toml",
         "//markdown/private/core:Cargo.toml",
         "//markdown/private/utils:Cargo.toml",
     ],

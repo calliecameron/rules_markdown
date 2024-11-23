@@ -1,0 +1,13 @@
+[package]
+name = "markdown_private_collection"
+edition.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "gen_collection_src"
+path = "gen_collection_src.rs"
+
+[dependencies]
+clap.workspace = true
+markdown.workspace = true
+serde_yaml.workspace = true

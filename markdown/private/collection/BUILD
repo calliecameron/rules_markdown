@@ -1,6 +1,6 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load("@pip//:requirements.bzl", "requirement")
-load("//markdown/private/support/python:defs.bzl", "py_binary")
+load("@crates//:defs.bzl", "all_crate_deps")
+load("@rules_rust//rust:defs.bzl", "rust_binary")
 load("//markdown/private/utils:defs.bzl", "script_py_test")
 
 bzl_library(
@@ -18,15 +18,14 @@ exports_files(
     visibility = ["//visibility:public"],
 )
 
-py_binary(
+rust_binary(
     name = "gen_collection_src",
-    srcs = ["gen_collection_src.py"],
-    type_stub_deps = [requirement("types-PyYAML")],
-    visibility = ["//visibility:public"],
+    srcs = ["gen_collection_src.rs"],
     deps = [
-        requirement("PyYAML"),
-        "//markdown/private/utils:metadata",
-    ],
+        "//markdown/private/utils",
+    ] + all_crate_deps(
+        normal = True,
+    ),
 )
 
 script_py_test(
