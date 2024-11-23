@@ -10,10 +10,10 @@ use std::fs::read_to_string;
 struct Cli {
     raw_version_file: String,
     deps_metadata_file: String,
-    metadata_out_file: String,
-    #[arg(long = "version_override")]
+    out_file: String,
+    #[arg(long)]
     version_override: Option<String>,
-    #[arg(long = "repo_override")]
+    #[arg(long)]
     repo_override: Option<String>,
 }
 
@@ -140,7 +140,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         args.repo_override,
     )?;
 
-    version.write_json(args.metadata_out_file)
+    version.write_json(args.out_file)
 }
 
 #[cfg(test)]

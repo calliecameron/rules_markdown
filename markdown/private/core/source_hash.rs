@@ -11,7 +11,7 @@ use std::fs::read_to_string;
 struct Cli {
     src_file: String,
     deps_metadata_file: String,
-    metadata_out_file: String,
+    out_file: String,
 }
 
 #[derive(Serialize)]
@@ -35,5 +35,5 @@ fn main() -> Result<(), Box<dyn Error>> {
     let hash_input = dep_hashes.to_json()? + src.as_str();
     let hash_output = format!("{:x}", md5::compute(hash_input));
 
-    SourceHash::build(&hash_output)?.write_json(args.metadata_out_file)
+    SourceHash::build(&hash_output)?.write_json(args.out_file)
 }

@@ -18,9 +18,9 @@ struct Cli {
 #[derive(Args)]
 #[group(required = true, multiple = false)]
 struct InFile {
-    #[arg(long = "version_file")]
+    #[arg(long)]
     version_file: Option<String>,
-    #[arg(long = "info_file")]
+    #[arg(long)]
     info_file: Option<String>,
 }
 

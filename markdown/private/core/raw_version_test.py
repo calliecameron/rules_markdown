@@ -13,12 +13,12 @@ class TestRawVersion(test_utils.ScriptTestCase):
         if version:
             version_file = os.path.join(self.tmpdir(), "version.json")
             self.dump_json(version_file, version)
-            args += ["--version_file", version_file]
+            args += ["--version-file", version_file]
 
         if info:
             info_file = os.path.join(self.tmpdir(), "info.txt")
             self.dump_file(info_file, info)
-            args += ["--info_file", info_file]
+            args += ["--info-file", info_file]
 
         out_file = os.path.join(self.tmpdir(), "out.json")
 

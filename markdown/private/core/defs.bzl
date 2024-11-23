@@ -262,10 +262,10 @@ def _md_file_impl(ctx):
     raw_version = ctx.actions.declare_file(ctx.label.name + "_raw_version.json")
     if ctx.file.version_file:
         inputs = [ctx.file.version_file]
-        args = ["--version_file", ctx.file.version_file.path]
+        args = ["--version-file", ctx.file.version_file.path]
     else:
         inputs = [ctx.info_file]
-        args = ["--info_file", ctx.info_file.path]
+        args = ["--info-file", ctx.info_file.path]
     ctx.actions.run(
         outputs = [raw_version],
         inputs = inputs,
@@ -277,9 +277,9 @@ def _md_file_impl(ctx):
     version = ctx.actions.declare_file(ctx.label.name + "_version.json")
     extra_args = []
     if ctx.attr.version_override:
-        extra_args += ["--version_override", ctx.attr.version_override]
+        extra_args += ["--version-override", ctx.attr.version_override]
     if ctx.attr.repo_override:
-        extra_args += ["--repo_override", ctx.attr.repo_override]
+        extra_args += ["--repo-override", ctx.attr.repo_override]
     ctx.actions.run(
         outputs = [version],
         inputs = [raw_version, ctx.attr.deps[MdGroupInfo].metadata],

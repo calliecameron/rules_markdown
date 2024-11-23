@@ -19,18 +19,18 @@ class TestVersion(test_utils.ScriptTestCase):
         deps_metadata_file = os.path.join(self.tmpdir(), "deps_metadata.json")
         self.dump_json(deps_metadata_file, deps_metadata)
 
-        metadata_out_file = os.path.join(self.tmpdir(), "metadata_out.json")
+        out_file = os.path.join(self.tmpdir(), "out.json")
 
         super().run_script(
             args=[
                 raw_version_file,
                 deps_metadata_file,
-                metadata_out_file,
+                out_file,
                 *args,
             ],
         )
 
-        return self.load_file(metadata_out_file)
+        return self.load_file(out_file)
 
     def test_main_simple(self) -> None:
         metadata_out = self.run_script(
@@ -104,7 +104,7 @@ class TestVersion(test_utils.ScriptTestCase):
                     "parsed-dates": [],
                 },
             },
-            ["--version_override", "override"],
+            ["--version-override", "override"],
         )
 
         self.assertEqual(
@@ -138,7 +138,7 @@ class TestVersion(test_utils.ScriptTestCase):
                     "parsed-dates": [],
                 },
             },
-            ["--repo_override", "override"],
+            ["--repo-override", "override"],
         )
 
         self.assertEqual(
@@ -173,7 +173,7 @@ class TestVersion(test_utils.ScriptTestCase):
                         "parsed-dates": [],
                     },
                 },
-                ["--version_override", "override"],
+                ["--version-override", "override"],
             )
 
 

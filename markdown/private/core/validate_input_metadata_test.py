@@ -43,6 +43,14 @@ GOOD2 = {
     "finished": True,
 }
 
+GOOD_MINIMAL: Mapping[str, Any] = {}
+
+GOOD_CONVERSIONS = {
+    "title": "",
+    "date": "",
+    "notes": "",
+}
+
 
 class TestValidate(test_utils.ScriptTestCase):
     def run_script(  # type: ignore[override]
@@ -112,6 +120,16 @@ class TestValidate(test_utils.ScriptTestCase):
     ],
     "title": "Foo"
 }""",
+        )
+
+        self.assertEqual(
+            self.run_script(GOOD_MINIMAL),
+            "{}",
+        )
+
+        self.assertEqual(
+            self.run_script(GOOD_CONVERSIONS),
+            "{}",
         )
 
     def test_validate_fails(self) -> None:

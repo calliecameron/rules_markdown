@@ -18,17 +18,17 @@ class TestSourceHash(test_utils.ScriptTestCase):
         deps_metadata_file = os.path.join(self.tmpdir(), "deps_metadata.json")
         self.dump_json(deps_metadata_file, deps_metadata)
 
-        metadata_out_file = os.path.join(self.tmpdir(), "metadata_out.json")
+        out_file = os.path.join(self.tmpdir(), "out.json")
 
         super().run_script(
             args=[
                 src_file,
                 deps_metadata_file,
-                metadata_out_file,
+                out_file,
             ],
         )
 
-        return self.load_json(metadata_out_file)
+        return self.load_json(out_file)
 
     def test_script(self) -> None:
         metadata_out = self.run_script(
