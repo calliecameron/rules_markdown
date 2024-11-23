@@ -13,5 +13,4 @@ derive_builder.workspace = true
 regex.workspace = true
 serde.workspace = true
 serde_json.workspace = true
-serde-json-fmt.workspace = true
 validator.workspace = true

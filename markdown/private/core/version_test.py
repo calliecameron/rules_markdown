@@ -2,6 +2,7 @@ import os
 import os.path
 import subprocess
 from collections.abc import Mapping, Sequence
+from typing import Any
 
 from markdown.private.utils import test_utils
 
@@ -12,7 +13,7 @@ class TestVersion(test_utils.ScriptTestCase):
         raw_version: Mapping[str, str],
         deps_metadata: Mapping[str, Mapping[str, str | Sequence[str]]],
         args: Sequence[str],
-    ) -> str:
+    ) -> dict[str, Any]:
         raw_version_file = os.path.join(self.tmpdir(), "raw_version.json")
         self.dump_json(raw_version_file, raw_version)
 
@@ -30,7 +31,7 @@ class TestVersion(test_utils.ScriptTestCase):
             ],
         )
 
-        return self.load_file(out_file)
+        return self.load_json(out_file)
 
     def test_main_simple(self) -> None:
         metadata_out = self.run_script(
@@ -41,10 +42,7 @@ class TestVersion(test_utils.ScriptTestCase):
 
         self.assertEqual(
             metadata_out,
-            """{
-    "repo": "bar",
-    "version": "foo"
-}""",
+            {"repo": "bar", "version": "foo"},
         )
 
     def test_main_complex(self) -> None:
@@ -75,10 +73,7 @@ class TestVersion(test_utils.ScriptTestCase):
 
         self.assertEqual(
             metadata_out,
-            """{
-    "repo": "bar",
-    "version": "foo, dirty deps"
-}""",
+            {"repo": "bar", "version": "foo, dirty deps"},
         )
 
     def test_main_version_override(self) -> None:
@@ -109,10 +104,7 @@ class TestVersion(test_utils.ScriptTestCase):
 
         self.assertEqual(
             metadata_out,
-            """{
-    "repo": "bar",
-    "version": "override"
-}""",
+            {"repo": "bar", "version": "override"},
         )
 
     def test_main_repo_override(self) -> None:
@@ -143,10 +135,7 @@ class TestVersion(test_utils.ScriptTestCase):
 
         self.assertEqual(
             metadata_out,
-            """{
-    "repo": "override",
-    "version": "foo, dirty deps"
-}""",
+            {"repo": "override", "version": "foo, dirty deps"},
         )
 
     def test_main_fails(self) -> None:

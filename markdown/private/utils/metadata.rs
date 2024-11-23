@@ -542,8 +542,8 @@ mod version_test {
         assert_eq!(
             Version::build("foo", "bar").unwrap().to_json().unwrap(),
             r#"{
-    "repo": "bar",
-    "version": "foo"
+  "repo": "bar",
+  "version": "foo"
 }"#
         );
     }
@@ -552,8 +552,8 @@ mod version_test {
     fn test_deserialization() {
         let v: Version = from_json(
             r#"{
-    "repo": "bar",
-    "version": "foo"
+  "repo": "bar",
+  "version": "foo"
 }"#,
         )
         .unwrap();
@@ -562,22 +562,22 @@ mod version_test {
 
         assert!(from_json::<Version>(
             r#"{
-    "repo": "bar",
-    "version": ""
+  "repo": "bar",
+  "version": ""
 }"#
         )
         .is_err());
         assert!(from_json::<Version>(
             r#"{
-    "repo": "",
-    "version": "foo"
+  "repo": "",
+  "version": "foo"
 }"#
         )
         .is_err());
         assert!(from_json::<Version>(
             r#"{
-    "repo": "",
-    "version": ""
+  "repo": "",
+  "version": ""
 }"#
         )
         .is_err());
@@ -599,7 +599,7 @@ mod source_hash_test {
         assert_eq!(
             SourceHash::build("foo").unwrap().to_json().unwrap(),
             r#"{
-    "source-hash": "foo"
+  "source-hash": "foo"
 }"#
         )
     }
@@ -608,7 +608,7 @@ mod source_hash_test {
     fn test_deserialization() {
         let h: SourceHash = from_json(
             r#"{
-    "source-hash": "foo"
+  "source-hash": "foo"
 }"#,
         )
         .unwrap();
@@ -616,7 +616,7 @@ mod source_hash_test {
 
         assert!(from_json::<SourceHash>(
             r#"{
-    "source-hash": "",
+  "source-hash": "",
 }"#
         )
         .is_err());
@@ -649,10 +649,10 @@ mod parsed_dates_test {
             .to_json()
             .unwrap(),
             r#"{
-    "parsed-dates": [
-        "2020",
-        "2020/01"
-    ]
+  "parsed-dates": [
+    "2020",
+    "2020/01"
+  ]
 }"#
         )
     }
@@ -661,12 +661,12 @@ mod parsed_dates_test {
     fn test_deserialization_good() {
         let pd: ParsedDates = from_json(
             r#"{
-    "parsed-dates": [
-        "2020/01/01",
-        "2021",
-        "2021/03",
-        "2024/06/23"
-    ]
+  "parsed-dates": [
+    "2020/01/01",
+    "2021",
+    "2021/03",
+    "2024/06/23"
+  ]
 }"#,
         )
         .unwrap();
@@ -677,18 +677,18 @@ mod parsed_dates_test {
     fn test_deserialization_bad_invalid() {
         assert!(from_json::<ParsedDates>(
             r#"{
-    "parsed-dates": [
-        "2020/01/01 10:30:00"
-    ]
+  "parsed-dates": [
+    "2020/01/01 10:30:00"
+  ]
 }"#
         )
         .is_err());
 
         assert!(from_json::<ParsedDates>(
             r#"{
-    "parsed-dates": [
-        ""
-    ]
+  "parsed-dates": [
+    ""
+  ]
 }"#
         )
         .is_err());
@@ -698,10 +698,10 @@ mod parsed_dates_test {
     fn test_deserialization_bad_duplicates() {
         assert!(from_json::<ParsedDates>(
             r#"{
-    "parsed-dates": [
-        "2020/01/01",
-        "2020/01/01"
-    ]
+  "parsed-dates": [
+    "2020/01/01",
+    "2020/01/01"
+  ]
 }"#,
         )
         .is_err());
@@ -711,10 +711,10 @@ mod parsed_dates_test {
     fn test_deserialization_bad_unordered() {
         assert!(from_json::<ParsedDates>(
             r#"{
-    "parsed-dates": [
-        "2024/06/23",
-        "2020/01/01"
-    ]
+  "parsed-dates": [
+    "2024/06/23",
+    "2020/01/01"
+  ]
 }"#,
         )
         .is_err());
@@ -738,8 +738,8 @@ mod identifier_test {
         assert_eq!(
             Identifier::build("foo", "bar").unwrap().to_json().unwrap(),
             r#"{
-    "scheme": "foo",
-    "text": "bar"
+  "scheme": "foo",
+  "text": "bar"
 }"#
         )
     }
@@ -748,8 +748,8 @@ mod identifier_test {
     fn test_deserialization() {
         let i: Identifier = from_json(
             r#"{
-    "scheme": "foo",
-    "text": "bar"
+  "scheme": "foo",
+  "text": "bar"
 }"#,
         )
         .unwrap();
@@ -758,22 +758,22 @@ mod identifier_test {
 
         assert!(from_json::<Identifier>(
             r#"{
-    "scheme": "",
-    "text": "bar"
+  "scheme": "",
+  "text": "bar"
 }"#
         )
         .is_err());
         assert!(from_json::<Identifier>(
             r#"{
-    "scheme": "foo",
-    "text": ""
+  "scheme": "foo",
+  "text": ""
 }"#
         )
         .is_err());
         assert!(from_json::<Identifier>(
             r#"{
-    "scheme": "",
-    "text": ""
+  "scheme": "",
+  "text": ""
 }"#
         )
         .is_err());
@@ -833,49 +833,49 @@ mod input_metadata_test {
                 .to_json()
                 .unwrap(),
             r#"{
-    "author": [
-        "bar",
-        "baz"
-    ],
-    "date": "quux",
-    "finished": true,
-    "identifier": [
-        {
-            "scheme": "a",
-            "text": "b"
-        },
-        {
-            "scheme": "c",
-            "text": "d"
-        }
-    ],
-    "notes": "blah",
-    "publications": [
-        {
-            "accepted": "2023-05-17",
-            "notes": "baz",
-            "paid": "quux",
-            "published": "2023-05-18",
-            "submitted": "2023-05-16",
-            "urls": [
-                "foo",
-                "bar"
-            ],
-            "venue": "Book"
-        },
-        {
-            "accepted": "2023-05-20",
-            "notes": "baz2",
-            "paid": "quux2",
-            "submitted": "2023-05-19",
-            "urls": [
-                "foo2",
-                "bar2"
-            ],
-            "venue": "Book2"
-        }
-    ],
-    "title": "foo"
+  "author": [
+    "bar",
+    "baz"
+  ],
+  "date": "quux",
+  "finished": true,
+  "identifier": [
+    {
+      "scheme": "a",
+      "text": "b"
+    },
+    {
+      "scheme": "c",
+      "text": "d"
+    }
+  ],
+  "notes": "blah",
+  "publications": [
+    {
+      "accepted": "2023-05-17",
+      "notes": "baz",
+      "paid": "quux",
+      "published": "2023-05-18",
+      "submitted": "2023-05-16",
+      "urls": [
+        "foo",
+        "bar"
+      ],
+      "venue": "Book"
+    },
+    {
+      "accepted": "2023-05-20",
+      "notes": "baz2",
+      "paid": "quux2",
+      "submitted": "2023-05-19",
+      "urls": [
+        "foo2",
+        "bar2"
+      ],
+      "venue": "Book2"
+    }
+  ],
+  "title": "foo"
 }"#
         )
     }
@@ -896,9 +896,9 @@ mod input_metadata_test {
     fn test_deserialization_conversions() {
         let m = from_json::<InputMetadata>(
             r#"{
-    "title": "",
-    "date": "",
-    "notes": ""
+  "title": "",
+  "date": "",
+  "notes": ""
 }"#,
         )
         .unwrap();
@@ -927,50 +927,50 @@ mod input_metadata_test {
     fn test_deserialization_full() {
         let m = from_json::<InputMetadata>(
             r#"{
-            "author": [
-                "bar",
-                "baz"
-            ],
-            "date": "quux",
-            "finished": true,
-            "identifier": [
-                {
-                    "scheme": "a",
-                    "text": "b"
-                },
-                {
-                    "scheme": "c",
-                    "text": "d"
-                }
-            ],
-            "notes": "blah",
-            "publications": [
-                {
-                    "accepted": "2023-05-17",
-                    "notes": "baz",
-                    "paid": "quux",
-                    "published": "2023-05-18",
-                    "submitted": "2023-05-16",
-                    "urls": [
-                        "foo",
-                        "bar"
-                    ],
-                    "venue": "Book"
-                },
-                {
-                    "accepted": "2023-05-20",
-                    "notes": "baz2",
-                    "paid": "quux2",
-                    "submitted": "2023-05-19",
-                    "urls": [
-                        "foo2",
-                        "bar2"
-                    ],
-                    "venue": "Book2"
-                }
-            ],
-            "title": "foo"
-        }"#,
+  "author": [
+    "bar",
+    "baz"
+  ],
+  "date": "quux",
+  "finished": true,
+  "identifier": [
+    {
+      "scheme": "a",
+      "text": "b"
+    },
+    {
+      "scheme": "c",
+      "text": "d"
+    }
+  ],
+  "notes": "blah",
+  "publications": [
+    {
+      "accepted": "2023-05-17",
+      "notes": "baz",
+      "paid": "quux",
+      "published": "2023-05-18",
+      "submitted": "2023-05-16",
+      "urls": [
+        "foo",
+        "bar"
+      ],
+      "venue": "Book"
+    },
+    {
+      "accepted": "2023-05-20",
+      "notes": "baz2",
+      "paid": "quux2",
+      "submitted": "2023-05-19",
+      "urls": [
+        "foo2",
+        "bar2"
+      ],
+      "venue": "Book2"
+    }
+  ],
+  "title": "foo"
+}"#,
         )
         .unwrap();
 
@@ -1080,59 +1080,59 @@ mod output_metadata_test {
                 .to_json()
                 .unwrap(),
             r#"{
-    "author": [
-        "bar",
-        "baz"
-    ],
-    "date": "quux",
-    "finished": true,
-    "identifier": [
-        {
-            "scheme": "a",
-            "text": "b"
-        },
-        {
-            "scheme": "c",
-            "text": "d"
-        }
-    ],
-    "lang": "blah1",
-    "notes": "blah",
-    "parsed-dates": [
-        "2020",
-        "2020/01"
-    ],
-    "poetry-lines": 5,
-    "publications": [
-        {
-            "accepted": "2023-05-17",
-            "notes": "baz",
-            "paid": "quux",
-            "published": "2023-05-18",
-            "submitted": "2023-05-16",
-            "urls": [
-                "foo",
-                "bar"
-            ],
-            "venue": "Book"
-        },
-        {
-            "accepted": "2023-05-20",
-            "notes": "baz2",
-            "paid": "quux2",
-            "submitted": "2023-05-19",
-            "urls": [
-                "foo2",
-                "bar2"
-            ],
-            "venue": "Book2"
-        }
-    ],
-    "repo": "blah3",
-    "source-hash": "blah4",
-    "title": "foo",
-    "version": "blah2",
-    "wordcount": 10
+  "author": [
+    "bar",
+    "baz"
+  ],
+  "date": "quux",
+  "finished": true,
+  "identifier": [
+    {
+      "scheme": "a",
+      "text": "b"
+    },
+    {
+      "scheme": "c",
+      "text": "d"
+    }
+  ],
+  "lang": "blah1",
+  "notes": "blah",
+  "parsed-dates": [
+    "2020",
+    "2020/01"
+  ],
+  "poetry-lines": 5,
+  "publications": [
+    {
+      "accepted": "2023-05-17",
+      "notes": "baz",
+      "paid": "quux",
+      "published": "2023-05-18",
+      "submitted": "2023-05-16",
+      "urls": [
+        "foo",
+        "bar"
+      ],
+      "venue": "Book"
+    },
+    {
+      "accepted": "2023-05-20",
+      "notes": "baz2",
+      "paid": "quux2",
+      "submitted": "2023-05-19",
+      "urls": [
+        "foo2",
+        "bar2"
+      ],
+      "venue": "Book2"
+    }
+  ],
+  "repo": "blah3",
+  "source-hash": "blah4",
+  "title": "foo",
+  "version": "blah2",
+  "wordcount": 10
 }"#
         )
     }
@@ -1141,14 +1141,14 @@ mod output_metadata_test {
     fn test_deserialization_single_author() {
         let m = from_json::<OutputMetadata>(
             r#"{
-    "author": "foo",
-    "lang": "blah1",
-    "parsed-dates": [],
-    "poetry-lines": 5,
-    "repo": "blah3",
-    "source-hash": "blah4",
-    "version": "blah2",
-    "wordcount": 10
+  "author": "foo",
+  "lang": "blah1",
+  "parsed-dates": [],
+  "poetry-lines": 5,
+  "repo": "blah3",
+  "source-hash": "blah4",
+  "version": "blah2",
+  "wordcount": 10
 }"#,
         )
         .unwrap();
@@ -1172,14 +1172,14 @@ mod output_metadata_test {
     fn test_deserialization_str_numbers() {
         let m = from_json::<OutputMetadata>(
             r#"{
-    "author": "foo",
-    "lang": "blah1",
-    "parsed-dates": [],
-    "poetry-lines": "5",
-    "repo": "blah3",
-    "source-hash": "blah4",
-    "version": "blah2",
-    "wordcount": "10"
+  "author": "foo",
+  "lang": "blah1",
+  "parsed-dates": [],
+  "poetry-lines": "5",
+  "repo": "blah3",
+  "source-hash": "blah4",
+  "version": "blah2",
+  "wordcount": "10"
 }"#,
         )
         .unwrap();
@@ -1203,60 +1203,60 @@ mod output_metadata_test {
     fn test_deserialization_full() {
         let m = from_json::<OutputMetadata>(
             r#"{
-                "author": [
-                    "bar",
-                    "baz"
-                ],
-                "date": "quux",
-                "finished": true,
-                "identifier": [
-                    {
-                        "scheme": "a",
-                        "text": "b"
-                    },
-                    {
-                        "scheme": "c",
-                        "text": "d"
-                    }
-                ],
-                "lang": "blah1",
-                "notes": "blah",
-                "parsed-dates": [
-                    "2020",
-                    "2020/01"
-                ],
-                "poetry-lines": 5,
-                "publications": [
-                    {
-                        "accepted": "2023-05-17",
-                        "notes": "baz",
-                        "paid": "quux",
-                        "published": "2023-05-18",
-                        "submitted": "2023-05-16",
-                        "urls": [
-                            "foo",
-                            "bar"
-                        ],
-                        "venue": "Book"
-                    },
-                    {
-                        "accepted": "2023-05-20",
-                        "notes": "baz2",
-                        "paid": "quux2",
-                        "submitted": "2023-05-19",
-                        "urls": [
-                            "foo2",
-                            "bar2"
-                        ],
-                        "venue": "Book2"
-                    }
-                ],
-                "repo": "blah3",
-                "source-hash": "blah4",
-                "title": "foo",
-                "version": "blah2",
-                "wordcount": 10
-            }"#,
+  "author": [
+    "bar",
+    "baz"
+  ],
+  "date": "quux",
+  "finished": true,
+  "identifier": [
+    {
+      "scheme": "a",
+      "text": "b"
+    },
+    {
+      "scheme": "c",
+      "text": "d"
+    }
+  ],
+  "lang": "blah1",
+  "notes": "blah",
+  "parsed-dates": [
+    "2020",
+    "2020/01"
+  ],
+  "poetry-lines": 5,
+  "publications": [
+    {
+      "accepted": "2023-05-17",
+      "notes": "baz",
+      "paid": "quux",
+      "published": "2023-05-18",
+      "submitted": "2023-05-16",
+      "urls": [
+        "foo",
+        "bar"
+      ],
+      "venue": "Book"
+    },
+    {
+      "accepted": "2023-05-20",
+      "notes": "baz2",
+      "paid": "quux2",
+      "submitted": "2023-05-19",
+      "urls": [
+        "foo2",
+        "bar2"
+      ],
+      "venue": "Book2"
+    }
+  ],
+  "repo": "blah3",
+  "source-hash": "blah4",
+  "title": "foo",
+  "version": "blah2",
+  "wordcount": 10
+}"#,
         )
         .unwrap();
 
@@ -1356,24 +1356,24 @@ mod metadata_map_test {
         assert_eq!(
             m.to_json().unwrap(),
             r#"{
-    "bar": {
-        "lang": "quux1",
-        "parsed-dates": [],
-        "poetry-lines": 8,
-        "repo": "quux3",
-        "source-hash": "quux4",
-        "version": "quux2",
-        "wordcount": 20
-    },
-    "foo": {
-        "lang": "blah1",
-        "parsed-dates": [],
-        "poetry-lines": 5,
-        "repo": "blah3",
-        "source-hash": "blah4",
-        "version": "blah2",
-        "wordcount": 10
-    }
+  "bar": {
+    "lang": "quux1",
+    "parsed-dates": [],
+    "poetry-lines": 8,
+    "repo": "quux3",
+    "source-hash": "quux4",
+    "version": "quux2",
+    "wordcount": 20
+  },
+  "foo": {
+    "lang": "blah1",
+    "parsed-dates": [],
+    "poetry-lines": 5,
+    "repo": "blah3",
+    "source-hash": "blah4",
+    "version": "blah2",
+    "wordcount": 10
+  }
 }"#,
         )
     }
@@ -1382,24 +1382,24 @@ mod metadata_map_test {
     fn test_deserialization() {
         let mm = from_json::<MetadataMap>(
             r#"{
-    "bar": {
-        "lang": "quux1",
-        "parsed-dates": [],
-        "poetry-lines": 8,
-        "repo": "quux3",
-        "source-hash": "quux4",
-        "version": "quux2",
-        "wordcount": 20
-    },
-    "foo": {
-        "lang": "blah1",
-        "parsed-dates": [],
-        "poetry-lines": 5,
-        "repo": "blah3",
-        "source-hash": "blah4",
-        "version": "blah2",
-        "wordcount": 10
-    }
+  "bar": {
+    "lang": "quux1",
+    "parsed-dates": [],
+    "poetry-lines": 8,
+    "repo": "quux3",
+    "source-hash": "quux4",
+    "version": "quux2",
+    "wordcount": 20
+  },
+  "foo": {
+    "lang": "blah1",
+    "parsed-dates": [],
+    "poetry-lines": 5,
+    "repo": "blah3",
+    "source-hash": "blah4",
+    "version": "blah2",
+    "wordcount": 10
+  }
 }"#,
         )
         .unwrap();

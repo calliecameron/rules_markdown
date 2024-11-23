@@ -2,12 +2,13 @@ import os
 import os.path
 import subprocess
 from collections.abc import Mapping
+from typing import Any
 
 from markdown.private.utils import test_utils
 
 
 class TestRawVersion(test_utils.ScriptTestCase):
-    def run_script(self, version: Mapping[str, str], info: str) -> str:  # type: ignore[override]
+    def run_script(self, version: Mapping[str, str], info: str) -> dict[str, Any]:  # type: ignore[override]
         args = []
 
         if version:
@@ -24,7 +25,7 @@ class TestRawVersion(test_utils.ScriptTestCase):
 
         super().run_script(args=[*args, out_file])
 
-        return self.load_file(out_file)
+        return self.load_json(out_file)
 
     def test_version_file(self) -> None:
         self.assertEqual(
@@ -35,10 +36,7 @@ class TestRawVersion(test_utils.ScriptTestCase):
                 },
                 "",
             ),
-            """{
-    "repo": "a/b",
-    "version": "1"
-}""",
+            {"repo": "a/b", "version": "1"},
         )
 
     def test_info_file_present(self) -> None:
@@ -50,10 +48,7 @@ STABLE_WORKSPACE_PARENT_REPO a/b
 STABLE_WORKSPACE_PARENT_VERSION 1
 """,
             ),
-            """{
-    "repo": "a/b",
-    "version": "1"
-}""",
+            {"repo": "a/b", "version": "1"},
         )
 
     def test_info_file_missing(self) -> None:
@@ -64,10 +59,7 @@ STABLE_WORKSPACE_PARENT_VERSION 1
 FOO 1
 """,
             ),
-            """{
-    "repo": "unversioned",
-    "version": "unversioned"
-}""",
+            {"repo": "unversioned", "version": "unversioned"},
         )
 
     def test_neither(self) -> None:

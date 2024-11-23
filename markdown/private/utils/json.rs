@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize, Serializer};
-use serde_json_fmt::JsonFormat;
 use std::error::Error;
 use std::fs::write;
 use std::path::Path;
@@ -21,9 +20,7 @@ pub trait JsonSerializable {
     where
         Self: Serialize,
     {
-        let s = JsonFormat::pretty().indent_width(Some(4)).ascii(true);
-        let out = s.format_to_string(&SortAlphabetically(self))?;
-        Ok(out)
+        serde_json::to_string_pretty(&SortAlphabetically(self))
     }
 
     fn write_json<P>(&self, path: P) -> Result<(), Box<dyn Error>>

@@ -729,8 +729,8 @@ mod publication_test {
         assert_eq!(
             p.to_json().unwrap(),
             r#"{
-    "self-published": "2023-05-16",
-    "venue": "foo"
+  "self-published": "2023-05-16",
+  "venue": "foo"
 }"#
         );
     }
@@ -750,16 +750,16 @@ mod publication_test {
         assert_eq!(
             p.to_json().unwrap(),
             r#"{
-    "accepted": "2023-05-17",
-    "notes": "quux",
-    "paid": "blah",
-    "published": "2023-05-18",
-    "submitted": "2023-05-16",
-    "urls": [
-        "bar",
-        "baz"
-    ],
-    "venue": "foo"
+  "accepted": "2023-05-17",
+  "notes": "quux",
+  "paid": "blah",
+  "published": "2023-05-18",
+  "submitted": "2023-05-16",
+  "urls": [
+    "bar",
+    "baz"
+  ],
+  "venue": "foo"
 }"#
         );
     }
@@ -768,9 +768,9 @@ mod publication_test {
     fn test_deserialization_good_minimal() {
         let p: Publication = from_json(
             r#"{
-    "notes": "",
-    "submitted": "2023-05-16",
-    "venue": "foo"
+  "notes": "",
+  "submitted": "2023-05-16",
+  "venue": "foo"
 }"#,
         )
         .unwrap();
@@ -794,16 +794,16 @@ mod publication_test {
     fn test_deserialization_good_complex() {
         let p: Publication = from_json(
             r#"{
-    "accepted": "2023-05-17",
-    "notes": "baz",
-    "paid": "quux",
-    "published": "2023-05-18",
-    "submitted": "2023-05-16",
-    "urls": [
-        "foo",
-        "bar"
-    ],
-    "venue": "foo"
+  "accepted": "2023-05-17",
+  "notes": "baz",
+  "paid": "quux",
+  "published": "2023-05-18",
+  "submitted": "2023-05-16",
+  "urls": [
+    "foo",
+    "bar"
+  ],
+  "venue": "foo"
 }"#,
         )
         .unwrap();
@@ -839,9 +839,9 @@ mod publication_test {
     fn test_deserialization_bad_too_many_end_dates() {
         assert!(from_json::<Publication>(
             r#"{
-    "published": "2023-05-16",
-    "rejected": "2023-05-16",
-    "venue": "foo"
+  "published": "2023-05-16",
+  "rejected": "2023-05-16",
+  "venue": "foo"
 }"#,
         )
         .is_err());
@@ -1000,29 +1000,29 @@ mod publications_test {
         assert_eq!(
             ps.to_json().unwrap(),
             r#"[
-    {
-        "accepted": "2023-05-17",
-        "notes": "baz",
-        "paid": "quux",
-        "published": "2023-05-18",
-        "submitted": "2023-05-16",
-        "urls": [
-            "foo",
-            "bar"
-        ],
-        "venue": "Book"
-    },
-    {
-        "accepted": "2023-05-20",
-        "notes": "baz2",
-        "paid": "quux2",
-        "submitted": "2023-05-19",
-        "urls": [
-            "foo2",
-            "bar2"
-        ],
-        "venue": "Book2"
-    }
+  {
+    "accepted": "2023-05-17",
+    "notes": "baz",
+    "paid": "quux",
+    "published": "2023-05-18",
+    "submitted": "2023-05-16",
+    "urls": [
+      "foo",
+      "bar"
+    ],
+    "venue": "Book"
+  },
+  {
+    "accepted": "2023-05-20",
+    "notes": "baz2",
+    "paid": "quux2",
+    "submitted": "2023-05-19",
+    "urls": [
+      "foo2",
+      "bar2"
+    ],
+    "venue": "Book2"
+  }
 ]"#
         );
     }
@@ -1031,29 +1031,29 @@ mod publications_test {
     fn test_deserialization_good() {
         let ps: Publications = from_json(
             r#"[
-    {
-        "accepted": "2023-05-17",
-        "notes": "baz",
-        "paid": "quux",
-        "published": "2023-05-18",
-        "submitted": "2023-05-16",
-        "urls": [
-            "foo",
-            "bar"
-        ],
-        "venue": "Book"
-    },
-    {
-        "accepted": "2023-05-20",
-        "notes": "baz2",
-        "paid": "quux2",
-        "submitted": "2023-05-19",
-        "urls": [
-            "foo2",
-            "bar2"
-        ],
-        "venue": "Book2"
-    }
+  {
+    "accepted": "2023-05-17",
+    "notes": "baz",
+    "paid": "quux",
+    "published": "2023-05-18",
+    "submitted": "2023-05-16",
+    "urls": [
+      "foo",
+      "bar"
+    ],
+    "venue": "Book"
+  },
+  {
+    "accepted": "2023-05-20",
+    "notes": "baz2",
+    "paid": "quux2",
+    "submitted": "2023-05-19",
+    "urls": [
+      "foo2",
+      "bar2"
+    ],
+    "venue": "Book2"
+  }
 ]"#,
         )
         .unwrap();

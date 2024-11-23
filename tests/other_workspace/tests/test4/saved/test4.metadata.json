@@ -1,16 +1,16 @@
 {
-    "author": [
-        "The Author"
-    ],
-    "date": "1 January 2022",
-    "lang": "en-GB",
-    "parsed-dates": [
-        "2022/01/01"
-    ],
-    "poetry-lines": 24,
-    "repo": "reproducible",
-    "source-hash": "eabaf7703065d2a44ba59d5fd9fc06a5cf8d455a21cd9395c960c68916375315",
-    "title": "Test 4",
-    "version": "reproducible",
-    "wordcount": 897
+  "author": [
+    "The Author"
+  ],
+  "date": "1 January 2022",
+  "lang": "en-GB",
+  "parsed-dates": [
+    "2022/01/01"
+  ],
+  "poetry-lines": 24,
+  "repo": "reproducible",
+  "source-hash": "eabaf7703065d2a44ba59d5fd9fc06a5cf8d455a21cd9395c960c68916375315",
+  "title": "Test 4",
+  "version": "reproducible",
+  "wordcount": 897
 }

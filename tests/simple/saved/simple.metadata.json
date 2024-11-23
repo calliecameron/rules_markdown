@@ -1,19 +1,19 @@
 {
-    "author": [
-        "The Author"
-    ],
-    "identifier": [
-        {
-            "scheme": "DOI",
-            "text": "doi:10.234234.234/33"
-        }
-    ],
-    "lang": "en-GB",
-    "parsed-dates": [],
-    "poetry-lines": 0,
-    "repo": "reproducible",
-    "source-hash": "137da27807d7aa9a521eda690ac8a42b1f9e2949de627a8374a6817d848423d7",
-    "title": "Simple Test",
-    "version": "reproducible",
-    "wordcount": 2
+  "author": [
+    "The Author"
+  ],
+  "identifier": [
+    {
+      "scheme": "DOI",
+      "text": "doi:10.234234.234/33"
+    }
+  ],
+  "lang": "en-GB",
+  "parsed-dates": [],
+  "poetry-lines": 0,
+  "repo": "reproducible",
+  "source-hash": "137da27807d7aa9a521eda690ac8a42b1f9e2949de627a8374a6817d848423d7",
+  "title": "Simple Test",
+  "version": "reproducible",
+  "wordcount": 2
 }

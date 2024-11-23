@@ -56,7 +56,7 @@ class TestValidate(test_utils.ScriptTestCase):
     def run_script(  # type: ignore[override]
         self,
         content: Mapping[str, Any],
-    ) -> str:
+    ) -> dict[str, Any]:
         in_file = os.path.join(self.tmpdir(), "in.json")
         self.dump_json(in_file, content)
 
@@ -69,67 +69,59 @@ class TestValidate(test_utils.ScriptTestCase):
             ],
         )
 
-        return self.load_file(out_file)
+        return self.load_json(out_file)
 
     def test_validate_succeeds(self) -> None:
         self.assertEqual(
             self.run_script(GOOD),
-            """{
-    "author": [
-        "Bar"
-    ],
-    "finished": true,
-    "notes": "baz quux",
-    "publications": [
-        {
-            "accepted": "2022-12-02",
-            "notes": "foo bar",
-            "paid": "\\u00a310",
-            "published": "2022-12-03",
-            "submitted": "2022-12-01",
-            "urls": [
-                "http://example.com"
-            ],
-            "venue": "Foo"
-        }
-    ],
-    "title": "Foo"
-}""",
+            {
+                "author": ["Bar"],
+                "finished": True,
+                "notes": "baz quux",
+                "publications": [
+                    {
+                        "accepted": "2022-12-02",
+                        "notes": "foo bar",
+                        "paid": "£10",
+                        "published": "2022-12-03",
+                        "submitted": "2022-12-01",
+                        "urls": ["http://example.com"],
+                        "venue": "Foo",
+                    },
+                ],
+                "title": "Foo",
+            },
         )
         self.assertEqual(
             self.run_script(GOOD2),
-            """{
-    "author": [
-        "Bar"
-    ],
-    "date": "10 June 2023",
-    "finished": true,
-    "notes": "baz quux",
-    "publications": [
-        {
-            "accepted": "2022-12-02",
-            "notes": "foo bar",
-            "paid": "\\u00a310",
-            "published": "2022-12-03",
-            "submitted": "2022-12-01",
-            "urls": [
-                "http://example.com"
-            ],
-            "venue": "Foo"
-        }
-    ],
-    "title": "Foo"
-}""",
+            {
+                "author": ["Bar"],
+                "date": "10 June 2023",
+                "finished": True,
+                "notes": "baz quux",
+                "publications": [
+                    {
+                        "accepted": "2022-12-02",
+                        "notes": "foo bar",
+                        "paid": "£10",
+                        "published": "2022-12-03",
+                        "submitted": "2022-12-01",
+                        "urls": ["http://example.com"],
+                        "venue": "Foo",
+                    },
+                ],
+                "title": "Foo",
+            },
         )
 
         self.assertEqual(
             self.run_script(GOOD_MINIMAL),
-            "{}",
+            {},
         )
 
         self.assertEqual(
             self.run_script(GOOD_CONVERSIONS),
-            "{}",
+            {},
         )
 
     def test_validate_fails(self) -> None:

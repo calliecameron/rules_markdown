@@ -11,7 +11,7 @@ class TestValidateOutputMetadata(test_utils.ScriptTestCase):
     def run_script(  # type: ignore[override]
         self,
         content: Mapping[str, Any],
-    ) -> str:
+    ) -> dict[str, Any]:
         in_file = os.path.join(self.tmpdir(), "in.json")
         self.dump_json(in_file, content)
 
@@ -24,7 +24,7 @@ class TestValidateOutputMetadata(test_utils.ScriptTestCase):
             ],
         )
 
-        return self.load_file(out_file)
+        return self.load_json(out_file)
 
     def test_good(self) -> None:
         self.assertEqual(
@@ -39,15 +39,15 @@ class TestValidateOutputMetadata(test_utils.ScriptTestCase):
                     "parsed-dates": [],
                 },
             ),
-            """{
-    "lang": "en-GB",
-    "parsed-dates": [],
-    "poetry-lines": 10,
-    "repo": "bar",
-    "source-hash": "quux",
-    "version": "foo",
-    "wordcount": 10
-}""",
+            {
+                "lang": "en-GB",
+                "parsed-dates": [],
+                "poetry-lines": 10,
+                "repo": "bar",
+                "source-hash": "quux",
+                "version": "foo",
+                "wordcount": 10,
+            },
         )
 
     def test_fails(self) -> None:

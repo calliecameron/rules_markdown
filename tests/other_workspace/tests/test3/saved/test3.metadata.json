@@ -1,28 +1,28 @@
 {
-    "author": [
-        "An Author"
-    ],
-    "date": "23 February 2019 baz",
-    "identifier": [
-        {
-            "scheme": "DOI",
-            "text": "doi:10.234234.234/33"
-        }
-    ],
-    "lang": "en-GB",
-    "parsed-dates": [
-        "2019/02/23"
-    ],
-    "poetry-lines": 8,
-    "publications": [
-        {
-            "self-published": "2022-12-12",
-            "venue": "Baz"
-        }
-    ],
-    "repo": "reproducible",
-    "source-hash": "c9bdde8df4de365edb9ff2bda9ac479378d7f92e0160033275f4e9428850904f",
-    "title": "The Title Is 'Baz'",
-    "version": "reproducible",
-    "wordcount": 337
+  "author": [
+    "An Author"
+  ],
+  "date": "23 February 2019 baz",
+  "identifier": [
+    {
+      "scheme": "DOI",
+      "text": "doi:10.234234.234/33"
+    }
+  ],
+  "lang": "en-GB",
+  "parsed-dates": [
+    "2019/02/23"
+  ],
+  "poetry-lines": 8,
+  "publications": [
+    {
+      "self-published": "2022-12-12",
+      "venue": "Baz"
+    }
+  ],
+  "repo": "reproducible",
+  "source-hash": "c9bdde8df4de365edb9ff2bda9ac479378d7f92e0160033275f4e9428850904f",
+  "title": "The Title Is 'Baz'",
+  "version": "reproducible",
+  "wordcount": 337
 }
