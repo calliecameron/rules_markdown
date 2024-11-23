@@ -104,10 +104,7 @@ def md_file(
     """
     if not src:
         src = name + ".md"
-    deps = deps or []
     extra_dictionaries = extra_dictionaries or []
-    data = data or []
-    images = images or []
 
     md_group(
         name = name + "_deps",
@@ -401,7 +398,7 @@ def md_collection(
         name = name + "_src",
         title = title,
         author = author,
-        date = date or "",
+        date = date,
         deps = name + "_deps",
     )
 
