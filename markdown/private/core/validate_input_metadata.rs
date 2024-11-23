@@ -10,6 +10,7 @@ use std::fs::read_to_string;
 struct Cli {
     #[arg(value_parser = arg_validators::non_empty())]
     in_file: String,
+
     #[arg(value_parser = arg_validators::non_empty())]
     out_file: String,
 }

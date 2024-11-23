@@ -13,6 +13,7 @@ const VERSION_KEY: &str = "STABLE_WORKSPACE_PARENT_VERSION";
 struct Cli {
     #[arg(value_parser = arg_validators::non_empty())]
     out_file: String,
+
     #[command(flatten)]
     in_file: InFile,
 }
@@ -23,6 +24,7 @@ struct InFile {
     #[arg(long)]
     #[arg(value_parser = arg_validators::non_empty())]
     version_file: Option<String>,
+
     #[arg(long)]
     #[arg(value_parser = arg_validators::non_empty())]
     info_file: Option<String>,

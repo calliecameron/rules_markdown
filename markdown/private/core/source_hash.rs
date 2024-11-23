@@ -12,8 +12,10 @@ use std::fs::read_to_string;
 struct Cli {
     #[arg(value_parser = arg_validators::non_empty())]
     src_file: String,
+
     #[arg(value_parser = arg_validators::non_empty())]
     deps_metadata_file: String,
+
     #[arg(value_parser = arg_validators::non_empty())]
     out_file: String,
 }

@@ -333,6 +333,7 @@ name = "markdown"
 version = "0.0.0"
 dependencies = [
  "chrono",
+ "clap",
  "derive_builder",
  "regex",
  "serde",
@@ -349,7 +350,6 @@ dependencies = [
  "markdown",
  "md5",
  "serde",
- "serde_json",
 ]
 
 [[package]]
