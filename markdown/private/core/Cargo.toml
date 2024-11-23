@@ -28,4 +28,3 @@ clap.workspace = true
 markdown.workspace = true
 md5.workspace = true
 serde.workspace = true
-serde_json.workspace = true
