@@ -1,5 +1,5 @@
 use clap::Parser;
-use markdown::arg_validators;
+use markdown::args;
 use markdown::json::from_json;
 use markdown::metadata::{InputMetadataBuilder, MetadataMap};
 use std::error::Error;
@@ -8,24 +8,24 @@ use std::fs::{read_to_string, write};
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
 struct Cli {
-    #[arg(value_parser = arg_validators::non_empty())]
+    #[arg(value_parser = args::non_empty())]
     title: String,
 
-    #[arg(value_parser = arg_validators::non_empty())]
+    #[arg(value_parser = args::non_empty())]
     author: String,
 
     #[arg(long)]
-    #[arg(value_parser = arg_validators::non_empty())]
+    #[arg(value_parser = args::non_empty())]
     date: Option<String>,
 
-    #[arg(value_parser = arg_validators::non_empty())]
+    #[arg(value_parser = args::non_empty())]
     metadata_file: String,
 
-    #[arg(value_parser = arg_validators::non_empty())]
+    #[arg(value_parser = args::non_empty())]
     out_file: String,
 
     #[arg(long = "dep")]
-    #[arg(value_parser = arg_validators::non_empty())]
+    #[arg(value_parser = args::non_empty())]
     deps: Vec<String>,
 }
 

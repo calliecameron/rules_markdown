@@ -44,7 +44,7 @@ py_library(
 rust_library(
     name = "utils",
     srcs = [
-        "arg_validators.rs",
+        "args.rs",
         "bazel.rs",
         "deserializers.rs",
         "field_validators.rs",

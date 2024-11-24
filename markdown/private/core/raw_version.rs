@@ -1,5 +1,5 @@
 use clap::{Args, Parser};
-use markdown::arg_validators;
+use markdown::args;
 use markdown::json::{from_json, JsonSerializable};
 use markdown::metadata::Version;
 use std::error::Error;
@@ -11,7 +11,7 @@ const VERSION_KEY: &str = "STABLE_WORKSPACE_PARENT_VERSION";
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
 struct Cli {
-    #[arg(value_parser = arg_validators::non_empty())]
+    #[arg(value_parser = args::non_empty())]
     out_file: String,
 
     #[command(flatten)]
@@ -22,11 +22,11 @@ struct Cli {
 #[group(required = true, multiple = false)]
 struct InFile {
     #[arg(long)]
-    #[arg(value_parser = arg_validators::non_empty())]
+    #[arg(value_parser = args::non_empty())]
     version_file: Option<String>,
 
     #[arg(long)]
-    #[arg(value_parser = arg_validators::non_empty())]
+    #[arg(value_parser = args::non_empty())]
     info_file: Option<String>,
 }
 
