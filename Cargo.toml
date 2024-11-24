@@ -16,9 +16,9 @@ chrono = { version = "0.4.38", features = ["serde"] }
 clap = { version = "4.5.20", features = ["derive"] }
 derive_builder = "0.20.2"
 markdown = { path = "markdown/private/utils" }
+md5 = "0.7.0"
 regex = "1.11.0"
 serde = { version = "1.0.210", features = ["derive"] }
 serde_json = "1.0.128"
 serde_yaml = "0.9.34+deprecated"
-sha2 = "0.10.8"
 validator = { version = "0.18.1", features = ["derive"] }

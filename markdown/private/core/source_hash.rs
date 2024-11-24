@@ -2,7 +2,6 @@ use clap::Parser;
 use markdown::arg_validators;
 use markdown::json::{from_json, JsonSerializable};
 use markdown::metadata::{MetadataMap, SourceHash};
-use sha2::{Digest, Sha256};
 use std::collections::BTreeMap;
 use std::error::Error;
 use std::fs::read_to_string;
@@ -42,7 +41,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     hash_input.push(String::from("}"));
     hash_input.push(src);
 
-    let hash_output = format!("{:x}", Sha256::digest(hash_input.join("\n")));
+    // We use md5 because the PDF trailer ID must be a 16-byte hex string -
+    // which is the size of md5.
+    let hash_output = format!("{:x}", md5::compute(hash_input.join("\n")));
 
     SourceHash::build(&hash_output)?.write_json(args.out_file)
 }
