@@ -11,7 +11,7 @@ exports_files(
         "poetry_lines.lua",
         "write_metadata.lua",
     ],
-    visibility = ["//visibility:public"],
+    visibility = ["//markdown/private/core:__pkg__"],
 )
 
 pandoc_filter_py_test(
