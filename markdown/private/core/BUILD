@@ -100,9 +100,7 @@ py_binary(
     type_stub_deps = [
         requirement("types-dateparser"),
     ],
-    visibility = ["//visibility:public"],
     deps = [
-        "//markdown/private/utils:metadata",
         requirement("dateparser"),
     ],
 )

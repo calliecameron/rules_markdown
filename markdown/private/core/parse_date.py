@@ -4,8 +4,6 @@ import json
 from dateparser.date import DateDataParser
 from dateparser.search import search_dates
 
-from markdown.private.utils.metadata import InputMetadata, ParsedDates
-
 
 def parse_date(date: str) -> frozenset[str]:
     settings = {"DATE_ORDER": "DMY", "PARSERS": ["custom-formats", "absolute-time"]}
@@ -27,28 +25,24 @@ def parse_date(date: str) -> frozenset[str]:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("metadata_in_file")
-    parser.add_argument("metadata_out_file")
+    parser.add_argument("in_file")
+    parser.add_argument("out_file")
     args = parser.parse_args()
 
-    with open(args.metadata_in_file, encoding="utf-8") as f:
-        metadata = InputMetadata.model_validate_json(f.read())
+    with open(args.in_file, encoding="utf-8") as f:
+        metadata = json.load(f)
 
+    date = metadata.get("date", "")
     dates: frozenset[str] = frozenset()
-    if metadata.date:
-        dates = parse_date(metadata.date)
+    if date:
+        dates = parse_date(date)
 
-    with open(args.metadata_out_file, "w", encoding="utf-8") as f:
+    with open(args.out_file, "w", encoding="utf-8") as f:
         json.dump(
-            ParsedDates.model_validate({"parsed-dates": sorted(dates)}).model_dump(
-                mode="json",
-                by_alias=True,
-                exclude_unset=True,
-                exclude_defaults=True,
-            ),
+            {"parsed-dates": sorted(dates)},
             f,
             sort_keys=True,
-            indent=4,
+            indent=2,
         )
 
 
