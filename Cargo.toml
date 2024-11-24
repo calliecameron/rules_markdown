@@ -4,6 +4,7 @@ members = [
     "markdown/private/collection",
     "markdown/private/core",
     "markdown/private/core/group",
+    "markdown/private/core/lint",
     "markdown/private/utils"
 ]
 

@@ -1,0 +1,12 @@
+[package]
+name = "markdown_private_core_lint"
+edition.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "custom_lint"
+path = "custom_lint.rs"
+
+[dependencies]
+clap.workspace = true
+markdown.workspace = true

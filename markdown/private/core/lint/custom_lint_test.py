@@ -2,7 +2,6 @@ import os
 import os.path
 import subprocess
 
-from markdown.private.core.lint import custom_lint
 from markdown.private.utils import test_utils
 
 GOOD = """Foo bar.
@@ -14,18 +13,6 @@ Some -- dashes---
 
 
 class TestCustomLint(test_utils.ScriptTestCase):
-    def test_lint(self) -> None:
-        # OK
-        self.assertEqual(custom_lint.lint(GOOD.split("\n")), [])
-
-        self.assertNotEqual(custom_lint.lint(["“"]), [])
-        self.assertNotEqual(custom_lint.lint(["”"]), [])
-        self.assertNotEqual(custom_lint.lint(["‘"]), [])  # noqa: RUF001
-        self.assertNotEqual(custom_lint.lint(["’"]), [])  # noqa: RUF001
-        self.assertNotEqual(custom_lint.lint(["–"]), [])  # noqa: RUF001
-        self.assertNotEqual(custom_lint.lint(["—"]), [])
-        self.assertNotEqual(custom_lint.lint(["…"]), [])
-
     def run_script(  # type: ignore[override]
         self,
         content: str,

@@ -65,6 +65,7 @@ crate.from_cargo(
         "//markdown/private/collection:Cargo.toml",
         "//markdown/private/core:Cargo.toml",
         "//markdown/private/core/group:Cargo.toml",
+        "//markdown/private/core/lint:Cargo.toml",
         "//markdown/private/utils:Cargo.toml",
     ],
 )
