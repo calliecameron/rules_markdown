@@ -7,7 +7,7 @@ exports_files(
         "spellcheck_filter.lua",
         "spellcheck_cleanup.lua",
     ],
-    visibility = ["//visibility:public"],
+    visibility = ["//markdown/private/core:__pkg__"],
 )
 
 pandoc_filter_py_test(
@@ -25,7 +25,7 @@ pandoc_filter_py_test(
 sh_binary(
     name = "spellcheck",
     srcs = ["spellcheck.sh"],
-    visibility = ["//visibility:public"],
+    visibility = ["//markdown/private/core:__pkg__"],
 )
 
 script_py_test(
@@ -47,7 +47,7 @@ script_py_test(
 sh_binary(
     name = "gen_dictionary",
     srcs = ["gen_dictionary.sh"],
-    visibility = ["//visibility:public"],
+    visibility = ["//markdown/private/core:__pkg__"],
 )
 
 script_py_test(
