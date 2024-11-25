@@ -39,11 +39,10 @@ def py_test(name, type_stub_deps = None, **kwargs):
     )
 
 def py_source(name, src, visibility = None):
-    if visibility:
-        native.exports_files(
-            [src],
-            visibility = visibility,
-        )
+    native.exports_files(
+        [src],
+        visibility = visibility or ["//visibility:private"],
+    )
     _py_lint(
         name = name,
         srcs = [src],

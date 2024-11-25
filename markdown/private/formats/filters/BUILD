@@ -9,7 +9,7 @@ exports_files(
         "remove_collection_separators.lua",
         "remove_collection_separators_before_headers.lua",
     ],
-    visibility = ["//visibility:public"],
+    visibility = ["//markdown/private/formats:__subpackages__"],
 )
 
 pandoc_filter_py_test(

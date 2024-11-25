@@ -33,11 +33,10 @@ def sh_test(name, **kwargs):
     )
 
 def sh_source(name, src, visibility = None):
-    if visibility:
-        native.exports_files(
-            [src],
-            visibility = visibility,
-        )
+    native.exports_files(
+        [src],
+        visibility = visibility or ["//visibility:private"],
+    )
     _sh_lint(
         name = name,
         srcs = [src],

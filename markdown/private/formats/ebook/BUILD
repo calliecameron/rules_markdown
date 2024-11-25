@@ -15,7 +15,7 @@ exports_files(
     [
         "epub.css",
     ],
-    visibility = ["//visibility:public"],
+    visibility = ["//visibility:private"],
 )
 
 sh_binary(
@@ -23,5 +23,5 @@ sh_binary(
     srcs = ["ebook_convert.sh"],
     args = ["$(rootpath //markdown/private/external:ebook_convert)"],
     data = ["//markdown/private/external:ebook_convert"],
-    visibility = ["//visibility:public"],
+    visibility = ["//markdown/private/formats:__pkg__"],
 )

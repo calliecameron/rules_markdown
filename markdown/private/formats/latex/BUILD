@@ -19,7 +19,7 @@ exports_files(
         "template.tex",
         "latex_filter.lua",
     ],
-    visibility = ["//visibility:public"],
+    visibility = ["//visibility:private"],
 )
 
 pandoc_filter_py_test(
@@ -31,7 +31,6 @@ pandoc_filter_py_test(
 sh_source(
     name = "write_xelatex",
     src = "write_xelatex.sh",
-    visibility = ["//visibility:private"],
 )
 
 genrule(
@@ -41,11 +40,9 @@ genrule(
     cmd = "$(rootpath write_xelatex.sh) $< >$@",
     executable = True,
     tools = ["write_xelatex.sh"],
-    visibility = ["//visibility:private"],
 )
 
 sh_binary(
     name = "xelatex",
     srcs = [":xelatex_sh"],
-    visibility = ["//visibility:private"],
 )

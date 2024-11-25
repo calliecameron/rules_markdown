@@ -16,7 +16,7 @@ exports_files(
         "plain_markdown_filter.lua",
         "tumblr_markdown_filter.lua",
     ],
-    visibility = ["//visibility:public"],
+    visibility = ["//visibility:private"],
 )
 
 pandoc_filter_py_test(
