@@ -20,18 +20,6 @@ py_library(
 )
 
 py_library(
-    name = "bazel_package",
-    srcs = ["bazel_package.py"],
-    visibility = ["//markdown/private:__subpackages__"],
-)
-
-py_test(
-    name = "bazel_package_test",
-    srcs = ["bazel_package_test.py"],
-    deps = [":bazel_package"],
-)
-
-py_library(
     name = "metadata",
     srcs = ["metadata.py"],
     visibility = ["//markdown/private:__subpackages__"],

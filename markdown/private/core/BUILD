@@ -11,18 +11,25 @@ bzl_library(
     visibility = ["//markdown/private:__subpackages__"],
 )
 
-py_binary(
+rust_binary(
     name = "preprocess",
-    srcs = ["preprocess.py"],
-    visibility = ["//visibility:public"],
-    deps = ["//markdown/private/utils:bazel_package"],
+    srcs = ["preprocess.rs"],
+    deps = [
+        "//markdown/private/utils",
+    ] + all_crate_deps(
+        normal = True,
+    ),
+)
+
+rust_test(
+    name = "preprocess_rs_test",
+    crate = ":preprocess",
 )
 
 script_py_test(
     name = "preprocess_test",
     src = "preprocess_test.py",
     script = ":preprocess",
-    deps = [":preprocess"],
 )
 
 rust_binary(

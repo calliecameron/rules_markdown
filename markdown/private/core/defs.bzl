@@ -180,15 +180,13 @@ def _md_file_impl(ctx):
     for dep in ctx.attr.deps[MdGroupInfo].deps:
         dep_args += [
             "--dep",
-            dep.label.package + ":" + dep.label.name,
-            dep[MdFileInfo].output.path,
+            dep.label.package + ":" + dep.label.name + "=" + dep[MdFileInfo].output.path,
         ]
     image_args = []
     for image in ctx.attr.images:
         image_args += [
             "--image",
-            image.label.package + ":" + image.label.name,
-            image[DefaultInfo].files.to_list()[0].path,
+            image.label.package + ":" + image.label.name + "=" + image[DefaultInfo].files.to_list()[0].path,
         ]
     ctx.actions.run(
         outputs = [preprocessed],

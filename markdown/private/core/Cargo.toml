@@ -4,6 +4,10 @@ edition.workspace = true
 rust-version.workspace = true
 
 [[bin]]
+name = "preprocess"
+path = "preprocess.rs"
+
+[[bin]]
 name = "raw_version"
 path = "raw_version.rs"
 
@@ -27,3 +31,4 @@ path = "version.rs"
 clap.workspace = true
 markdown.workspace = true
 md5.workspace = true
+regex.workspace = true
