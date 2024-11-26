@@ -1,6 +1,8 @@
 use clap::Parser;
 use markdown::args;
+use markdown::problems::{Problems, RowColProblem};
 use std::error::Error;
+use std::fmt::Display;
 use std::fs::{read_to_string, write};
 
 const CURLY_QUOTES: &str = "“”‘’";
@@ -21,34 +23,24 @@ struct Cli {
     out_file: String,
 }
 
-struct Problem {
-    row: usize,
-    col: usize,
-    problem: String,
-}
-
-fn lint(data: &str) -> Vec<Problem> {
+fn lint(data: &str) -> Vec<RowColProblem> {
     let mut problems = Vec::new();
 
     for (row, line) in data.lines().enumerate() {
         let chars: Vec<char> = line.chars().collect();
         for (col, &c) in chars.iter().enumerate() {
             if CURLY_QUOTES.contains(c) && (col == 0 || chars[col - 1] != '\\') {
-                problems.push(Problem {
-                    row,
-                    col,
-                    problem: String::from(CURLY_QUOTE_MSG),
-                });
+                problems.push(RowColProblem::new(row, col, CURLY_QUOTE_MSG));
             }
         }
 
         for (bad_char, name, replacement) in BAD_CHARS {
             if let Some(col) = chars.iter().position(|&c| c == bad_char) {
-                problems.push(Problem {
+                problems.push(RowColProblem::new(
                     row,
                     col,
-                    problem: format!("Literal {} must be replaced with '{}'", name, replacement),
-                });
+                    &format!("Literal {} must be replaced with '{}'", name, replacement),
+                ));
             }
         }
     }
@@ -59,21 +51,13 @@ fn lint(data: &str) -> Vec<Problem> {
 fn main() -> Result<(), Box<dyn Error>> {
     let args = Cli::parse();
 
-    let problems = lint(&read_to_string(args.in_file)?);
-
-    if !problems.is_empty() {
-        let mut msg = vec![String::from("ERROR: linting failed")];
-        for p in problems {
-            msg.push(format!(
-                "row {} col {}: {}",
-                p.row + 1,
-                p.col + 1,
-                p.problem
-            ));
-        }
-        eprintln!("{}\n\n", msg.join("\n\n"));
-        return Err("linting failed".into());
-    }
+    let mut problems = Problems::new("linting failed");
+    problems.extend(
+        lint(&read_to_string(args.in_file)?)
+            .into_iter()
+            .map(|p| -> Box<dyn Display> { Box::new(p) }),
+    );
+    problems.check();
 
     write(args.out_file, "OK\n")?;
     Ok(())

@@ -38,6 +38,7 @@ rust_library(
         "field_validators.rs",
         "json.rs",
         "metadata.rs",
+        "problems.rs",
         "publications.rs",
         "utils.rs",
     ],

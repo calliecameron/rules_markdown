@@ -1,9 +1,11 @@
 use clap::Parser;
 use markdown::args::{non_empty, KeyValue};
 use markdown::bazel::Label;
+use markdown::problems::{ColProblem, Problems, RowProblem};
 use regex::Regex;
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::error::Error;
+use std::fmt::Display;
 use std::fs::{read_to_string, write};
 
 const INCLUDE: &str = "!include";
@@ -33,20 +35,8 @@ struct Cli {
     images: Vec<KeyValue>,
 }
 
-struct Problem {
-    row: usize,
-    col: usize,
-    problem: String,
-}
-
-#[derive(Clone, Debug)]
-struct LineProblem {
-    col: usize,
-    problem: String,
-}
-
-struct ReplacementResult {
-    result: Result<Option<String>, Vec<LineProblem>>,
+struct ReplacementResult<T> {
+    result: Result<Option<String>, Vec<T>>,
     deps_used: HashSet<String>,
 }
 
@@ -54,7 +44,7 @@ fn process_include(
     line: &str,
     deps: &HashMap<String, String>,
     current_package: &str,
-) -> ReplacementResult {
+) -> ReplacementResult<String> {
     let Some(raw_label) = line.strip_prefix(INCLUDE) else {
         return ReplacementResult {
             result: Ok(None),
@@ -64,10 +54,9 @@ fn process_include(
 
     if !raw_label.starts_with(' ') {
         return ReplacementResult {
-            result: Err(vec![LineProblem {
-                col: 0,
-                problem: format!("Include statement must be followed by a space: {line}"),
-            }]),
+            result: Err(vec![format!(
+                "Include statement must be followed by a space: {line}"
+            )]),
             deps_used: HashSet::new(),
         };
     }
@@ -83,18 +72,12 @@ fn process_include(
                 };
             }
             ReplacementResult {
-                result: Err(vec![LineProblem {
-                    col: 0,
-                    problem: format!("{INCLUDE_MSG} {label}"),
-                }]),
+                result: Err(vec![format!("{INCLUDE_MSG} {label}")]),
                 deps_used: HashSet::from([label]),
             }
         }
         Err(e) => ReplacementResult {
-            result: Err(vec![LineProblem {
-                col: 0,
-                problem: format!("{INCLUDE_MSG} {e}"),
-            }]),
+            result: Err(vec![format!("{INCLUDE_MSG} {e}")]),
             deps_used: HashSet::new(),
         },
     }
@@ -104,7 +87,7 @@ fn process_images(
     line: &str,
     images: &HashMap<String, String>,
     current_package: &str,
-) -> ReplacementResult {
+) -> ReplacementResult<ColProblem> {
     let char_indices: Vec<usize> = line.char_indices().map(|(i, _)| i).collect();
     let mut problems = Vec::new();
     let mut labels = HashSet::new();
@@ -152,16 +135,10 @@ fn process_images(
                     };
                     replacements.insert(text, replacement);
                 } else {
-                    problems.push(LineProblem {
-                        col,
-                        problem: format!("{IMAGE_MSG} {label}"),
-                    });
+                    problems.push(ColProblem::new(col, &format!("{IMAGE_MSG} {label}")));
                 }
             }
-            Err(e) => problems.push(LineProblem {
-                col,
-                problem: format!("{IMAGE_MSG} {e}"),
-            }),
+            Err(e) => problems.push(ColProblem::new(col, &format!("{IMAGE_MSG} {e}"))),
         }
     }
 
@@ -213,8 +190,8 @@ fn preprocess(
     deps: &HashMap<String, String>,
     images: &HashMap<String, String>,
     current_package: &str,
-) -> Vec<Problem> {
-    let mut problems = Vec::new();
+) -> Vec<Box<dyn Display>> {
+    let mut problems: Vec<Box<dyn Display>> = Vec::new();
     let mut used_deps = BTreeSet::new();
     let declared_deps = BTreeSet::from_iter(deps.keys().map(String::from));
     let mut used_images = BTreeSet::new();
@@ -233,11 +210,10 @@ fn preprocess(
                 }
             }
             Err(ps) => {
-                problems.extend(ps.into_iter().map(|p| Problem {
-                    row,
-                    col: p.col,
-                    problem: p.problem,
-                }));
+                problems.extend(
+                    ps.into_iter()
+                        .map(|p| -> Box<dyn Display> { Box::new(RowProblem::new(row, &p)) }),
+                );
             }
         }
 
@@ -250,29 +226,20 @@ fn preprocess(
                 }
             }
             Err(ps) => {
-                problems.extend(ps.into_iter().map(|p| Problem {
-                    row,
-                    col: p.col,
-                    problem: p.problem,
-                }));
+                problems.extend(
+                    ps.into_iter()
+                        .map(|p| -> Box<dyn Display> { Box::new(p.add_row(row)) }),
+                );
             }
         }
     }
 
     if let Err(problem) = check_strict_deps(&used_deps, &declared_deps, "deps") {
-        problems.push(Problem {
-            row: 0,
-            col: 0,
-            problem,
-        });
+        problems.push(Box::new(problem));
     }
 
     if let Err(problem) = check_strict_deps(&used_images, &declared_images, "images") {
-        problems.push(Problem {
-            row: 0,
-            col: 0,
-            problem,
-        });
+        problems.push(Box::new(problem));
     }
 
     problems
@@ -291,21 +258,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     let images: HashMap<String, String> =
         HashMap::from_iter(args.images.into_iter().map(|kv| (kv.key, kv.value)));
 
-    let problems = preprocess(&mut data, &deps, &images, &args.current_package);
-
-    if !problems.is_empty() {
-        let mut msg = vec![String::from("ERROR: markdown preprocessing failed")];
-        for p in problems {
-            msg.push(format!(
-                "row {} col {}: {}",
-                p.row + 1,
-                p.col + 1,
-                p.problem
-            ));
-        }
-        eprintln!("{}\n\n", msg.join("\n\n"));
-        return Err("linting failed".into());
-    }
+    let mut problems = Problems::new("markdown preprocessing failed");
+    problems.extend(preprocess(&mut data, &deps, &images, &args.current_package));
+    problems.check();
 
     write(args.out_file, data.join("\n") + "\n")?;
     Ok(())
@@ -402,7 +357,7 @@ mod test_preprocess {
         // Try to use unknown image
         let r = process_images("Foo ![bar](:bar) bar ![quux](:quux)", &images, "foo");
         assert_eq!(r.result.clone().unwrap_err().len(), 1);
-        assert_eq!(r.result.unwrap_err()[0].col, 29);
+        assert_eq!(r.result.unwrap_err()[0].col(), 29);
         assert_eq!(
             r.deps_used,
             HashSet::from([String::from("foo:bar"), String::from("foo:quux")])
@@ -411,7 +366,7 @@ mod test_preprocess {
         // Invalid label
         let r = process_images("Foo ![bar](:bar:)", &images, "foo");
         assert_eq!(r.result.clone().unwrap_err().len(), 1);
-        assert_eq!(r.result.unwrap_err()[0].col, 11);
+        assert_eq!(r.result.unwrap_err()[0].col(), 11);
         assert!(r.deps_used.is_empty());
     }
 
