@@ -1,5 +1,7 @@
 """Markdown rules."""
 
+load("//markdown/private/utils:lib.bzl", "key_value_arg")
+
 _SRC_FORMAT = "markdown+smart-pandoc_title_block-auto_identifiers"
 
 MdGroupInfo = provider(
@@ -30,7 +32,10 @@ def _md_group_impl(ctx):
     for dep in ctx.attr.deps:
         metadata_args += [
             "--metadata-file",
-            dep.label.package + ":" + dep.label.name + "=" + dep[MdFileInfo].metadata.path,
+            key_value_arg(
+                dep.label.package + ":" + dep.label.name,
+                dep[MdFileInfo].metadata.path,
+            ),
         ]
     ctx.actions.run(
         outputs = [metadata],
@@ -180,13 +185,19 @@ def _md_file_impl(ctx):
     for dep in ctx.attr.deps[MdGroupInfo].deps:
         dep_args += [
             "--dep",
-            dep.label.package + ":" + dep.label.name + "=" + dep[MdFileInfo].output.path,
+            key_value_arg(
+                dep.label.package + ":" + dep.label.name,
+                dep[MdFileInfo].output.path,
+            ),
         ]
     image_args = []
     for image in ctx.attr.images:
         image_args += [
             "--image",
-            image.label.package + ":" + image.label.name + "=" + image[DefaultInfo].files.to_list()[0].path,
+            key_value_arg(
+                image.label.package + ":" + image.label.name,
+                image[DefaultInfo].files.to_list()[0].path,
+            ),
         ]
     ctx.actions.run(
         outputs = [preprocessed],

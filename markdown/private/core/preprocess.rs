@@ -254,9 +254,9 @@ fn main() -> Result<(), Box<dyn Error>> {
         .collect();
 
     let deps: HashMap<String, String> =
-        HashMap::from_iter(args.deps.into_iter().map(|kv| (kv.key, kv.value)));
+        HashMap::from_iter(args.deps.into_iter().map(KeyValue::to_tuple));
     let images: HashMap<String, String> =
-        HashMap::from_iter(args.images.into_iter().map(|kv| (kv.key, kv.value)));
+        HashMap::from_iter(args.images.into_iter().map(KeyValue::to_tuple));
 
     let mut problems = Problems::new("markdown preprocessing failed");
     problems.extend(preprocess(&mut data, &deps, &images, &args.current_package));

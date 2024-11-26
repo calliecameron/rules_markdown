@@ -11,6 +11,12 @@ bzl_library(
     visibility = ["//markdown/private:__subpackages__"],
 )
 
+bzl_library(
+    name = "lib_bzl",
+    srcs = ["lib.bzl"],
+    visibility = ["//markdown/private/core:__pkg__"],
+)
+
 py_library(
     name = "test_utils",
     testonly = True,

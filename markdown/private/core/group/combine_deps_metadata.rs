@@ -22,7 +22,12 @@ fn main() -> Result<(), Box<dyn Error>> {
     let out = args
         .metadata_files
         .into_iter()
-        .map(|kv| Ok((kv.key, from_json(&read_to_string(kv.value)?)?)))
+        .map(|kv| {
+            Ok((
+                String::from(kv.key()),
+                from_json(&read_to_string(kv.value())?)?,
+            ))
+        })
         .collect::<Result<BTreeMap<String, OutputMetadata>, Box<dyn Error>>>()?;
 
     MetadataMap::build(out)?.write_json(args.out_file)

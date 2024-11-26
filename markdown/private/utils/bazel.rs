@@ -81,9 +81,8 @@ impl Label {
         fn valid(c: char) -> bool {
             // We deliberately exclude closing parenthesis from this list, even
             // though it's valid according to the bazel spec, because it messes
-            // up markdown image handling. Same goes for equals, which we use
-            // for multi-part args.
-            c.is_ascii_alphanumeric() || "%-@^_\"#$&'(*-+,;<>?[]{|}~/.".contains(c)
+            // up markdown image handling.
+            c.is_ascii_alphanumeric() || "%-@^_\"#$&'(*-+,;<=>?[]{|}~/.".contains(c)
         }
 
         for c in target.chars() {
@@ -136,7 +135,7 @@ mod label_test {
     fn test_validate_target() {
         assert!(Label::validate_target("").is_ok());
         assert!(Label::validate_target("a").is_ok());
-        assert!(Label::validate_target("abc/DEF123%-@^_\"#$&'(*-+,;<>?[]{|}~/.a").is_ok());
+        assert!(Label::validate_target("abc/DEF123%-@^_\"#$&'(*-+,;<=>?[]{|}~/.a").is_ok());
 
         assert!(Label::validate_target("!").is_err());
         assert!(Label::validate_target("/a").is_err());
