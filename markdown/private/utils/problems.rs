@@ -88,7 +88,7 @@ impl RowColProblem {
 
 impl Display for RowColProblem {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        write!(f, "row {} col{}: {}", self.row + 1, self.col + 1, self.msg)
+        write!(f, "row {} col {}: {}", self.row + 1, self.col + 1, self.msg)
     }
 }
 
