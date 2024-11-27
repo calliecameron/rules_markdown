@@ -2,7 +2,7 @@ load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@crates//:defs.bzl", "aliases", "all_crate_deps")
 load("@pip//:requirements.bzl", "requirement")
 load("@rules_rust//rust:defs.bzl", "rust_library", "rust_test")
-load("//markdown/private/support/python:defs.bzl", "py_binary", "py_library", "py_source", "py_test")
+load("//markdown/private/support/python:defs.bzl", "py_binary", "py_library", "py_source")
 load("//markdown/private/support/shell:defs.bzl", "sh_binary", "sh_source", "sh_test")
 
 bzl_library(
@@ -23,16 +23,6 @@ py_library(
     srcs = ["test_utils.py"],
     visibility = ["//markdown/private:__subpackages__"],
     deps = [requirement("panflute")],
-)
-
-py_library(
-    name = "metadata",
-    srcs = ["metadata.py"],
-    visibility = ["//markdown/private:__subpackages__"],
-    deps = [
-        requirement("pydantic"),
-        ":publications",
-    ],
 )
 
 rust_library(
@@ -62,25 +52,6 @@ rust_library(
 rust_test(
     name = "utils_test",
     crate = ":utils",
-)
-
-py_test(
-    name = "metadata_test",
-    srcs = ["metadata_test.py"],
-    deps = [":metadata"],
-)
-
-py_library(
-    name = "publications",
-    srcs = ["publications.py"],
-    visibility = ["//markdown/private:__subpackages__"],
-    deps = [requirement("pydantic")],
-)
-
-py_test(
-    name = "publications_test",
-    srcs = ["publications_test.py"],
-    deps = [":publications"],
 )
 
 sh_binary(
