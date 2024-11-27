@@ -21,7 +21,11 @@ pub enum State {
 
 impl Display for State {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        Debug::fmt(self, f)
+        if *self == State::SelfPublished {
+            f.write_str("self_published")?;
+            return Ok(());
+        }
+        f.write_str(&format!("{:?}", self).to_ascii_lowercase())
     }
 }
 

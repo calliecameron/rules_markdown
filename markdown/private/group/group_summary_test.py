@@ -82,11 +82,11 @@ class TestSummary(test_utils.ScriptTestCase):
         self.assertEqual(
             self.run_script([]),
             """
-| target    | title    | author   | raw date                         | date                |   wordcount |   poetry lines | finished   | publication   | version     | status   |
-|-----------|----------|----------|----------------------------------|---------------------|-------------|----------------|------------|---------------|-------------|----------|
-| test1:bar | Bar\\nbaz | A        |                                  |                     |           5 |              0 | no         |               | quux, dirty | DIRTY    |
-| test1:foo | Foo      | A, B     | 2022                             | 2022                |          10 |              3 | yes        | published     | bar         | ok       |
-| test2:baz | baz      | B        | from August 2020 to 1 March 2023 | 2020/08, 2023/03/01 |          20 |              5 | no         | attempted     | baz         | ok       |
+| target    | title    | author | raw date                         | date                | wordcount | poetry lines | finished | publication | version     | status |
+|-----------|----------|--------|----------------------------------|---------------------|-----------|--------------|----------|-------------|-------------|--------|
+| test1:bar | Bar\\nbaz | A      |                                  |                     |         5 |            0 | no       |             | quux, dirty | DIRTY  |
+| test1:foo | Foo      | A, B   | 2022                             | 2022                |        10 |            3 | yes      | published   | bar         | ok     |
+| test2:baz | baz      | B      | from August 2020 to 1 March 2023 | 2020/08, 2023/03/01 |        20 |            5 | no       | attempted   | baz         | ok     |
 """.lstrip(),  # noqa: E501
         )
 
@@ -261,8 +261,8 @@ test1:foo,Foo,"A, B",2022,2022,10,3,yes,published,bar,ok
             self.run_script(["--raw", "--sort-finished", "--reverse"]),
             """target,title,author,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:foo,Foo,"A, B",2022,2022,10,3,yes,published,bar,ok
-test1:bar,Bar\\nbaz,A,,,5,0,no,,"quux, dirty",DIRTY
 test2:baz,baz,B,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test1:bar,Bar\\nbaz,A,,,5,0,no,,"quux, dirty",DIRTY
 """,  # noqa: E501
         )
 
@@ -314,8 +314,8 @@ test2:baz,baz,B,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,a
         self.assertEqual(
             self.run_script(["--raw", "--sort-status", "--reverse"]),
             """target,title,author,raw date,date,wordcount,poetry lines,finished,publication,version,status
-test1:foo,Foo,"A, B",2022,2022,10,3,yes,published,bar,ok
 test2:baz,baz,B,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test1:foo,Foo,"A, B",2022,2022,10,3,yes,published,bar,ok
 test1:bar,Bar\\nbaz,A,,,5,0,no,,"quux, dirty",DIRTY
 """,  # noqa: E501
         )

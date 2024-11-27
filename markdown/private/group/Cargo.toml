@@ -7,7 +7,15 @@ rust-version.workspace = true
 name = "group_publications"
 path = "group_publications.rs"
 
+[[bin]]
+name = "group_summary"
+path = "group_summary.rs"
+
 [dependencies]
 clap.workspace = true
+csv.workspace = true
 html-escape.workspace = true
 markdown.workspace = true
+regex.workspace = true
+serde.workspace = true
+tabled.workspace = true

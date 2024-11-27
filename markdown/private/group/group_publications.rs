@@ -15,13 +15,6 @@ fn capitalize(s: &str) -> String {
     String::from_iter(chars)
 }
 
-fn state_name(state: State) -> String {
-    if state == State::SelfPublished {
-        return String::from("self_published");
-    }
-    state.to_string().to_ascii_lowercase()
-}
-
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
 struct Cli {
@@ -63,7 +56,7 @@ fn generate_row(target: &str, venues: &BTreeSet<&str>, metadata: &OutputMetadata
 
     let class_attr = {
         if let Some(state) = metadata.publications().highest_active_state() {
-            state_name(state)
+            state.to_string()
         } else {
             String::new()
         }
@@ -111,13 +104,13 @@ fn generate_cell(target: &str, p: &Publication) -> String {
         format!(
             "{} {}",
             d.date.format("%Y-%m-%d"),
-            capitalize(&state_name(d.state).replace("_", "-"))
+            capitalize(&d.state.to_string().replace("_", "-"))
         )
     }));
 
     format!(
         "<td class=\"{}\" title=\"{}\"><a href=\"#{}\">{}</a></td>",
-        state_name(p.latest().state),
+        p.latest().state.to_string(),
         html_escape::encode_double_quoted_attribute(&format!("{target}, {}", p.venue())),
         html_escape::encode_double_quoted_attribute(target),
         Vec::from_iter(content.iter().map(html_escape::encode_text)).join("<br>")
@@ -177,31 +170,31 @@ fn generate_head() -> Vec<String> {
         String::from("a:visited { color: black; }"),
         format!(
             ".{} {{ background-color: #ffff00; }}",
-            state_name(State::Submitted)
+            State::Submitted.to_string()
         ),
         format!(
             ".{} {{ background-color: #ff6d6d; }}",
-            state_name(State::Rejected)
+            State::Rejected.to_string()
         ),
         format!(
             ".{} {{ background-color: #ff972f; }}",
-            state_name(State::Withdrawn)
+            State::Withdrawn.to_string()
         ),
         format!(
             ".{} {{ background-color: #cccccc; }}",
-            state_name(State::Abandoned)
+            State::Abandoned.to_string()
         ),
         format!(
             ".{} {{ background-color: #729fcf; }}",
-            state_name(State::Accepted)
+            State::Accepted.to_string()
         ),
         format!(
             ".{} {{ background-color: #158466; }}",
-            state_name(State::SelfPublished)
+            State::SelfPublished.to_string()
         ),
         format!(
             ".{} {{ background-color: #81d41a; }}",
-            state_name(State::Published)
+            State::Published.to_string()
         ),
         String::from("</style>"),
         String::from("</head>"),
