@@ -5,6 +5,7 @@ members = [
     "markdown/private/core",
     "markdown/private/core/group",
     "markdown/private/core/lint",
+    "markdown/private/formats/word",
     "markdown/private/utils"
 ]
 

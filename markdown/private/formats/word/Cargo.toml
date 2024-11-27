@@ -1,0 +1,13 @@
+[package]
+name = "markdown_private_formats_word"
+edition.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "shunn_metadata"
+path = "shunn_metadata.rs"
+
+[dependencies]
+clap.workspace = true
+markdown.workspace = true
+serde.workspace = true

@@ -1,5 +1,6 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load("//markdown/private/support/python:defs.bzl", "py_binary")
+load("@crates//:defs.bzl", "all_crate_deps")
+load("@rules_rust//rust:defs.bzl", "rust_binary")
 load("//markdown/private/support/shell:defs.bzl", "sh_binary", "sh_test")
 load("//markdown/private/utils:defs.bzl", "pandoc_filter_py_test", "script_py_test")
 
@@ -19,7 +20,7 @@ exports_files(
         "docx_filter.lua",
         "shunn_docx_filter.lua",
     ],
-    visibility = ["//visibility:public"],
+    visibility = ["//visibility:private"],
 )
 
 sh_binary(
@@ -27,14 +28,16 @@ sh_binary(
     srcs = ["unoconv.sh"],
     args = ["$(rootpath //markdown/private/external:unoconv)"],
     data = ["//markdown/private/external:unoconv"],
-    visibility = ["//visibility:public"],
 )
 
-py_binary(
+rust_binary(
     name = "shunn_metadata",
-    srcs = ["shunn_metadata.py"],
-    visibility = ["//visibility:public"],
-    deps = ["//markdown/private/utils:metadata"],
+    srcs = ["shunn_metadata.rs"],
+    deps = [
+        "//markdown/private/utils",
+    ] + all_crate_deps(
+        normal = True,
+    ),
 )
 
 script_py_test(
@@ -58,7 +61,6 @@ sh_binary(
         "//markdown/private/external:unzip",
         "//markdown/private/external:zip",
     ],
-    visibility = ["//visibility:public"],
 )
 
 pandoc_filter_py_test(
