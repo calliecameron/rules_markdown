@@ -39,7 +39,7 @@ bzl_library(
 sh_binary(
     name = "write_open_script",
     srcs = ["write_open_script.sh"],
-    visibility = ["//visibility:public"],
+    visibility = ["//markdown/private/formats:__subpackages__"],
 )
 
 script_py_test(
@@ -53,7 +53,7 @@ sh_binary(
     srcs = ["zip_cleaner.sh"],
     args = ["$(rootpath //markdown/private/external:strip_nondeterminism)"],
     data = ["//markdown/private/external:strip_nondeterminism"],
-    visibility = ["//visibility:public"],
+    visibility = ["//markdown/private/formats:__subpackages__"],
 )
 
 script_py_test(
@@ -75,7 +75,7 @@ script_py_test(
 sh_binary(
     name = "write_save_script",
     srcs = ["write_save_script.sh"],
-    visibility = ["//visibility:public"],
+    visibility = ["//markdown/private/formats:__subpackages__"],
 )
 
 script_py_test(
