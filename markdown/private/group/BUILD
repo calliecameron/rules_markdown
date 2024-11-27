@@ -1,5 +1,7 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@crates//:defs.bzl", "all_crate_deps")
 load("@pip//:requirements.bzl", "requirement")
+load("@rules_rust//rust:defs.bzl", "rust_binary")
 load("//markdown/private/support/python:defs.bzl", "py_binary")
 load("//markdown/private/support/shell:defs.bzl", "sh_binary")
 load("//markdown/private/utils:defs.bzl", "script_py_test")
@@ -46,14 +48,14 @@ script_py_test(
     script = ":write_group_summary_script",
 )
 
-py_binary(
+rust_binary(
     name = "group_publications",
-    srcs = ["group_publications.py"],
-    visibility = ["//visibility:public"],
+    srcs = ["group_publications.rs"],
     deps = [
-        "//markdown/private/utils:metadata",
-        "//markdown/private/utils:publications",
-    ],
+        "//markdown/private/utils",
+    ] + all_crate_deps(
+        normal = True,
+    ),
 )
 
 script_py_test(

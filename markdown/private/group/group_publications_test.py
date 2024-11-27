@@ -117,48 +117,48 @@ a:visited { color: black; }
 <h2>Details</h2>
 <h3 id="//baz:quux">//baz:quux</h3>
 <code><pre>{
-    "lang": "en-GB",
-    "parsed-dates": [
-        "2021"
-    ],
-    "poetry-lines": 0,
-    "publications": [
-        {
-            "self-published": "2022-11-14",
-            "venue": "Foo"
-        }
-    ],
-    "repo": "bar",
-    "source-hash": "1",
-    "title": "Baz",
-    "version": "quux, dirty",
-    "wordcount": 20
+  "lang": "en-GB",
+  "parsed-dates": [
+    "2021"
+  ],
+  "poetry-lines": 0,
+  "publications": [
+    {
+      "self-published": "2022-11-14",
+      "venue": "Foo"
+    }
+  ],
+  "repo": "bar",
+  "source-hash": "1",
+  "title": "Baz",
+  "version": "quux, dirty",
+  "wordcount": 20
 }</pre></code>
 <h3 id="//foo:bar">//foo:bar</h3>
 <code><pre>{
-    "lang": "en-GB",
-    "parsed-dates": [
-        "2020"
-    ],
-    "poetry-lines": 0,
-    "publications": [
-        {
-            "accepted": "2022-12-13",
-            "published": "2022-12-14",
-            "submitted": "2022-12-13",
-            "venue": "Foo"
-        },
-        {
-            "rejected": "2022-10-14",
-            "submitted": "2022-10-13",
-            "venue": "Bar"
-        }
-    ],
-    "repo": "bar",
-    "source-hash": "1",
-    "title": "Foo &lt;Bar&gt;",
-    "version": "bar",
-    "wordcount": 10
+  "lang": "en-GB",
+  "parsed-dates": [
+    "2020"
+  ],
+  "poetry-lines": 0,
+  "publications": [
+    {
+      "accepted": "2022-12-13",
+      "published": "2022-12-14",
+      "submitted": "2022-12-13",
+      "venue": "Foo"
+    },
+    {
+      "rejected": "2022-10-14",
+      "submitted": "2022-10-13",
+      "venue": "Bar"
+    }
+  ],
+  "repo": "bar",
+  "source-hash": "1",
+  "title": "Foo &lt;Bar&gt;",
+  "version": "bar",
+  "wordcount": 10
 }</pre></code>
 </body>
 </html>

@@ -6,6 +6,7 @@ members = [
     "markdown/private/core/group",
     "markdown/private/core/lint",
     "markdown/private/formats/word",
+    "markdown/private/group",
     "markdown/private/utils"
 ]
 
@@ -17,6 +18,7 @@ rust-version = "1.82.0"
 chrono = { version = "0.4.38", features = ["serde"] }
 clap = { version = "4.5.20", features = ["derive"] }
 derive_builder = "0.20.2"
+html-escape = "0.2.13"
 markdown = { path = "markdown/private/utils" }
 md5 = "0.7.0"
 regex = "1.11.0"

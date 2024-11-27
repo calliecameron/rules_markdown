@@ -2,6 +2,7 @@ use crate::{deserializers, field_validators, json::JsonSerializable};
 use chrono::naive::NaiveDate;
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
+use std::fmt::{self, Debug, Display, Formatter};
 use validator::{Validate, ValidationError, ValidationErrors};
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
@@ -16,6 +17,12 @@ pub enum State {
     // Good end states
     SelfPublished,
     Published,
+}
+
+impl Display for State {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        Debug::fmt(self, f)
+    }
 }
 
 #[derive(Clone, Copy, PartialEq, Debug)]
