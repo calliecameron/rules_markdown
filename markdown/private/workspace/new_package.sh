@@ -59,7 +59,7 @@ fi
 
 if [ -d "${SOURCE_DIR}/.git" ]; then
     cat >"${SOURCE_DIR}/BUILD" <<EOF
-load("@rules_markdown//markdown:defs.bzl", "md_document", "md_git_repo")
+load("@markdown//:defs.bzl", "md_document", "md_git_repo")
 
 md_git_repo()
 
@@ -69,7 +69,7 @@ md_document(
 EOF
 else
     cat >"${SOURCE_DIR}/BUILD" <<EOF
-load("@rules_markdown//markdown:defs.bzl", "md_document")
+load("@markdown//:defs.bzl", "md_document")
 
 md_document(
     name = "${BASENAME}",
