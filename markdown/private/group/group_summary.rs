@@ -346,7 +346,7 @@ fn should_include(row: &Row, includes: &Vec<Filter>, excludes: &Vec<Filter>) -> 
     includes.iter().any(|f| f.matches(row))
 }
 
-fn sanitize(s: &str) -> String {
+fn sanitise(s: &str) -> String {
     s.replace("\n", "\\n")
 }
 
@@ -369,10 +369,10 @@ fn main() -> Result<(), Box<dyn Error>> {
 
         let row = Row {
             target: target.clone(),
-            title: sanitize(m.title().unwrap_or(&String::new())),
-            author: sanitize(&m.authors().join(", ")),
-            raw_date: sanitize(m.date().unwrap_or(&String::new())),
-            date: sanitize(&m.parsed_dates().dates().join(", ")),
+            title: sanitise(m.title().unwrap_or(&String::new())),
+            author: sanitise(&m.authors().join(", ")),
+            raw_date: sanitise(m.date().unwrap_or(&String::new())),
+            date: sanitise(&m.parsed_dates().dates().join(", ")),
             wordcount: m.wordcount(),
             poetry_lines: m.poetry_lines(),
             finished: if m.finished() {

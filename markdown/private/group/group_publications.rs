@@ -7,7 +7,7 @@ use std::collections::{BTreeMap, BTreeSet, HashMap};
 use std::error::Error;
 use std::fs::{read_to_string, write};
 
-fn capitalize(s: &str) -> String {
+fn capitalise(s: &str) -> String {
     let mut chars: Vec<char> = s.chars().collect();
     if let Some(c) = chars.first_mut() {
         c.make_ascii_uppercase();
@@ -104,7 +104,7 @@ fn generate_cell(target: &str, p: &Publication) -> String {
         format!(
             "{} {}",
             d.date.format("%Y-%m-%d"),
-            capitalize(&d.state.to_string().replace("_", "-"))
+            capitalise(&d.state.to_string().replace("_", "-"))
         )
     }));
 
