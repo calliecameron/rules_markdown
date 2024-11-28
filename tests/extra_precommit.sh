@@ -2,6 +2,14 @@
 
 set -eu
 
+# The main test script only builds the dependencies of tests - correctly for a
+# repo using this module. However, in this repo we need to build everything.
+bazel build ...:all
+(
+    cd tests/other_workspace
+    bazel build ...:all
+)
+
 if ! grep "$(date '+%Y')" 'LICENSE' &>/dev/null; then
     echo 'Error: update LICENSE to contain the current year'
     exit 1

@@ -8,7 +8,10 @@ load("//markdown/private/support/shell:defs.bzl", "sh_binary", "sh_source", "sh_
 bzl_library(
     name = "defs_bzl",
     srcs = ["defs.bzl"],
-    visibility = ["//markdown/private:__subpackages__"],
+    visibility = [
+        "//markdown/private:__subpackages__",
+        "//readme:__pkg__",
+    ],
 )
 
 bzl_library(

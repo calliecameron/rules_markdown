@@ -75,7 +75,7 @@ script_py_test(
 sh_binary(
     name = "write_save_script",
     srcs = ["write_save_script.sh"],
-    visibility = ["//markdown/private/formats:__subpackages__"],
+    visibility = ["//visibility:public"],
 )
 
 script_py_test(

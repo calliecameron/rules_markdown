@@ -110,7 +110,7 @@ fn generate_cell(target: &str, p: &Publication) -> String {
 
     format!(
         "<td class=\"{}\" title=\"{}\"><a href=\"#{}\">{}</a></td>",
-        p.latest().state.to_string(),
+        p.latest().state,
         html_escape::encode_double_quoted_attribute(&format!("{target}, {}", p.venue())),
         html_escape::encode_double_quoted_attribute(target),
         Vec::from_iter(content.iter().map(html_escape::encode_text)).join("<br>")

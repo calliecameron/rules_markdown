@@ -10,7 +10,7 @@ bzl_library(
     visibility = ["//visibility:private"],
     deps = [
         "//markdown/private/utils:defs_bzl",
-        "@markdown//:defs_bzl",
+        "@markdown//:defs.bzl",
     ],
 )
 
