@@ -1,4 +1,4 @@
-use std::fmt::{Display, Formatter, Result};
+use std::fmt::{Display, Formatter};
 use std::process;
 
 #[derive(Clone, Debug)]
@@ -25,7 +25,7 @@ impl RowProblem {
 }
 
 impl Display for RowProblem {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         write!(f, "row {}: {}", self.row + 1, self.msg)
     }
 }
@@ -87,7 +87,7 @@ impl RowColProblem {
 }
 
 impl Display for RowColProblem {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         write!(f, "row {} col {}: {}", self.row + 1, self.col + 1, self.msg)
     }
 }
@@ -109,22 +109,85 @@ impl Problems {
         self.problems.push(p);
     }
 
-    pub fn check(&self) {
+    fn check_internal(&self) -> Option<String> {
         if self.problems.is_empty() {
-            return;
+            return None;
         }
 
         let mut msg = vec![format!("ERROR: {}", self.err_msg)];
         for p in self.problems.iter() {
-            msg.push(p.to_string());
+            msg.push(format!("  {}", p));
         }
-        eprintln!("{}\n\n", msg.join("\n\n"));
-        process::exit(1);
+        Some(format!("{}\n\n", msg.join("\n\n")))
+    }
+
+    pub fn check(&self) {
+        if let Some(msg) = self.check_internal() {
+            eprintln!("{}", msg);
+            process::exit(1);
+        }
     }
 }
 
 impl Extend<Box<dyn Display>> for Problems {
     fn extend<T: IntoIterator<Item = Box<dyn Display>>>(&mut self, iter: T) {
         self.problems.extend(iter);
+    }
+}
+
+#[cfg(test)]
+mod test_problems {
+    use super::{ColProblem, Display, Problems, RowColProblem, RowProblem};
+
+    #[test]
+    fn test_row_problem() {
+        let p = RowProblem::new(2, "foo");
+        assert_eq!(p.row(), 2);
+        assert_eq!(p.msg(), "foo");
+        assert_eq!(format!("{p}"), "row 3: foo");
+    }
+
+    #[test]
+    fn test_col_problem() {
+        let p = ColProblem::new(2, "foo");
+        assert_eq!(p.col(), 2);
+        assert_eq!(p.msg(), "foo");
+        let p2 = p.add_row(5);
+        assert_eq!(p2.row(), 5);
+        assert_eq!(p2.col(), 2);
+        assert_eq!(p2.msg(), "foo");
+    }
+
+    #[test]
+    fn test_row_col_problem() {
+        let p = RowColProblem::new(2, 5, "foo");
+        assert_eq!(p.row(), 2);
+        assert_eq!(p.col(), 5);
+        assert_eq!(p.msg(), "foo");
+        assert_eq!(format!("{p}"), "row 3 col 6: foo");
+    }
+
+    #[test]
+    fn test_problems() {
+        let mut p = Problems::new("foo");
+        assert!(p.check_internal().is_none());
+        p.push(Box::new(String::from("bar")));
+        let v: Vec<Box<dyn Display>> = vec![
+            Box::new(String::from("baz")),
+            Box::new(String::from("quux")),
+        ];
+        p.extend(v);
+        assert_eq!(
+            p.check_internal().unwrap(),
+            "ERROR: foo
+
+  bar
+
+  baz
+
+  quux
+
+"
+        );
     }
 }
