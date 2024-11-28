@@ -11,11 +11,11 @@ bazel_dep(
 )
 bazel_dep(
     name = "rules_python",
-    version = "0.36.0",
+    version = "0.40.0",
 )
 bazel_dep(
     name = "rules_rust",
-    version = "0.52.2",
+    version = "0.54.1",
 )
 bazel_dep(
     name = "buildifier_prebuilt",
