@@ -6,9 +6,9 @@ def _hunspell_dicts_impl(module_ctx):
     http_archive(
         name = "hunspell_dicts",
         build_file = "//markdown/private/external:hunspell_dicts.build",
-        url = "https://github.com/LibreOffice/dictionaries/archive/refs/tags/libreoffice-24.8.2.1.tar.gz",
-        sha256 = "9beee5de1c87d130fdeedee201772dbd2846a7f3065c5eb52d5dbcdce559ce9b",
-        strip_prefix = "dictionaries-libreoffice-24.8.2.1",
+        url = "https://github.com/LibreOffice/dictionaries/archive/refs/tags/libreoffice-24.8.3.2.tar.gz",
+        sha256 = "87d9cc02974c9eb2c0b95e00f9df18c7ea698b99fe0fc191c672640759d170da",
+        strip_prefix = "dictionaries-libreoffice-24.8.3.2",
     )
 
     return module_ctx.extension_metadata(reproducible = True)
