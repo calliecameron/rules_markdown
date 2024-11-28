@@ -51,6 +51,6 @@ COPY --chown=${uid}:${gid} . /home/markdown/rules_markdown
 RUN cp rules_markdown/tests/container/setup_tests.sh . && \
     cp rules_markdown/tests/container/run_tests.sh .
 
-RUN bash -l -c "./setup_tests.sh"
+RUN bash -l -c "./setup_tests.sh '${bazel_version}'"
 
 ENTRYPOINT ["bash", "-l"]
