@@ -13,4 +13,4 @@ podman run \
     --user "$(id -u):$(id -g)" \
     -e "TERM=${TERM}" \
     rules-markdown-container-test \
-    -c './run_tests rules_markdown && ./run_tests other-workspace-unversioned && ./run_tests other-workspace-versioned'
+    -c './run_tests.sh'

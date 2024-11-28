@@ -1,0 +1,56 @@
+FROM ubuntu:22.04
+
+ENV TZ UTC
+
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
+    catdoc \
+    g++ \
+    gcc \
+    git \
+    python3 \
+    tzdata \
+    wget \
+    xz-utils && \
+    rm -rf /var/lib/apt/lists/*
+
+ARG uid
+ARG gid
+
+RUN addgroup --gid ${gid} markdown && \
+    adduser --uid ${uid} --gid ${gid} markdown
+
+RUN mkdir /nix && \
+    chown ${uid}:${gid} /nix
+
+USER ${uid}:${gid}
+ENV USER markdown
+WORKDIR /home/markdown
+
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+
+RUN wget https://releases.nixos.org/nix/nix-2.24.4/install && \
+    chmod a+x install && \
+    ./install --yes --no-daemon && \
+    rm install && \
+    mkdir -p .config/nix && \
+    echo 'experimental-features = nix-command flakes' > .config/nix/nix.conf
+
+ARG nixpkgs_commit
+ARG bazel_version
+
+RUN bash -l -c "nix profile install nixpkgs/${nixpkgs_commit}#bazelisk nixpkgs/${nixpkgs_commit}#bazel-buildtools" && \
+    mkdir bin && \
+    ln -s ~/.nix-profile/bin/bazelisk bin/bazel && \
+    echo 'export PATH="${HOME}/bin:${PATH}"' >> .profile && \
+    bash -l -c "USE_BAZEL_VERSION=${bazel_version} bazel --version"
+
+COPY --chown=${uid}:${gid} . /home/markdown/rules_markdown
+
+RUN cp rules_markdown/tests/container/setup_tests.sh . && \
+    cp rules_markdown/tests/container/run_tests.sh .
+
+RUN bash -l -c "./setup_tests.sh"
+
+ENTRYPOINT ["bash", "-l"]
