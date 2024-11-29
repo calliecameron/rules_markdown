@@ -2,13 +2,19 @@
 
 load("//markdown/private/utils:defs.bzl", "extend_file", "required_files")
 
-def md_git_repo(name = None, extra_gitignore_lines = None, extra_precommit = None):  # buildifier: disable=unused-variable
+def md_git_repo(
+        name = None,
+        extra_gitignore_lines = None,
+        extra_precommit = None,
+        precommit_build_all = False):  # buildifier: disable=unused-variable
     """Git repo setup.
 
     Args:
         name: unused
         extra_gitignore_lines: extra lines to add to the generated gitignore
         extra_precommit: an extra script to run at precommit
+        precommit_build_all: when true, build all targets in precommit; when
+            false, only build dependencies of tests
     """
     native.sh_binary(
         name = "git_test_extra",
@@ -36,6 +42,13 @@ def md_git_repo(name = None, extra_gitignore_lines = None, extra_precommit = Non
         append_lines = extra_gitignore_lines,
     )
 
+    native.genrule(
+        name = "precommit",
+        srcs = ["@rules_markdown//markdown/private/git:precommit_template"],
+        outs = ["precommit.sh"],
+        cmd = "sed 's/@@@@@/%s/g' <$< >$@" % ("t" if precommit_build_all else ""),
+    )
+
     copy = [
         (
             ":gitattributes",
@@ -58,7 +71,7 @@ def md_git_repo(name = None, extra_gitignore_lines = None, extra_precommit = Non
             "700",
         ),
         (
-            "@rules_markdown//markdown/private/git:precommit",
+            ":precommit",
             ".git/hooks/pre-commit",
             "700",
         ),

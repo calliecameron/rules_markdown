@@ -28,6 +28,7 @@ md_git_repo(
         "/target/",
     ],
     extra_precommit = "//tests:extra_precommit.sh",
+    precommit_build_all = True,
 )
 
 exports_files(

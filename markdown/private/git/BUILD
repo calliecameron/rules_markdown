@@ -18,8 +18,8 @@ exports_files(
 )
 
 sh_source(
-    name = "precommit",
-    src = "precommit",
+    name = "precommit_template",
+    src = "precommit_template",
     visibility = ["//visibility:public"],
 )
 

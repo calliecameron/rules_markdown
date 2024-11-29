@@ -3,12 +3,13 @@
 set -eu
 
 function usage() {
-    echo "Usage $(basename "${0}") root_dir"
+    echo "Usage $(basename "${0}") root_dir build_all"
     exit 1
 }
 
 test -z "${1:-}" && usage
 ROOT_DIR="$(readlink -f "${1}")"
+BUILD_ALL="${2:-}"
 
 TMP_DIR="$(mktemp -d)"
 
@@ -112,9 +113,13 @@ function refresh-summaries() {
 
 function run-tests() {
     local TEST_ROOT="${1}"
-    echo -e "\e[34mRunning tests in ${line}\e[0m"
     (
         cd "${TEST_ROOT}"
+        if [ -n "${BUILD_ALL}" ]; then
+            echo -e "\e[34mBuilding in ${line}\e[0m"
+            bazel build ...:all
+        fi
+        echo -e "\e[34mRunning tests in ${line}\e[0m"
         bazel test --build_tests_only //:buildifier_test ...:all
     )
 }

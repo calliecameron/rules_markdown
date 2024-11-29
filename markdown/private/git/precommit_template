@@ -16,7 +16,7 @@ if [ ! -x "${RUN_TESTS}" ]; then
     exit 1
 fi
 
-"${RUN_TESTS}" .
+"${RUN_TESTS}" . '@@@@@'
 
 if [ -x "${EXTRA_PRECOMMIT}" ]; then
     "${EXTRA_PRECOMMIT}"

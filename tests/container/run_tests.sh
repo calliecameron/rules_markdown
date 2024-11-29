@@ -7,9 +7,9 @@ cd "${THIS_DIR}"
 
 RUN_TESTS="${HOME}/rules_markdown/markdown/private/git/run_tests"
 
-"${RUN_TESTS}" "${HOME}/rules_markdown"
-"${RUN_TESTS}" "${HOME}/other-workspace-unversioned"
-"${RUN_TESTS}" "${HOME}/other-workspace-versioned"
+"${RUN_TESTS}" "${HOME}/rules_markdown" 't'
+"${RUN_TESTS}" "${HOME}/other-workspace-unversioned" 't'
+"${RUN_TESTS}" "${HOME}/other-workspace-versioned" 't'
 
 # We have to build first so that MODULE.bazel.lock doesn't change during the
 # test run
@@ -17,4 +17,4 @@ RUN_TESTS="${HOME}/rules_markdown/markdown/private/git/run_tests"
     cd "${HOME}/new-workspace"
     bazel build ...:all
 )
-"${RUN_TESTS}" "${HOME}/new-workspace"
+"${RUN_TESTS}" "${HOME}/new-workspace" 't'
