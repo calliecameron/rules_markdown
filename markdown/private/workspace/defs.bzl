@@ -25,19 +25,19 @@ def md_workspace(name = None, extra_bazelrc_lines = None):  # buildifier: disabl
 
     native.sh_binary(
         name = "new",
-        srcs = ["@rules_markdown//markdown/private/workspace:new_package.sh"],
+        srcs = [Label("//markdown/private/workspace:new_package.sh")],
         visibility = ["//visibility:private"],
     )
 
     extend_file(
         name = "bazeliskrc",
-        src = "@rules_markdown//markdown/private/workspace:default_bazeliskrc",
+        src = Label("//markdown/private/workspace:default_bazeliskrc"),
         prepend_lines = ["# Auto-generated; do not edit."],
     )
 
     extend_file(
         name = "bazelrc",
-        src = "@rules_markdown//markdown/private/workspace:default_bazelrc",
+        src = Label("//markdown/private/workspace:default_bazelrc"),
         prepend_lines = ["# Auto-generated; edit extra_bazelrc_lines in md_workspace."],
         append_lines = extra_bazelrc_lines,
     )
@@ -46,12 +46,12 @@ def md_workspace(name = None, extra_bazelrc_lines = None):  # buildifier: disabl
         name = "workspace",
         copy = [
             (
-                "@rules_markdown//markdown/private/workspace:workspace_status",
+                Label("//markdown/private/workspace:workspace_status"),
                 ".markdown_workspace/workspace_status",
                 "700",
             ),
             (
-                "@rules_markdown//markdown/private/utils:git_repo_version",
+                Label("//markdown/private/utils:git_repo_version"),
                 ".markdown_workspace/git_repo_version",
                 "700",
             ),
@@ -68,12 +68,12 @@ def md_workspace(name = None, extra_bazelrc_lines = None):  # buildifier: disabl
             # We need both markdownlint configs to ensure both vscode and the CLI in subfolders find
             # the config.
             (
-                "@rules_markdown//markdown/private/core/lint:default_markdownlintrc",
+                Label("//markdown/private/core/lint:default_markdownlintrc"),
                 ".markdownlintrc",
                 "600",
             ),
             (
-                "@rules_markdown//markdown/private/core/lint:default_markdownlintrc",
+                Label("//markdown/private/core/lint:default_markdownlintrc"),
                 ".markdownlint.json",
                 "600",
             ),

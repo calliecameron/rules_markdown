@@ -20,33 +20,33 @@ def md_git_repo(
     """
     native.sh_binary(
         name = "git_test_extra",
-        srcs = ["@rules_markdown//markdown/private/git:git_test_extra.sh"],
+        srcs = [Label("//markdown/private/git:git_test_extra.sh")],
         data = native.glob([".git/config"]),
         visibility = ["//visibility:private"],
     )
 
     extend_file(
         name = "gitattributes",
-        src = "@rules_markdown//markdown/private/git:default_gitattributes",
+        src = Label("//markdown/private/git:default_gitattributes"),
         prepend_lines = ["# Auto-generated; do not edit."],
     )
 
     extend_file(
         name = "gitconfig",
-        src = "@rules_markdown//markdown/private/git:default_gitconfig",
+        src = Label("//markdown/private/git:default_gitconfig"),
         prepend_lines = ["# Auto-generated; do not edit."],
     )
 
     extend_file(
         name = "gitignore",
-        src = "@rules_markdown//markdown/private/git:default_gitignore",
+        src = Label("//markdown/private/git:default_gitignore"),
         prepend_lines = ["# Auto-generated; edit extra_gitignore_lines in md_git_repo."],
         append_lines = extra_gitignore_lines,
     )
 
     native.genrule(
         name = "precommit",
-        srcs = ["@rules_markdown//markdown/private/git:precommit_template"],
+        srcs = [Label("//markdown/private/git:precommit_template")],
         outs = ["precommit.sh"],
         cmd = "sed 's/@@@@@/%s/g' <$< >$@" % ("t" if precommit_build_all else ""),
     )
@@ -68,7 +68,7 @@ def md_git_repo(
             "600",
         ),
         (
-            "@rules_markdown//markdown/private/git:run_tests",
+            Label("//markdown/private/git:run_tests"),
             ".git/hooks/markdown_run_tests",
             "700",
         ),
@@ -90,5 +90,5 @@ def md_git_repo(
         name = "git",
         copy = copy,
         extra_check = ":git_test_extra",
-        extra_update = "@rules_markdown//markdown/private/git:git_update_extra",
+        extra_update = Label("//markdown/private/git:git_update_extra"),
     )

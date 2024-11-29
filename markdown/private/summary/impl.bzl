@@ -9,19 +9,19 @@ def md_summary_impl(contents, md_group):
         name = "contents",
         copy = [
             (
-                "@rules_markdown//markdown/private/summary:contents.build",
+                Label("//markdown/private/summary:contents.build"),
                 "BUILD",
                 "600",
             ),
             (
-                "@rules_markdown//markdown/private/summary:refresh",
+                Label("//markdown/private/summary:refresh"),
                 "refresh",
                 "700",
             ),
         ],
         create = [
             (
-                "@rules_markdown//markdown/private/summary:contents.bzl",
+                Label("//markdown/private/summary:contents.bzl"),
                 "contents.bzl",
                 "600",
             ),

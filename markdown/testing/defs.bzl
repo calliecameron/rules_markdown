@@ -12,7 +12,7 @@ visibility("public")
 def _dump_test(target, extension, variant, tool, tool_target = None, tool_helper_targets = None, tool_helper_args = None):
     native.sh_test(
         name = "%s_%s_dump_test" % (target, ext_var_underscore(extension, variant)),
-        srcs = ["@rules_markdown//markdown/testing:dump_test.sh"],
+        srcs = [Label("//markdown/testing:dump_test.sh")],
         data = [
                    "output/%s.%s" % (target, ext_var_dot(extension, variant)),
                ] + ([tool_target] if tool_target else []) +
@@ -26,7 +26,7 @@ def _dump_test(target, extension, variant, tool, tool_target = None, tool_helper
 def _diff_test(target, extension, variant, tool, tool_target = None, tool_helper_targets = None, tool_helper_args = None):
     native.sh_test(
         name = "%s_%s_diff_test" % (target, ext_var_underscore(extension, variant)),
-        srcs = ["@rules_markdown//markdown/testing:diff_test.sh"],
+        srcs = [Label("//markdown/testing:diff_test.sh")],
         data = [
                    "output/%s.%s" % (target, ext_var_dot(extension, variant)),
                    "saved/%s.%s" % (target, ext_var_dot(extension, variant)),
@@ -42,21 +42,21 @@ def _diff_test(target, extension, variant, tool, tool_target = None, tool_helper
 def _zip_cleaned_test(target, extension, variant):
     native.sh_test(
         name = "%s_%s_zip_cleaned_test" % (target, ext_var_underscore(extension, variant)),
-        srcs = ["@rules_markdown//markdown/testing:zip_cleaned_test.sh"],
+        srcs = [Label("//markdown/testing:zip_cleaned_test.sh")],
         data = [
             "output/%s.%s" % (target, ext_var_dot(extension, variant)),
-            "@rules_markdown//markdown/private/external:zipinfo",
+            Label("//markdown/private/external:zipinfo"),
         ],
         args = [
             "$(rootpath output/%s.%s)" % (target, ext_var_dot(extension, variant)),
-            "$(rootpath @rules_markdown//markdown/private/external:zipinfo)",
+            "$(rootpath %s)" % Label("//markdown/private/external:zipinfo"),
         ],
     )
 
 def _version_test(target, version_regex):
     native.sh_test(
         name = "%s_version_test" % target,
-        srcs = ["@rules_markdown//markdown/testing:version_test.sh"],
+        srcs = [Label("//markdown/testing:version_test.sh")],
         data = [
             "output/%s.%s" % (target, ext_var_dot("json", "metadata")),
         ],
@@ -102,10 +102,10 @@ def _zip_tests(target, extension, variant, reproducible):
         extension,
         variant,
         reproducible,
-        "$(rootpath @rules_markdown//markdown/private/utils:zipdump)",
-        "@rules_markdown//markdown/private/utils:zipdump",
-        ["@rules_markdown//markdown/private/external:unzip"],
-        ["$(rootpath @rules_markdown//markdown/private/external:unzip)"],
+        "$(rootpath %s)" % Label("//markdown/private/utils:zipdump"),
+        Label("//markdown/private/utils:zipdump"),
+        [Label("//markdown/private/external:unzip")],
+        ["$(rootpath %s)" % Label("//markdown/private/external:unzip")],
     )
     _zip_cleaned_test(
         target,
@@ -119,15 +119,15 @@ def _pdf_tests(target, extension, variant, reproducible):
         extension,
         variant,
         reproducible,
-        "$(rootpath @rules_markdown//markdown/private/utils:pdfdump)",
-        "@rules_markdown//markdown/private/utils:pdfdump",
+        "$(rootpath %s)" % Label("//markdown/private/utils:pdfdump"),
+        Label("//markdown/private/utils:pdfdump"),
         [
-            "@rules_markdown//markdown/private/external:pdfinfo",
-            "@rules_markdown//markdown/private/utils:pdf2txt",
+            Label("//markdown/private/external:pdfinfo"),
+            Label("//markdown/private/utils:pdf2txt"),
         ],
         [
-            "$(rootpath @rules_markdown//markdown/private/external:pdfinfo)",
-            "$(rootpath @rules_markdown//markdown/private/utils:pdf2txt)",
+            "$(rootpath %s)" % Label("//markdown/private/external:pdfinfo"),
+            "$(rootpath %s)" % Label("//markdown/private/utils:pdf2txt"),
         ],
     )
 
@@ -137,10 +137,10 @@ def _bin_tests(target, extension, variant):
         target,
         extension,
         variant,
-        "$(rootpath @rules_markdown//markdown/private/utils:bindump)",
-        "@rules_markdown//markdown/private/utils:bindump",
-        ["@rules_markdown//markdown/private/external:hexdump"],
-        ["$(rootpath @rules_markdown//markdown/private/external:hexdump)"],
+        "$(rootpath %s)" % Label("//markdown/private/utils:bindump"),
+        Label("//markdown/private/utils:bindump"),
+        [Label("//markdown/private/external:hexdump")],
+        ["$(rootpath %s)" % Label("//markdown/private/external:hexdump")],
     )
 
 def _doc_tests(target, extension, variant):
@@ -149,8 +149,8 @@ def _doc_tests(target, extension, variant):
         target,
         extension,
         variant,
-        "$(rootpath @rules_markdown//markdown/private/utils:docdump)",
-        "@rules_markdown//markdown/private/utils:docdump",
+        "$(rootpath %s)" % Label("//markdown/private/utils:docdump"),
+        Label("//markdown/private/utils:docdump"),
     )
 
 def output_test(target, reproducible, name = None):  # buildifier: disable=unused-variable

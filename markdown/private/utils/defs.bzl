@@ -57,7 +57,7 @@ def _required_files_update(name, copy, create, extra_update):
 
     native.sh_binary(
         name = name + "_update",
-        srcs = ["@rules_markdown//markdown/private/utils:required_files_update.sh"],
+        srcs = [Label("//markdown/private/utils:required_files_update.sh")],
         args = args,
         data = data,
         visibility = ["//visibility:private"],
@@ -97,7 +97,7 @@ def _required_files_test(name, check, check_mode_only, extra_check):
 
     native.sh_test(
         name = name + "_test",
-        srcs = ["@rules_markdown//markdown/private/utils:required_files_test.sh"],
+        srcs = [Label("//markdown/private/utils:required_files_test.sh")],
         args = args,
         data = data,
         visibility = ["//visibility:private"],
