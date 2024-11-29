@@ -12,6 +12,8 @@ load(
     "tools",
 )
 
+visibility("//markdown/private/formats")
+
 _LATEX_VARS = [
     "--variable=fontsize:12pt",
     "--variable=papersize:a4",

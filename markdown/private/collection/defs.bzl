@@ -2,6 +2,8 @@
 
 load("//markdown/private/core:defs.bzl", "MdGroupInfo")
 
+visibility("//markdown/private")
+
 def _md_collection_src_impl(ctx):
     output = ctx.actions.declare_file(ctx.label.name + ".md")
     extra_args = []

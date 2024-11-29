@@ -3,6 +3,8 @@
 load("//markdown/private/core:defs.bzl", "MdFileInfo")
 load(":types.bzl", "filter")
 
+visibility("//markdown/private/formats/...")
+
 tools = struct(
     pandoc = struct(
         attr = {

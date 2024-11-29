@@ -2,6 +2,8 @@
 
 load("@bazel_skylib//rules:native_binary.bzl", "native_test")
 
+visibility("//...")
+
 def sh_library(name, **kwargs):
     _sh_lint(
         name = name,

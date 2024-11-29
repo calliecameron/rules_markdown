@@ -1,5 +1,7 @@
 """Utility functions."""
 
+visibility("//markdown/private/core")
+
 def _escape_key_value_part(s):
     return s.replace("\\", "\\\\").replace("=", "\\=")
 

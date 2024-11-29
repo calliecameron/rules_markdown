@@ -15,6 +15,8 @@ load(
     "write_open_script",
 )
 
+visibility("//markdown/private/formats")
+
 MdDocxInfo = provider(
     "Info for docx output",
     fields = {

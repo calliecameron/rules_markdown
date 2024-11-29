@@ -2,6 +2,8 @@
 
 load("//markdown/private/core:defs.bzl", "MdGroupInfo")
 
+visibility(["//markdown/private", "//markdown/private/summary"])
+
 def _md_group_summary_impl(ctx):
     script = ctx.actions.declare_file(ctx.label.name + ".sh")
     ctx.actions.run(

@@ -1,22 +1,4 @@
-load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("//markdown/private/support/shell:defs.bzl", "sh_source")
-
-bzl_library(
-    name = "defs_bzl",
-    srcs = ["defs.bzl"],
-    visibility = [
-        "//markdown/private:__pkg__",
-        "//markdown/private/workspace:__pkg__",
-    ],
-    deps = ["//markdown/private/utils:defs_bzl"],
-)
-
-bzl_library(
-    name = "impl_bzl",
-    srcs = ["impl.bzl"],
-    visibility = ["//visibility:public"],
-    deps = ["//markdown/private/group:defs_bzl"],
-)
 
 exports_files(
     [

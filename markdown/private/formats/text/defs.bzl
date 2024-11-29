@@ -11,6 +11,8 @@ load(
     "filter",
 )
 
+visibility("//markdown/private/formats")
+
 _md_plain_filter = filter(
     attr = {
         "_plain_markdown_filter": attr.label(

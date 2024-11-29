@@ -3,6 +3,8 @@
 load("@bazel_skylib//lib:subpackages.bzl", "subpackages")
 load("//markdown/private/utils:defs.bzl", "required_files")
 
+visibility(["//markdown/private", "//markdown/private/workspace"])
+
 def md_summary(name = None):  # buildifier: disable=unused-variable
     """Summaries of subpackage contents.
 

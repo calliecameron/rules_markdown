@@ -4,6 +4,8 @@ load("@buildifier_prebuilt//:rules.bzl", "buildifier_test")
 load("//markdown/private/summary:defs.bzl", "md_summary")
 load("//markdown/private/utils:defs.bzl", "extend_file", "required_files")
 
+visibility("//markdown/private")
+
 def md_workspace(name = None, extra_bazelrc_lines = None):  # buildifier: disable=unused-variable
     """Workspace setup.
 

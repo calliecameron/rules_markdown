@@ -1,5 +1,7 @@
 """Repository rule for the main markdown repo."""
 
+visibility("//markdown/extensions")
+
 def _defs(repository_ctx):
     repository_ctx.file(
         "defs.bzl",
@@ -14,7 +16,9 @@ def _versions(repository_ctx):
 
     repository_ctx.file(
         "versions.bzl",
-        content = """_VERSION_FILES = {
+        content = """visibility("private")
+
+_VERSION_FILES = {
 %s
 }
 
@@ -54,7 +58,9 @@ def _cache(repository_ctx):
 
     repository_ctx.file(
         "cache.bzl",
-        content = """def cache_dir():
+        content = """visibility("private")
+
+def cache_dir():
     return \"%s\"
 """ % cache_dir,
         executable = False,
@@ -66,8 +72,6 @@ def _build(repository_ctx, build_entries):
         content = """exports_files(
     [
         "defs.bzl",
-        "versions.bzl",
-        "cache.bzl",
     ],
     visibility = ["//visibility:public"],
 )

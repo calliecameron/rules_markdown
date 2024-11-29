@@ -1,14 +1,4 @@
-load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("//markdown/private/support/shell:defs.bzl", "sh_source")
-
-bzl_library(
-    name = "defs_bzl",
-    srcs = ["defs.bzl"],
-    visibility = ["//visibility:public"],
-    deps = [
-        "//markdown/private/formats:defs_bzl",
-    ],
-)
 
 sh_source(
     name = "diff_test",

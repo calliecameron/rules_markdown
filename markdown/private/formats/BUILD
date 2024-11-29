@@ -1,40 +1,5 @@
-load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("//markdown/private/support/shell:defs.bzl", "sh_binary")
 load("//markdown/private/utils:defs.bzl", "script_py_test")
-
-bzl_library(
-    name = "types_bzl",
-    srcs = ["types.bzl"],
-    visibility = ["//markdown/private/formats:__subpackages__"],
-)
-
-bzl_library(
-    name = "lib_bzl",
-    srcs = ["lib.bzl"],
-    visibility = ["//markdown/private/formats:__subpackages__"],
-    deps = [
-        ":types_bzl",
-        "//markdown/private/core:defs_bzl",
-    ],
-)
-
-bzl_library(
-    name = "defs_bzl",
-    srcs = ["defs.bzl"],
-    visibility = [
-        "//markdown/private:__pkg__",
-        "//markdown/testing:__pkg__",
-    ],
-    deps = [
-        ":lib_bzl",
-        "//markdown/private/formats/ebook:defs_bzl",
-        "//markdown/private/formats/html:defs_bzl",
-        "//markdown/private/formats/latex:defs_bzl",
-        "//markdown/private/formats/metadata:defs_bzl",
-        "//markdown/private/formats/text:defs_bzl",
-        "//markdown/private/formats/word:defs_bzl",
-    ],
-)
 
 sh_binary(
     name = "write_open_script",

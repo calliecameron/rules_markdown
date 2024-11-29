@@ -2,6 +2,8 @@
 
 load("//markdown/private/utils:defs.bzl", "extend_file", "required_files")
 
+visibility("//markdown/private")
+
 def md_git_repo(
         name = None,
         extra_gitignore_lines = None,

@@ -2,6 +2,8 @@
 
 load("//markdown/private/utils:lib.bzl", "key_value_arg")
 
+visibility("//markdown/private/...")
+
 _SRC_FORMAT = "markdown+smart-pandoc_title_block-auto_identifiers"
 
 MdGroupInfo = provider(

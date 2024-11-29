@@ -3,6 +3,8 @@
 load("//markdown/extensions/private:git_repo.bzl", "git_repo")
 load("//markdown/extensions/private:main_repo.bzl", "main_repo")
 
+visibility("private")
+
 def _markdown_impl(module_ctx):
     root = module_ctx.path(Label("@@//:WORKSPACE")).dirname
 

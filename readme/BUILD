@@ -1,18 +1,7 @@
-load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@markdown//:defs.bzl", "md_document")
 load("//markdown/private/support/shell:defs.bzl", "sh_source")
 load("//markdown/testing:defs.bzl", "output_test")
 load("defs.bzl", "wrap_file")
-
-bzl_library(
-    name = "defs_bzl",
-    srcs = ["defs.bzl"],
-    visibility = ["//visibility:private"],
-    deps = [
-        "//markdown/private/utils:defs_bzl",
-        "@markdown//:defs.bzl",
-    ],
-)
 
 sh_source(
     name = "version",

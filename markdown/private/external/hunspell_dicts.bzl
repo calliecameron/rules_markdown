@@ -2,6 +2,8 @@
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
+visibility("private")
+
 def _hunspell_dicts_impl(module_ctx):
     http_archive(
         name = "hunspell_dicts",

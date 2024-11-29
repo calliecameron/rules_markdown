@@ -1,5 +1,7 @@
 """Auto-generated bzl file."""
 
+visibility("private")
+
 _CONTENTS = [
     "//readme:basic_build",
     "//readme:bazeliskrc",

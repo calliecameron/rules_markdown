@@ -7,6 +7,8 @@ load(
     "ext_var_underscore",
 )
 
+visibility("public")
+
 def _dump_test(target, extension, variant, tool, tool_target = None, tool_helper_targets = None, tool_helper_args = None):
     native.sh_test(
         name = "%s_%s_dump_test" % (target, ext_var_underscore(extension, variant)),

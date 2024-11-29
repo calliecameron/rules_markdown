@@ -15,6 +15,8 @@ load(
     "write_open_script",
 )
 
+visibility("//markdown/private/formats")
+
 MdEpubInfo = provider(
     "Info for epub output",
     fields = {

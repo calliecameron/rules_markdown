@@ -40,6 +40,8 @@ load(
     _ext_var_underscore = "ext_var_underscore",
 )
 
+visibility(["//markdown/private", "//markdown/testing"])
+
 md_md = _md_md
 md_plain_md = _md_plain_md
 md_tumblr_md = _md_tumblr_md

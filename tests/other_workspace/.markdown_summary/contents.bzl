@@ -1,5 +1,7 @@
 """Auto-generated bzl file."""
 
+visibility("private")
+
 _CONTENTS = [
     "//tests/test1:test1",
     "//tests/test2:test2",

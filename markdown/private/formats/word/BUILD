@@ -1,18 +1,7 @@
-load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@crates//:defs.bzl", "all_crate_deps")
 load("@rules_rust//rust:defs.bzl", "rust_binary")
 load("//markdown/private/support/shell:defs.bzl", "sh_binary", "sh_test")
 load("//markdown/private/utils:defs.bzl", "pandoc_filter_py_test", "script_py_test")
-
-bzl_library(
-    name = "defs_bzl",
-    srcs = ["defs.bzl"],
-    visibility = ["//markdown/private/formats:__pkg__"],
-    deps = [
-        "//markdown/private/core:defs_bzl",
-        "//markdown/private/formats:lib_bzl",
-    ],
-)
 
 exports_files(
     [

@@ -4,6 +4,8 @@ load("@bazel_skylib//lib:shell.bzl", "shell")
 load("@pip//:requirements.bzl", "requirement")
 load("//markdown/private/support/python:defs.bzl", "py_test")
 
+visibility(["//markdown/private/...", "//readme", "//"])
+
 def extend_file(name, src, out = None, prepend_lines = None, append_lines = None):
     """A file with lines prepended and appended.
 

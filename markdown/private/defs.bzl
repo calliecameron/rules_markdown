@@ -49,6 +49,8 @@ load(
     _md_workspace = "md_workspace",
 )
 
+visibility("public")
+
 _FORMATS = [
     ("md", None),
     ("md", "plain"),

@@ -1,5 +1,7 @@
 """Repository rule for getting the version of a git repo."""
 
+visibility("//markdown/extensions")
+
 def _git_repo_impl(repository_ctx):
     files_to_watch = _git_internal_files(repository_ctx) + _git_repo_files(repository_ctx)
     for file in files_to_watch:

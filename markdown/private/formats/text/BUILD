@@ -1,15 +1,4 @@
-load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("//markdown/private/utils:defs.bzl", "pandoc_filter_py_test")
-
-bzl_library(
-    name = "defs_bzl",
-    srcs = ["defs.bzl"],
-    visibility = ["//markdown/private/formats:__pkg__"],
-    deps = [
-        "//markdown/private/formats:lib_bzl",
-        "//markdown/private/formats:types_bzl",
-    ],
-)
 
 exports_files(
     [

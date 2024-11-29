@@ -19,6 +19,8 @@ load(
     "version_file",
 )
 
+visibility("public")
+
 def md_file(
         name,
         **kwargs):

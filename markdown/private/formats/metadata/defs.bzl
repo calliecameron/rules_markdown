@@ -10,6 +10,8 @@ load(
     "write_open_script",
 )
 
+visibility("//markdown/private/formats")
+
 def _copy_impl(ctx, extension, variant, input):
     output = ctx.outputs.out
     ctx.actions.run(

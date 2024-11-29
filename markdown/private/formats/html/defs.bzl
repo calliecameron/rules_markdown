@@ -7,6 +7,8 @@ load(
     "simple_pandoc_output_rule",
 )
 
+visibility("//markdown/private/formats")
+
 def _md_html_impl(ctx):
     return simple_pandoc_output_impl(
         ctx = ctx,
