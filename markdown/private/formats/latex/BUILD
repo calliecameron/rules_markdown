@@ -1,3 +1,4 @@
+load("//markdown/private/support/lua:defs.bzl", "lua_source")
 load("//markdown/private/support/shell:defs.bzl", "sh_source")
 load("//markdown/private/utils:defs.bzl", "pandoc_filter_py_test")
 
@@ -6,9 +7,13 @@ exports_files(
         "header_template.tex",
         "before_template.tex",
         "template.tex",
-        "latex_filter.lua",
     ],
     visibility = ["//visibility:private"],
+)
+
+lua_source(
+    name = "latex_filter",
+    src = "latex_filter.lua",
 )
 
 pandoc_filter_py_test(

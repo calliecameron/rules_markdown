@@ -86,17 +86,23 @@ nix_pkg.attr(
     attr = "calibre",
 )
 nix_pkg.attr(
+    attr = "glibcLocales",
+    build_file_content = """exports_files(
+    ["lib/locale/locale-archive"],
+    visibility = ["//visibility:public"],
+)""",
+)
+nix_pkg.attr(
     attr = "hexdump",
 )
 nix_pkg.attr(
     attr = "hunspell",
 )
 nix_pkg.attr(
-    attr = "glibcLocales",
-    build_file_content = """exports_files(
-    ["lib/locale/locale-archive"],
-    visibility = ["//visibility:public"],
-)""",
+    attr = "lua54Packages.luacheck",
+)
+nix_pkg.attr(
+    attr = "luaformatter",
 )
 nix_pkg.attr(
     attr = "markdownlint-cli",
@@ -139,6 +145,8 @@ use_repo(
     "glibcLocales",
     "hexdump",
     "hunspell",
+    "lua54Packages.luacheck",
+    "luaformatter",
     "markdownlint-cli",
     "pandoc",
     "perl538Packages.strip-nondeterminism",

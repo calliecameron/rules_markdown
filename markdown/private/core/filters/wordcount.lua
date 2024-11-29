@@ -1,5 +1,4 @@
 -- modified from https://pandoc.org/lua-filters.html#examples
-
 local words = 0
 
 local wordcount = {
@@ -11,17 +10,17 @@ local wordcount = {
     end,
 
     CodeBlock = function(elem)
-        _, n = elem.text:gsub("%S+","")
+        local _, n = elem.text:gsub("%S+", "")
         words = words + n
     end,
 
     Code = function(elem)
-        _, n = elem.text:gsub("%S+","")
+        local _, n = elem.text:gsub("%S+", "")
         words = words + n
     end,
 }
 
-function get_wordcount(doc, meta)
+function get_wordcount(doc, _)
     -- skip metadata, just count body
     pandoc.walk_block(pandoc.Div(doc.blocks), wordcount)
 end

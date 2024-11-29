@@ -34,6 +34,8 @@ md_git_repo(
 exports_files(
     [
         "pyproject.toml",
+        ".luacheckrc",
+        ".lua-format",
     ],
     visibility = ["//:__subpackages__"],
 )

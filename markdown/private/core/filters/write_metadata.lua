@@ -15,7 +15,7 @@ function write_metadata(doc)
         local output = pandoc.write(doc, "markdown", options)
         local outputFile = io.open(metadata_out_file, "w")
         if outputFile == nil then
-            io.stderr:write("Failed to open metadata output file: " .. path .. "\n")
+            io.stderr:write("Failed to open metadata output file: " .. metadata_out_file .. "\n")
             os.exit(1)
         end
         outputFile:write(output)

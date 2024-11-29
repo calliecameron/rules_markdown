@@ -2,9 +2,9 @@ local lines = 0
 
 function get_lines(elem)
     pandoc.walk_block(pandoc.Div(elem.content), {
-        LineBlock = function(elem)
-            lines = lines + #elem.content
-        end
+        LineBlock = function(inner_elem)
+            lines = lines + #inner_elem.content
+        end,
     })
 end
 

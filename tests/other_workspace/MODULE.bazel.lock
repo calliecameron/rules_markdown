@@ -850,7 +850,7 @@
     "@@rules_nixpkgs_core~//extensions:package.bzl%nix_pkg%rules_markdown@_~nix_pkg": {
       "general": {
         "bzlTransitiveDigest": "uAGqafYVHfrpValToJbVqUKuhSWG/ISg8w7II/Z+5ao=",
-        "usagesDigest": "ESb4oduTV5q5TReyQKL+qFJEo3qxbSsszAjq21iIFyk=",
+        "usagesDigest": "3L9XMNr7ssKJhyhk/idl9l305LyA7xyymE2QR0kRUvc=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -866,6 +866,22 @@
               "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
               "repositories": {},
               "build_file_content": "",
+              "nixopts": [],
+              "quiet": false,
+              "fail_not_supported": true
+            }
+          },
+          "glibcLocales": {
+            "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
+            "ruleClassName": "_nixpkgs_package",
+            "attributes": {
+              "unmangled_name": "glibcLocales",
+              "attribute_path": "glibcLocales",
+              "nix_file_deps": {},
+              "nix_file_content": "",
+              "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
+              "repositories": {},
+              "build_file_content": "exports_files(\n    [\"lib/locale/locale-archive\"],\n    visibility = [\"//visibility:public\"],\n)",
               "nixopts": [],
               "quiet": false,
               "fail_not_supported": true
@@ -903,17 +919,33 @@
               "fail_not_supported": true
             }
           },
-          "glibcLocales": {
+          "lua54Packages.luacheck": {
             "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
             "ruleClassName": "_nixpkgs_package",
             "attributes": {
-              "unmangled_name": "glibcLocales",
-              "attribute_path": "glibcLocales",
+              "unmangled_name": "lua54Packages.luacheck",
+              "attribute_path": "lua54Packages.luacheck",
               "nix_file_deps": {},
               "nix_file_content": "",
               "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
               "repositories": {},
-              "build_file_content": "exports_files(\n    [\"lib/locale/locale-archive\"],\n    visibility = [\"//visibility:public\"],\n)",
+              "build_file_content": "",
+              "nixopts": [],
+              "quiet": false,
+              "fail_not_supported": true
+            }
+          },
+          "luaformatter": {
+            "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
+            "ruleClassName": "_nixpkgs_package",
+            "attributes": {
+              "unmangled_name": "luaformatter",
+              "attribute_path": "luaformatter",
+              "nix_file_deps": {},
+              "nix_file_content": "",
+              "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
+              "repositories": {},
+              "build_file_content": "",
               "nixopts": [],
               "quiet": false,
               "fail_not_supported": true

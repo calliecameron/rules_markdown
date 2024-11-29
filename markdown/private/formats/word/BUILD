@@ -1,13 +1,12 @@
 load("@crates//:defs.bzl", "all_crate_deps")
 load("@rules_rust//rust:defs.bzl", "rust_binary")
+load("//markdown/private/support/lua:defs.bzl", "lua_source")
 load("//markdown/private/support/shell:defs.bzl", "sh_binary", "sh_test")
 load("//markdown/private/utils:defs.bzl", "pandoc_filter_py_test", "script_py_test")
 
 exports_files(
     [
         "reference.docx",
-        "docx_filter.lua",
-        "shunn_docx_filter.lua",
     ],
     visibility = ["//visibility:private"],
 )
@@ -52,10 +51,20 @@ sh_binary(
     ],
 )
 
+lua_source(
+    name = "docx_filter",
+    src = "docx_filter.lua",
+)
+
 pandoc_filter_py_test(
     name = "docx_filter_test",
     src = "docx_filter_test.py",
     filter = "docx_filter.lua",
+)
+
+lua_source(
+    name = "shunn_docx_filter",
+    src = "shunn_docx_filter.lua",
 )
 
 sh_test(

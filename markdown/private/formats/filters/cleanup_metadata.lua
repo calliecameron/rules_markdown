@@ -1,4 +1,4 @@
-function Meta(meta)
+function Meta(meta) -- luacheck: ignore 131
     if meta["notes"] ~= nil then
         meta["notes"] = nil
     end

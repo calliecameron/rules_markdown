@@ -11,6 +11,6 @@ local rule = [[<w:p>
   </w:r>
 </w:p>]]
 
-function HorizontalRule(elem)
+function HorizontalRule(_) -- luacheck: ignore 131
     return pandoc.RawBlock("openxml", rule)
 end

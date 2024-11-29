@@ -5,17 +5,14 @@ local suppress_indent = [[
 \makeatother
 ]]
 
-function Div(elem)
+function Div(elem) -- luacheck: ignore 131
     for _, class in ipairs(elem.classes) do
         if class == "firstparagraph" then
-            return {
-                pandoc.RawBlock("latex", suppress_indent),
-                elem,
-            }
+            return {pandoc.RawBlock("latex", suppress_indent), elem}
         end
     end
 end
 
-function HorizontalRule(elem)
+function HorizontalRule(_) -- luacheck: ignore 131
     return pandoc.RawBlock("latex", "\\begin{center}* * *\\end{center}")
 end

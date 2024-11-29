@@ -1,6 +1,6 @@
 local header_ids = {}
 
-function Header(elem)
+function Header(elem) -- luacheck: ignore 131
     if not header_ids[elem.level] then
         header_ids[elem.level] = 1
     end

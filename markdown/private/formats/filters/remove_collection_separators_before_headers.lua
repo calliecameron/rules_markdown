@@ -40,15 +40,4 @@ function remove(elem)
     end
 end
 
-return {
-    {
-        Div = annotate,
-    },
-    {
-        traverse = "topdown",
-        Block = mark_for_removal,
-    },
-    {
-        Div = remove,
-    },
-}
+return {{Div = annotate}, {traverse = "topdown", Block = mark_for_removal}, {Div = remove}}

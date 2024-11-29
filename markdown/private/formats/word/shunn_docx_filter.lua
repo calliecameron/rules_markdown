@@ -8,10 +8,12 @@ function get_strip_nondeterminism(meta)
     return meta
 end
 
-function run(doc)
-    local pandoc_data_dir = os.getenv('PANDOC_DATA_DIR')
+function run(_)
+    local pandoc_data_dir = os.getenv("PANDOC_DATA_DIR")
 
-    local success, reason, code = os.execute(strip_nondeterminism .. " -t zip " .. pandoc.path.join({pandoc_data_dir, "reference.docx"}))
+    local success, reason, code = os.execute(strip_nondeterminism .. " -t zip " ..
+                                                 pandoc.path
+                                                     .join({pandoc_data_dir, "reference.docx"}))
     if not success then
         io.stderr:write("Stripping nondeterminism failed: " .. reason .. " " .. code .. "\n")
         os.exit(1)

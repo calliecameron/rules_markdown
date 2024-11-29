@@ -40,6 +40,18 @@ alias(
 )
 
 native_binary(
+    name = "luacheck",
+    src = "@lua54Packages.luacheck//:bin/luacheck",
+    visibility = ["//:__subpackages__"],
+)
+
+native_binary(
+    name = "lua_format",
+    src = "@luaformatter//:bin/lua-format",
+    visibility = ["//:__subpackages__"],
+)
+
+native_binary(
     name = "markdownlint",
     src = "@markdownlint-cli//:bin/markdownlint",
     visibility = ["//markdown/private/core:__pkg__"],

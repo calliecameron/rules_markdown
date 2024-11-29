@@ -6,9 +6,8 @@ function increment(elem)
 end
 
 function include(elem)
-    if #elem.content == 3 and elem.content[1].tag == "Str" and
-       elem.content[1].text == "!include" and elem.content[2].tag == "Space" and
-       elem.content[3].tag == "Str" then
+    if #elem.content == 3 and elem.content[1].tag == "Str" and elem.content[1].text == "!include" and
+        elem.content[2].tag == "Space" and elem.content[3].tag == "Str" then
         local path = elem.content[3].text
         local includedFile = io.open(path, "r")
         if includedFile == nil then

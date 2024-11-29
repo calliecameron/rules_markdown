@@ -1,12 +1,17 @@
+load("//markdown/private/support/lua:defs.bzl", "lua_source")
 load("//markdown/private/support/shell:defs.bzl", "sh_binary")
 load("//markdown/private/utils:defs.bzl", "pandoc_filter_py_test", "script_py_test")
 
 exports_files(
     [
         "spellcheck_input_template.md",
-        "spellcheck_filter.lua",
-        "spellcheck_cleanup.lua",
     ],
+    visibility = ["//markdown/private/core:__pkg__"],
+)
+
+lua_source(
+    name = "spellcheck_filter",
+    src = "spellcheck_filter.lua",
     visibility = ["//markdown/private/core:__pkg__"],
 )
 
@@ -14,6 +19,12 @@ pandoc_filter_py_test(
     name = "spellcheck_filter_test",
     src = "spellcheck_filter_test.py",
     filter = "spellcheck_filter.lua",
+)
+
+lua_source(
+    name = "spellcheck_cleanup",
+    src = "spellcheck_cleanup.lua",
+    visibility = ["//markdown/private/core:__pkg__"],
 )
 
 pandoc_filter_py_test(
