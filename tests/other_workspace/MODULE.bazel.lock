@@ -850,7 +850,7 @@
     "@@rules_nixpkgs_core~//extensions:package.bzl%nix_pkg%rules_markdown@_~nix_pkg": {
       "general": {
         "bzlTransitiveDigest": "uAGqafYVHfrpValToJbVqUKuhSWG/ISg8w7II/Z+5ao=",
-        "usagesDigest": "3L9XMNr7ssKJhyhk/idl9l305LyA7xyymE2QR0kRUvc=",
+        "usagesDigest": "qzgAcY+YVP6gzWD4FUWrEU88WtVjBX0N/3N3gLcsbKg=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
