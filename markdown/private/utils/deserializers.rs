@@ -49,7 +49,7 @@ where
 {
     struct UintStrVisitor;
 
-    impl<'de> de::Visitor<'de> for UintStrVisitor {
+    impl de::Visitor<'_> for UintStrVisitor {
         type Value = u32;
 
         fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
