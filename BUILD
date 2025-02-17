@@ -23,7 +23,7 @@ md_workspace(
 md_git_repo(
     extra_gitignore_lines = [
         "/.env",
-        "/.mypy_cache/",
+        "/.env.leave",
         "/.vscode/",
         "/target/",
     ],

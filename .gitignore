@@ -2,6 +2,6 @@
 /bazel-*
 *~
 /.env
-/.mypy_cache/
+/.env.leave
 /.vscode/
 /target/
