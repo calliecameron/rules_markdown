@@ -1,5 +1,6 @@
 load("@markdown//:defs.bzl", "md_git_repo", "md_workspace")
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
+load("//markdown/private/support/shell:defs.bzl", "sh_test")
 load("//markdown/private/utils:defs.bzl", "required_files")
 
 compile_pip_requirements(
@@ -55,5 +56,20 @@ required_files(
             "README.md",
             "600",
         ),
+    ],
+)
+
+sh_test(
+    name = "python_version_test",
+    srcs = ["python_version_test.sh"],
+    args = [
+        "$(rootpath MODULE.bazel)",
+        "$(rootpath .python-version)",
+        "$(rootpath pyproject.toml)",
+    ],
+    data = [
+        ".python-version",
+        "MODULE.bazel",
+        "pyproject.toml",
     ],
 )

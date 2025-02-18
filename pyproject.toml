@@ -1,5 +1,6 @@
 [tool.mypy]
 mypy_path = "$MYPY_CONFIG_FILE_DIR/mypy_stubs"
+python_version = "3.10"
 
 [tool.ruff]
 line-length = 100

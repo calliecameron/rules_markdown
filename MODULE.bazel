@@ -1,5 +1,7 @@
 """Module definition for rules_markdown."""
 
+PYTHON_VERSION = "3.10.15"
+
 module(
     name = "rules_markdown",
     version = "0.18.1",
@@ -32,14 +34,14 @@ bazel_dep(
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
-    python_version = "3.10",
+    python_version = PYTHON_VERSION,
 )
 use_repo(python, "python_versions")
 
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 pip.parse(
     hub_name = "pip",
-    python_version = "3.10",
+    python_version = PYTHON_VERSION,
     requirements_lock = "//:requirements_lock.txt",
 )
 use_repo(pip, "pip")
