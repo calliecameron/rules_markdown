@@ -26,3 +26,9 @@ ignore = [
     "TRY003",
     "TRY004",
 ]
+
+[tool.pyright]
+exclude = [
+    "bazel-*",
+    "tests/other_workspace/bazel-*",
+]
