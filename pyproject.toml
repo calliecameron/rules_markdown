@@ -29,6 +29,8 @@ ignore = [
 
 [tool.pyright]
 exclude = [
+    "**/.*",
     "bazel-*",
     "tests/other_workspace/bazel-*",
+    "target",
 ]
