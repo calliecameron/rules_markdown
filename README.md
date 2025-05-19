@@ -31,7 +31,7 @@ Create the following files in your workspace:
 `.bazeliskrc`:
 
 ``` text
-USE_BAZEL_VERSION=7.4.1
+USE_BAZEL_VERSION=8.2.1
 ```
 
 `.bazelrc`:

@@ -11,20 +11,20 @@ members = [
 ]
 
 [workspace.package]
-edition = "2021"
-rust-version = "1.83.0"
+edition = "2024"
+rust-version = "1.87.0"
 
 [workspace.dependencies]
-chrono = { version = "0.4.38", features = ["serde"] }
-clap = { version = "4.5.21", features = ["derive", "string"] }
+chrono = { version = "0.4.41", features = ["serde"] }
+clap = { version = "4.5.38", features = ["derive", "string"] }
 csv = "1.3.1"
 derive_builder = "0.20.2"
 html-escape = "0.2.13"
 markdown = { path = "markdown/private/utils" }
 md5 = "0.7.0"
 regex = "1.11.1"
-serde = { version = "1.0.215", features = ["derive"] }
-serde_json = "1.0.133"
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.140"
 serde_yaml = "0.9.34+deprecated"
-tabled = "0.17.0"
-validator = { version = "0.19.0", features = ["derive"] }
+tabled = "0.19.0"
+validator = { version = "0.20.0", features = ["derive"] }

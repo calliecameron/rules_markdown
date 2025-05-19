@@ -1,6 +1,6 @@
 use clap::Parser;
 use markdown::args;
-use markdown::json::{from_json, JsonSerializable};
+use markdown::json::{JsonSerializable, from_json};
 use markdown::metadata::OutputMetadata;
 use serde::Serialize;
 use std::error::Error;

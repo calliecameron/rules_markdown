@@ -1,6 +1,6 @@
-dateparser == 1.2.0
-mypy == 1.13.0
+dateparser == 1.2.1
+mypy == 1.15.0
 panflute == 2.3.1
-pdfminer.six == 20240706
-ruff == 0.4.4  # Should match version installed from nixpkgs
-types-dateparser == 1.2.0.20240420
+pdfminer.six == 20250506
+ruff == 0.7.3  # Should match version installed from nixpkgs
+types-dateparser == 1.2.0.20250516

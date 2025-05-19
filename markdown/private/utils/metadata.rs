@@ -528,7 +528,7 @@ mod test_utils {
 #[cfg(test)]
 mod version_test {
     use super::Version;
-    use crate::json::{from_json, JsonSerializable};
+    use crate::json::{JsonSerializable, from_json};
 
     #[test]
     fn test_build() {
@@ -560,34 +560,40 @@ mod version_test {
         assert_eq!(v.version, "foo");
         assert_eq!(v.repo, "bar");
 
-        assert!(from_json::<Version>(
-            r#"{
+        assert!(
+            from_json::<Version>(
+                r#"{
   "repo": "bar",
   "version": ""
 }"#
-        )
-        .is_err());
-        assert!(from_json::<Version>(
-            r#"{
+            )
+            .is_err()
+        );
+        assert!(
+            from_json::<Version>(
+                r#"{
   "repo": "",
   "version": "foo"
 }"#
-        )
-        .is_err());
-        assert!(from_json::<Version>(
-            r#"{
+            )
+            .is_err()
+        );
+        assert!(
+            from_json::<Version>(
+                r#"{
   "repo": "",
   "version": ""
 }"#
-        )
-        .is_err());
+            )
+            .is_err()
+        );
     }
 }
 
 #[cfg(test)]
 mod source_hash_test {
     use super::SourceHash;
-    use crate::json::{from_json, JsonSerializable};
+    use crate::json::{JsonSerializable, from_json};
 
     #[test]
     fn test_build() {
@@ -614,12 +620,14 @@ mod source_hash_test {
         .unwrap();
         assert_eq!(h.source_hash, "foo");
 
-        assert!(from_json::<SourceHash>(
-            r#"{
+        assert!(
+            from_json::<SourceHash>(
+                r#"{
   "source-hash": "",
 }"#
-        )
-        .is_err());
+            )
+            .is_err()
+        );
     }
 }
 
@@ -637,7 +645,7 @@ mod parsed_date_set_test {
 #[cfg(test)]
 mod parsed_dates_test {
     use super::{ParsedDateSet, ParsedDates};
-    use crate::json::{from_json, JsonSerializable};
+    use crate::json::{JsonSerializable, from_json};
 
     #[test]
     fn test_serialization() {
@@ -675,56 +683,64 @@ mod parsed_dates_test {
 
     #[test]
     fn test_deserialization_bad_invalid() {
-        assert!(from_json::<ParsedDates>(
-            r#"{
+        assert!(
+            from_json::<ParsedDates>(
+                r#"{
   "parsed-dates": [
     "2020/01/01 10:30:00"
   ]
 }"#
-        )
-        .is_err());
+            )
+            .is_err()
+        );
 
-        assert!(from_json::<ParsedDates>(
-            r#"{
+        assert!(
+            from_json::<ParsedDates>(
+                r#"{
   "parsed-dates": [
     ""
   ]
 }"#
-        )
-        .is_err());
+            )
+            .is_err()
+        );
     }
 
     #[test]
     fn test_deserialization_bad_duplicates() {
-        assert!(from_json::<ParsedDates>(
-            r#"{
+        assert!(
+            from_json::<ParsedDates>(
+                r#"{
   "parsed-dates": [
     "2020/01/01",
     "2020/01/01"
   ]
 }"#,
-        )
-        .is_err());
+            )
+            .is_err()
+        );
     }
 
     #[test]
     fn test_deserialization_bad_unordered() {
-        assert!(from_json::<ParsedDates>(
-            r#"{
+        assert!(
+            from_json::<ParsedDates>(
+                r#"{
   "parsed-dates": [
     "2024/06/23",
     "2020/01/01"
   ]
 }"#,
-        )
-        .is_err());
+            )
+            .is_err()
+        );
     }
 }
 
 #[cfg(test)]
 mod identifier_test {
     use super::Identifier;
-    use crate::json::{from_json, JsonSerializable};
+    use crate::json::{JsonSerializable, from_json};
 
     #[test]
     fn test_build() {
@@ -756,34 +772,40 @@ mod identifier_test {
         assert_eq!(i.scheme, "foo");
         assert_eq!(i.text, "bar");
 
-        assert!(from_json::<Identifier>(
-            r#"{
+        assert!(
+            from_json::<Identifier>(
+                r#"{
   "scheme": "",
   "text": "bar"
 }"#
-        )
-        .is_err());
-        assert!(from_json::<Identifier>(
-            r#"{
+            )
+            .is_err()
+        );
+        assert!(
+            from_json::<Identifier>(
+                r#"{
   "scheme": "foo",
   "text": ""
 }"#
-        )
-        .is_err());
-        assert!(from_json::<Identifier>(
-            r#"{
+            )
+            .is_err()
+        );
+        assert!(
+            from_json::<Identifier>(
+                r#"{
   "scheme": "",
   "text": ""
 }"#
-        )
-        .is_err());
+            )
+            .is_err()
+        );
     }
 }
 
 #[cfg(test)]
 mod input_metadata_test {
-    use super::{test_utils::ymd, Identifier, InputMetadata, InputMetadataBuilder};
-    use crate::json::{from_json, JsonSerializable};
+    use super::{Identifier, InputMetadata, InputMetadataBuilder, test_utils::ymd};
+    use crate::json::{JsonSerializable, from_json};
     use crate::publications::{PublicationBuilder, Publications, State};
 
     #[test]
@@ -1024,9 +1046,9 @@ mod input_metadata_test {
 #[cfg(test)]
 mod output_metadata_test {
     use super::{
-        test_utils::ymd, Identifier, OutputMetadata, OutputMetadataBuilder, ParsedDateSet,
+        Identifier, OutputMetadata, OutputMetadataBuilder, ParsedDateSet, test_utils::ymd,
     };
-    use crate::json::{from_json, JsonSerializable};
+    use crate::json::{JsonSerializable, from_json};
     use crate::publications::{PublicationBuilder, Publications, State};
 
     #[test]
@@ -1321,7 +1343,7 @@ mod metadata_map_test {
     use std::collections::BTreeMap;
 
     use super::{MetadataMap, OutputMetadataBuilder};
-    use crate::json::{from_json, JsonSerializable};
+    use crate::json::{JsonSerializable, from_json};
 
     #[test]
     fn test_serialization() {

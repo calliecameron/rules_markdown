@@ -1,6 +1,6 @@
 use clap::Parser;
-use markdown::args::{non_empty, KeyValue};
-use markdown::json::{from_json, JsonSerializable};
+use markdown::args::{KeyValue, non_empty};
+use markdown::json::{JsonSerializable, from_json};
 use markdown::metadata::{MetadataMap, OutputMetadata};
 use std::collections::BTreeMap;
 use std::error::Error;

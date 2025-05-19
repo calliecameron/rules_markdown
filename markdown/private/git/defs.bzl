@@ -21,7 +21,7 @@ def md_git_repo(
     native.sh_binary(
         name = "git_test_extra",
         srcs = [Label("//markdown/private/git:git_test_extra.sh")],
-        data = native.glob([".git/config"]),
+        data = native.glob([".git/config"], allow_empty = True),
         visibility = ["//visibility:private"],
     )
 

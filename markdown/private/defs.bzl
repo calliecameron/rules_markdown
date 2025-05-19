@@ -117,7 +117,7 @@ def md_file(
         name = name,
         src = src,
         deps = name + "_deps",
-        dictionaries = native.glob([name + ".dic"]) + extra_dictionaries,
+        dictionaries = native.glob([name + ".dic"], allow_empty = True) + extra_dictionaries,
         data = data,
         images = images,
         increment_included_headers = increment_included_headers,
@@ -326,7 +326,7 @@ def md_document(
     native.genrule(
         name = name + "_save_sh",
         outs = [name + "_save.sh"],
-        cmd = "$(location %s) $@ %s" % (Label("//markdown/private/formats:write_save_script"), native.package_name()),
+        cmd = "$(execpath %s) $@ %s" % (Label("//markdown/private/formats:write_save_script"), native.package_name()),
         tools = [Label("//markdown/private/formats:write_save_script")],
         visibility = ["//visibility:private"],
     )
@@ -416,11 +416,11 @@ def md_collection(
         extra_pandoc_flags = [
             "--table-of-contents",
             "--toc-depth=1",
-        ] + (["--metadata-file=$(rootpath %s)" % extra_metadata] if extra_metadata else []),
+        ] + (["--metadata-file=$(execpath %s)" % extra_metadata] if extra_metadata else []),
         extra_latex_flags = [
             "--variable=section-page-break",
-            "--include-in-header=$(rootpath %s)" % Label("//markdown/private/collection:collection_header.tex"),
-            "--include-before-body=$(rootpath %s)" % Label("//markdown/private/collection:collection_before.tex"),
+            "--include-in-header=$(execpath %s)" % Label("//markdown/private/collection:collection_header.tex"),
+            "--include-before-body=$(execpath %s)" % Label("//markdown/private/collection:collection_before.tex"),
         ],
         version_file = version_file,
         version_override = version_override,

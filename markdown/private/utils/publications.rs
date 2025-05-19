@@ -203,7 +203,7 @@ impl Publication {
     }
 
     pub fn latest(&self) -> Date {
-        if let Some(d) = self.dates().into_iter().last() {
+        if let Some(d) = self.dates().into_iter().next_back() {
             return d;
         }
         panic!("validation should ensure this never happens");
@@ -250,7 +250,7 @@ impl Publication {
     fn filter_dates(dates: &[(State, Option<&NaiveDate>)]) -> Vec<Option<Date>> {
         let mut out = Vec::new();
         for (s, d) in dates {
-            if let Some(&d) = d {
+            if let &Some(&d) = d {
                 out.push(Some(Date { state: *s, date: d }));
             } else {
                 out.push(None);
@@ -386,10 +386,10 @@ mod test_utils {
 #[cfg(test)]
 mod publication_test {
     use super::{
-        test_utils::{date, ymd},
         Publication, PublicationBuilder, State,
+        test_utils::{date, ymd},
     };
-    use crate::json::{from_json, JsonSerializable};
+    use crate::json::{JsonSerializable, from_json};
 
     #[test]
     fn test_good_minimal() {
@@ -635,99 +635,115 @@ mod publication_test {
 
     #[test]
     fn test_bad_no_venue() {
-        assert!(PublicationBuilder::default()
-            .submitted(ymd(2023, 5, 16))
-            .build()
-            .is_err());
+        assert!(
+            PublicationBuilder::default()
+                .submitted(ymd(2023, 5, 16))
+                .build()
+                .is_err()
+        );
     }
 
     #[test]
     fn test_bad_no_dates() {
-        assert!(PublicationBuilder::default()
-            .venue("foo")
-            .urls([String::from("foo"), String::from("bar")])
-            .notes("baz")
-            .paid("quux")
-            .build()
-            .is_err());
+        assert!(
+            PublicationBuilder::default()
+                .venue("foo")
+                .urls([String::from("foo"), String::from("bar")])
+                .notes("baz")
+                .paid("quux")
+                .build()
+                .is_err()
+        );
     }
 
     #[test]
     fn test_bad_too_many_end_dates() {
-        assert!(PublicationBuilder::default()
-            .venue("foo")
-            .urls([String::from("foo"), String::from("bar")])
-            .notes("baz")
-            .paid("quux")
-            .rejected(ymd(2023, 5, 16))
-            .published(ymd(2023, 5, 16))
-            .build()
-            .is_err());
+        assert!(
+            PublicationBuilder::default()
+                .venue("foo")
+                .urls([String::from("foo"), String::from("bar")])
+                .notes("baz")
+                .paid("quux")
+                .rejected(ymd(2023, 5, 16))
+                .published(ymd(2023, 5, 16))
+                .build()
+                .is_err()
+        );
     }
 
     #[test]
     fn test_bad_self_published_intermediate() {
-        assert!(PublicationBuilder::default()
-            .venue("foo")
-            .urls([String::from("foo"), String::from("bar")])
-            .notes("baz")
-            .paid("quux")
-            .submitted(ymd(2023, 5, 16))
-            .self_published(ymd(2023, 5, 17))
-            .build()
-            .is_err());
+        assert!(
+            PublicationBuilder::default()
+                .venue("foo")
+                .urls([String::from("foo"), String::from("bar")])
+                .notes("baz")
+                .paid("quux")
+                .submitted(ymd(2023, 5, 16))
+                .self_published(ymd(2023, 5, 17))
+                .build()
+                .is_err()
+        );
     }
 
     #[test]
     fn test_bad_accepted_bad_end_dates() {
-        assert!(PublicationBuilder::default()
-            .venue("foo")
-            .urls([String::from("foo"), String::from("bar")])
-            .notes("baz")
-            .paid("quux")
-            .accepted(ymd(2023, 5, 16))
-            .rejected(ymd(2023, 5, 16))
-            .build()
-            .is_err());
+        assert!(
+            PublicationBuilder::default()
+                .venue("foo")
+                .urls([String::from("foo"), String::from("bar")])
+                .notes("baz")
+                .paid("quux")
+                .accepted(ymd(2023, 5, 16))
+                .rejected(ymd(2023, 5, 16))
+                .build()
+                .is_err()
+        );
     }
 
     #[test]
     fn test_bad_published_missing_intermediate() {
-        assert!(PublicationBuilder::default()
-            .venue("foo")
-            .urls([String::from("foo"), String::from("bar")])
-            .notes("baz")
-            .paid("quux")
-            .submitted(ymd(2023, 5, 16))
-            .published(ymd(2023, 5, 16))
-            .build()
-            .is_err());
+        assert!(
+            PublicationBuilder::default()
+                .venue("foo")
+                .urls([String::from("foo"), String::from("bar")])
+                .notes("baz")
+                .paid("quux")
+                .submitted(ymd(2023, 5, 16))
+                .published(ymd(2023, 5, 16))
+                .build()
+                .is_err()
+        );
     }
 
     #[test]
     fn test_bad_bad_missing_submitted() {
-        assert!(PublicationBuilder::default()
-            .venue("foo")
-            .urls([String::from("foo"), String::from("bar")])
-            .notes("baz")
-            .paid("quux")
-            .rejected(ymd(2023, 5, 16))
-            .build()
-            .is_err());
+        assert!(
+            PublicationBuilder::default()
+                .venue("foo")
+                .urls([String::from("foo"), String::from("bar")])
+                .notes("baz")
+                .paid("quux")
+                .rejected(ymd(2023, 5, 16))
+                .build()
+                .is_err()
+        );
     }
 
     #[test]
     fn test_bad_wrong_order() {
-        assert!(PublicationBuilder::default()
-            .venue("foo")
-            .urls([String::from("foo"), String::from("bar")])
-            .notes("baz")
-            .paid("quux")
-            .submitted(ymd(2023, 5, 16))
-            .accepted(ymd(2023, 5, 16))
-            .published(ymd(2023, 5, 15))
-            .build()
-            .is_err());
+        assert!(
+            PublicationBuilder::default()
+                .venue("foo")
+                .urls([String::from("foo"), String::from("bar")])
+                .notes("baz")
+                .paid("quux")
+                .submitted(ymd(2023, 5, 16))
+                .accepted(ymd(2023, 5, 16))
+                .published(ymd(2023, 5, 15))
+                .build()
+                .is_err()
+        );
     }
 
     #[test]
@@ -848,21 +864,23 @@ mod publication_test {
 
     #[test]
     fn test_deserialization_bad_too_many_end_dates() {
-        assert!(from_json::<Publication>(
-            r#"{
+        assert!(
+            from_json::<Publication>(
+                r#"{
   "published": "2023-05-16",
   "rejected": "2023-05-16",
   "venue": "foo"
 }"#,
-        )
-        .is_err());
+            )
+            .is_err()
+        );
     }
 }
 
 #[cfg(test)]
 mod publications_test {
-    use super::{test_utils::ymd, PublicationBuilder, Publications, State};
-    use crate::json::{from_json, JsonSerializable};
+    use super::{PublicationBuilder, Publications, State, test_utils::ymd};
+    use crate::json::{JsonSerializable, from_json};
 
     #[test]
     fn test_good_active() {

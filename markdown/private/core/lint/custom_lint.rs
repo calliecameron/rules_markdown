@@ -70,15 +70,17 @@ mod custom_lint_test {
     #[test]
     fn test_lint() {
         // OK
-        assert!(lint(
-            "Foo bar.
+        assert!(
+            lint(
+                "Foo bar.
 
 \\“Lots \\”of \\‘quotes\\’.
 
 Some -- dashes---
 "
-        )
-        .is_empty());
+            )
+            .is_empty()
+        );
 
         assert!(!lint("“").is_empty());
         assert!(!lint("”").is_empty());

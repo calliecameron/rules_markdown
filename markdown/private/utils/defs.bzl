@@ -70,7 +70,7 @@ def _required_files_test(name, check, check_mode_only, extra_check):
     data = []
 
     for src, dst, dst_mode in check:
-        dsts = native.glob([dst])
+        dsts = native.glob([dst], allow_empty = True)
         if not dsts:
             args += ["--missing_file", dst]
         elif len(dsts) != 1:
@@ -82,7 +82,7 @@ def _required_files_test(name, check, check_mode_only, extra_check):
             data.append(dst)
 
     for _, dst, dst_mode in check_mode_only:
-        dsts = native.glob([dst])
+        dsts = native.glob([dst], allow_empty = True)
         if not dsts:
             args += ["--missing_file", dst]
         elif len(dsts) != 1:

@@ -3,7 +3,7 @@
 set -eu
 
 function usage() {
-    echo "Usage: $(basename "${0}") module_bazel python_version_file pyproject_toml"
+    echo "Usage: $(basename "${0}") module_bazel python_version_file pyproject_toml python_bzl"
     exit 1
 }
 
@@ -13,6 +13,8 @@ test -z "${2:-}" && usage
 PYTHON_VERSION_FILE="${2}"
 test -z "${3:-}" && usage
 PYPROJECT_TOML="${3}"
+test -z "${4:-}" && usage
+PYTHON_BZL="${4}"
 
 PYTHON_VERSION="$(grep '^PYTHON_VERSION = ' "${MODULE_BAZEL}" | grep -E -o '[0-9]+\.[0-9]+\.[0-9]+')"
 
@@ -39,6 +41,14 @@ ACTUAL_RUFF_VERSION="$(grep '^target-version = ' "${PYPROJECT_TOML}" | grep -E -
 
 if [ "${ACTUAL_RUFF_VERSION}" != "${EXPECTED_RUFF_VERSION}" ]; then
     echo "tools.ruff target-version in pyproject.toml must be ${EXPECTED_RUFF_VERSION}; got ${ACTUAL_RUFF_VERSION}"
+    FAIL='t'
+fi
+
+EXPECTED_PYTHON_BZL_VERSION="${PYTHON_VERSION}"
+ACTUAL_PYTHON_BZL_VERSION="$(grep '^PYTHON_VERSION = ' "${PYTHON_BZL}" | grep -E -o '[0-9]+\.[0-9]+\.[0-9]+')"
+
+if [ "${ACTUAL_PYTHON_BZL_VERSION}" != "${EXPECTED_PYTHON_BZL_VERSION}" ]; then
+    echo "PYTHON_VERSION in markdown/private/support/python/defs.bzl must be ${EXPECTED_PYTHON_BZL_VERSION}; got ${ACTUAL_PYTHON_BZL_VERSION}"
     FAIL='t'
 fi
 

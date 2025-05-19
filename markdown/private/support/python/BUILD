@@ -5,3 +5,10 @@ py_source(
     src = "mypy_stub.py",
     visibility = ["//:__subpackages__"],
 )
+
+exports_files(
+    [
+        "defs.bzl",
+    ],
+    visibility = ["//:__pkg__"],
+)

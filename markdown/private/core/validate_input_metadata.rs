@@ -1,6 +1,6 @@
 use clap::Parser;
 use markdown::args;
-use markdown::json::{from_json, JsonSerializable};
+use markdown::json::{JsonSerializable, from_json};
 use markdown::metadata::InputMetadata;
 use std::error::Error;
 use std::fs::read_to_string;

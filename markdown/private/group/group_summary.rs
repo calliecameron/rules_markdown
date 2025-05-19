@@ -1,8 +1,8 @@
 #![allow(warnings)]
 
 use clap::{
-    error::{ContextKind, ContextValue, ErrorKind},
     Arg, ArgAction, ArgGroup, Command, Id,
+    error::{ContextKind, ContextValue, ErrorKind},
 };
 use markdown::args;
 use markdown::json::from_json;
@@ -13,8 +13,8 @@ use std::error::Error;
 use std::fs::read_to_string;
 use std::io::stdout;
 use tabled::{
-    settings::{object::Columns, Alignment, Settings, Style},
     Table, Tabled,
+    settings::{Alignment, Settings, Style, object::Columns},
 };
 
 const TARGET: &str = "target";

@@ -31,7 +31,7 @@ genrule(
     name = "xelatex_sh",
     srcs = ["//markdown/private/external:xelatex"],
     outs = ["xelatex.sh"],
-    cmd = "$(rootpath write_xelatex.sh) $< >$@",
+    cmd = "$(execpath write_xelatex.sh) $< >$@",
     executable = True,
     tools = ["write_xelatex.sh"],
 )

@@ -1,6 +1,6 @@
 use clap::Parser;
 use markdown::args;
-use markdown::json::{from_json, JsonSerializable};
+use markdown::json::{JsonSerializable, from_json};
 use markdown::metadata::{MetadataMap, Version};
 use std::collections::BTreeMap;
 use std::error::Error;
@@ -138,7 +138,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
 #[cfg(test)]
 mod version_test {
-    use super::{get_version, BTreeMap, Version};
+    use super::{BTreeMap, Version, get_version};
 
     #[test]
     fn test_version() {
@@ -177,20 +177,24 @@ mod version_test {
         assert_eq!(v.version, "1, dirty deps, unversioned deps");
         assert_eq!(v.repo, "foo");
 
-        assert!(get_version(
-            &base,
-            &BTreeMap::from([(String::from("a"), dirty.clone())]),
-            None,
-            None
-        )
-        .is_err());
-        assert!(get_version(
-            &base,
-            &BTreeMap::from([(String::from("a"), unversioned.clone())]),
-            None,
-            None
-        )
-        .is_err());
+        assert!(
+            get_version(
+                &base,
+                &BTreeMap::from([(String::from("a"), dirty.clone())]),
+                None,
+                None
+            )
+            .is_err()
+        );
+        assert!(
+            get_version(
+                &base,
+                &BTreeMap::from([(String::from("a"), unversioned.clone())]),
+                None,
+                None
+            )
+            .is_err()
+        );
 
         let v = get_version(
             &base,
@@ -236,19 +240,23 @@ mod version_test {
         assert_eq!(v.version, "1");
         assert_eq!(v.repo, "OVERRIDE");
 
-        assert!(get_version(
-            &base,
-            &BTreeMap::from([(String::from("a"), dirty.clone())]),
-            Some(String::from("OVERRIDE")),
-            Some(String::from("OVERRIDE"))
-        )
-        .is_err());
-        assert!(get_version(
-            &base,
-            &BTreeMap::from([(String::from("a"), unversioned.clone())]),
-            Some(String::from("OVERRIDE")),
-            Some(String::from("OVERRIDE"))
-        )
-        .is_err());
+        assert!(
+            get_version(
+                &base,
+                &BTreeMap::from([(String::from("a"), dirty.clone())]),
+                Some(String::from("OVERRIDE")),
+                Some(String::from("OVERRIDE"))
+            )
+            .is_err()
+        );
+        assert!(
+            get_version(
+                &base,
+                &BTreeMap::from([(String::from("a"), unversioned.clone())]),
+                Some(String::from("OVERRIDE")),
+                Some(String::from("OVERRIDE"))
+            )
+            .is_err()
+        );
     }
 }

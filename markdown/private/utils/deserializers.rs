@@ -1,4 +1,4 @@
-use serde::{de, Deserialize, Deserializer};
+use serde::{Deserialize, Deserializer, de};
 use std::fmt;
 
 pub fn option_string<'de, D>(deserializer: D) -> Result<Option<String>, D::Error>

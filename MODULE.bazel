@@ -1,6 +1,6 @@
 """Module definition for rules_markdown."""
 
-PYTHON_VERSION = "3.10.15"
+PYTHON_VERSION = "3.13.2"
 
 module(
     name = "rules_markdown",
@@ -13,23 +13,23 @@ bazel_dep(
 )
 bazel_dep(
     name = "rules_python",
-    version = "0.40.0",
+    version = "1.4.1",
 )
 bazel_dep(
     name = "rules_rust",
-    version = "0.54.1",
+    version = "0.61.0",
 )
 bazel_dep(
     name = "buildifier_prebuilt",
-    version = "7.3.1",
+    version = "8.0.3",
 )
 bazel_dep(
     name = "platforms",
-    version = "0.0.10",
+    version = "0.0.11",
 )
 bazel_dep(
     name = "rules_nixpkgs_core",
-    version = "0.12.0",
+    version = "0.13.0",
 )
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
@@ -48,8 +48,8 @@ use_repo(pip, "pip")
 
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 rust.toolchain(
-    edition = "2021",
-    versions = ["1.83.0"],
+    edition = "2024",
+    versions = ["1.87.0"],
 )
 use_repo(rust, "rust_toolchains")
 
@@ -78,14 +78,15 @@ use_repo(crate, "crates")
 nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo", isolate = True)
 nix_repo.github(
     name = "nixpkgs",
-    commit = "138474277cc4b56b5e1ca7fad0e113aff93e8780",  # 24.05 as of 2024/10/12
-    sha256 = "aa9cb576b2ccfc2a8e9dfe632352aca8caec9acc69ec56f338f8588a846e73e0",
+    commit = "9b5ac7ad45298d58640540d0323ca217f32a6762",  # 24.11 as of 2025/05/19
+    sha256 = "03370fd7a26c7a1b321b9fd5faac471bbc08200a5c4a418d4cc57f0311ba9993",
 )
 use_repo(nix_repo, "nixpkgs")
 
 nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg", isolate = True)
 nix_pkg.attr(
     attr = "calibre",
+    repo = "@nixpkgs",
 )
 nix_pkg.attr(
     attr = "glibcLocales",
@@ -93,53 +94,69 @@ nix_pkg.attr(
     ["lib/locale/locale-archive"],
     visibility = ["//visibility:public"],
 )""",
+    repo = "@nixpkgs",
 )
 nix_pkg.attr(
     attr = "hexdump",
+    repo = "@nixpkgs",
 )
 nix_pkg.attr(
     attr = "hunspell",
+    repo = "@nixpkgs",
 )
 nix_pkg.attr(
     attr = "lua54Packages.luacheck",
+    repo = "@nixpkgs",
 )
 nix_pkg.attr(
     attr = "luaformatter",
+    repo = "@nixpkgs",
 )
 nix_pkg.attr(
     attr = "markdownlint-cli",
+    repo = "@nixpkgs",
 )
 nix_pkg.attr(
     attr = "pandoc",
+    repo = "@nixpkgs",
 )
 nix_pkg.attr(
     attr = "perl538Packages.strip-nondeterminism",
+    repo = "@nixpkgs",
 )
 nix_pkg.attr(
     attr = "poppler_utils",
+    repo = "@nixpkgs",
 )
 nix_pkg.attr(
     attr = "ruff",
+    repo = "@nixpkgs",
 )
 nix_pkg.attr(
     attr = "shellcheck",
+    repo = "@nixpkgs",
 )
 nix_pkg.attr(
     attr = "shfmt",
+    repo = "@nixpkgs",
 )
 nix_pkg.expr(
     name = "texlive",
     attr = "",
     expr = "with import <nixpkgs> {}; texliveMedium.withPackages (ps: with ps; [ bold-extra footmisc titlesec xurl ])",
+    repo = "@nixpkgs",
 )
 nix_pkg.attr(
     attr = "unoconv",
+    repo = "@nixpkgs",
 )
 nix_pkg.attr(
     attr = "unzip",
+    repo = "@nixpkgs",
 )
 nix_pkg.attr(
     attr = "zip",
+    repo = "@nixpkgs",
 )
 use_repo(
     nix_pkg,

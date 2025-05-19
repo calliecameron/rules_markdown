@@ -2,10 +2,13 @@
 
 load("@bazel_skylib//rules:native_binary.bzl", "native_test")
 load("@pip//:requirements.bzl", "requirement")
-load("@python_versions//3.10:defs.bzl", _py_binary = "py_binary", _py_test = "py_test")
-load("@rules_python//python:defs.bzl", _py_library = "py_library")
+load("@rules_python//python:py_binary.bzl", _py_binary = "py_binary")
+load("@rules_python//python:py_library.bzl", _py_library = "py_library")
+load("@rules_python//python:py_test.bzl", _py_test = "py_test")
 
 visibility("//...")
+
+PYTHON_VERSION = "3.13.2"
 
 def py_library(name, type_stub_deps = None, **kwargs):
     _py_lint(
@@ -26,6 +29,7 @@ def py_binary(name, type_stub_deps = None, **kwargs):
     )
     _py_binary(
         name = name,
+        python_version = PYTHON_VERSION,
         **kwargs
     )
 
@@ -37,6 +41,7 @@ def py_test(name, type_stub_deps = None, **kwargs):
     )
     _py_test(
         name = name,
+        python_version = PYTHON_VERSION,
         **kwargs
     )
 
@@ -84,6 +89,7 @@ def _py_lint(name, type_stub_deps = None, **kwargs):
             "//:pyproject.toml",
             "//mypy_stubs:stubs",
         ] + srcs,
+        python_version = PYTHON_VERSION,
     )
 
     native_test(

@@ -17,7 +17,7 @@ class GitCommit:
     timestamp: int
 
     def __str__(self) -> str:
-        timestamp = datetime.datetime.fromtimestamp(self.timestamp, tz=datetime.timezone.utc)
+        timestamp = datetime.datetime.fromtimestamp(self.timestamp, tz=datetime.UTC)
         return f'{self.commit}{"-dirty" if self.dirty else ""}, {timestamp}'
 
 

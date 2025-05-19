@@ -1,5 +1,5 @@
 use clap::Parser;
-use markdown::args::{non_empty, KeyValue};
+use markdown::args::{KeyValue, non_empty};
 use markdown::bazel::Label;
 use markdown::problems::{ColProblem, Problems, RowProblem};
 use regex::Regex;
@@ -269,7 +269,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 #[cfg(test)]
 mod test_preprocess {
     use super::{
-        check_strict_deps, preprocess, process_images, process_include, BTreeSet, HashMap, HashSet,
+        BTreeSet, HashMap, HashSet, check_strict_deps, preprocess, process_images, process_include,
     };
 
     #[test]
@@ -373,36 +373,44 @@ mod test_preprocess {
     #[test]
     fn test_check_strict_deps() {
         // OK
-        assert!(check_strict_deps(
-            &BTreeSet::from([String::from("a"), String::from("b")]),
-            &BTreeSet::from([String::from("a"), String::from("b")]),
-            "foo",
-        )
-        .is_ok());
+        assert!(
+            check_strict_deps(
+                &BTreeSet::from([String::from("a"), String::from("b")]),
+                &BTreeSet::from([String::from("a"), String::from("b")]),
+                "foo",
+            )
+            .is_ok()
+        );
 
         // Used but not declared
-        assert!(check_strict_deps(
-            &BTreeSet::from([String::from("a"), String::from("b")]),
-            &BTreeSet::from([String::from("a")]),
-            "foo",
-        )
-        .is_err());
+        assert!(
+            check_strict_deps(
+                &BTreeSet::from([String::from("a"), String::from("b")]),
+                &BTreeSet::from([String::from("a")]),
+                "foo",
+            )
+            .is_err()
+        );
 
         // Declared but not used
-        assert!(check_strict_deps(
-            &BTreeSet::from([String::from("a")]),
-            &BTreeSet::from([String::from("a"), String::from("b")]),
-            "foo",
-        )
-        .is_err());
+        assert!(
+            check_strict_deps(
+                &BTreeSet::from([String::from("a")]),
+                &BTreeSet::from([String::from("a"), String::from("b")]),
+                "foo",
+            )
+            .is_err()
+        );
 
         // Both
-        assert!(check_strict_deps(
-            &BTreeSet::from([String::from("a"), String::from("c")]),
-            &BTreeSet::from([String::from("a"), String::from("d")]),
-            "foo",
-        )
-        .is_err());
+        assert!(
+            check_strict_deps(
+                &BTreeSet::from([String::from("a"), String::from("c")]),
+                &BTreeSet::from([String::from("a"), String::from("d")]),
+                "foo",
+            )
+            .is_err()
+        );
     }
 
     #[test]
