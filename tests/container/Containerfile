@@ -2,6 +2,8 @@ FROM ubuntu:24.04
 
 ENV TZ UTC
 
+RUN userdel --remove ubuntu
+
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
     catdoc \
