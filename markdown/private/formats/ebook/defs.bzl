@@ -140,7 +140,7 @@ md_mobi = rule(
                     cfg = "exec",
                 ),
                 "_ebook_convert_bin": attr.label(
-                    default = "//markdown/private/external:ebook_convert",
+                    default = "//tools/external:ebook_convert",
                     executable = True,
                     cfg = "exec",
                 ),

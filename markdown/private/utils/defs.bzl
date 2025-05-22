@@ -158,12 +158,12 @@ def pandoc_filter_py_test(name, src, filter):
         name = name,
         srcs = [src],
         args = [
-            "$(rootpath //markdown/private/external:pandoc)",
+            "$(rootpath //tools/external:pandoc)",
             "$(rootpath %s)" % filter,
         ],
         data = [
             filter,
-            "//markdown/private/external:pandoc",
+            "//tools/external:pandoc",
         ],
         deps = [
             "//markdown/private/utils:test_utils",

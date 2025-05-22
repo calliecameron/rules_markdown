@@ -12,7 +12,7 @@ def lua_source(name, src, visibility = None):
 
     native_test(
         name = name + "_luacheck_test",
-        src = "//markdown/private/external:luacheck",
+        src = "//tools/external:luacheck",
         out = name + "_luacheck",
         args = [
             "--config=$(rootpath //:.luacheckrc)",
@@ -30,12 +30,12 @@ def lua_source(name, src, visibility = None):
         src = "//tools/lua:lua_format_stub.sh",
         out = name + "_luaformat",
         args = [
-            "$(rootpath //markdown/private/external:lua_format)",
+            "$(rootpath //tools/external:lua_format)",
             "$(location %s)" % src,
             "--config=$(rootpath //:.lua-format)",
         ],
         data = [
-            "//markdown/private/external:lua_format",
+            "//tools/external:lua_format",
             "//:.lua-format",
             src,
         ],

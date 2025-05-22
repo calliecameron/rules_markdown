@@ -29,7 +29,7 @@ sh_source(
 
 genrule(
     name = "xelatex_sh",
-    srcs = ["//markdown/private/external:xelatex"],
+    srcs = ["//tools/external:xelatex"],
     outs = ["xelatex.sh"],
     cmd = "$(execpath write_xelatex.sh) $< >$@",
     executable = True,

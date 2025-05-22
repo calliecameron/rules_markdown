@@ -9,7 +9,7 @@ tools = struct(
     pandoc = struct(
         attr = {
             "_pandoc": attr.label(
-                default = "//markdown/private/external:pandoc",
+                default = "//tools/external:pandoc",
                 executable = True,
                 cfg = "exec",
             ),
@@ -29,7 +29,7 @@ tools = struct(
     zip = struct(
         attr = {
             "_zip": attr.label(
-                default = "//markdown/private/external:zip",
+                default = "//tools/external:zip",
                 executable = True,
                 cfg = "exec",
             ),
@@ -39,7 +39,7 @@ tools = struct(
     unzip = struct(
         attr = {
             "_unzip": attr.label(
-                default = "//markdown/private/external:unzip",
+                default = "//tools/external:unzip",
                 executable = True,
                 cfg = "exec",
             ),
@@ -49,7 +49,7 @@ tools = struct(
     zip_cleaner = struct(
         attr = {
             "_strip_nondeterminism": attr.label(
-                default = "//markdown/private/external:strip_nondeterminism",
+                default = "//tools/external:strip_nondeterminism",
                 executable = True,
                 cfg = "exec",
             ),

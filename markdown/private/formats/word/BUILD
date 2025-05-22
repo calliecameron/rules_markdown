@@ -14,8 +14,8 @@ exports_files(
 sh_binary(
     name = "unoconv",
     srcs = ["unoconv.sh"],
-    args = ["$(rootpath //markdown/private/external:unoconv)"],
-    data = ["//markdown/private/external:unoconv"],
+    args = ["$(rootpath //tools/external:unoconv)"],
+    data = ["//tools/external:unoconv"],
 )
 
 rust_binary(
@@ -38,16 +38,16 @@ sh_binary(
     name = "md2short",
     srcs = ["md2short.sh"],
     args = [
-        "$(rootpath //markdown/private/external:md2short)",
-        "$(rootpath //markdown/private/external:pandoc)",
-        "$(rootpath //markdown/private/external:zip)",
-        "$(rootpath //markdown/private/external:unzip)",
+        "$(rootpath //tools/external:md2short)",
+        "$(rootpath //tools/external:pandoc)",
+        "$(rootpath //tools/external:zip)",
+        "$(rootpath //tools/external:unzip)",
     ],
     data = [
-        "//markdown/private/external:md2short",
-        "//markdown/private/external:pandoc",
-        "//markdown/private/external:unzip",
-        "//markdown/private/external:zip",
+        "//tools/external:md2short",
+        "//tools/external:pandoc",
+        "//tools/external:unzip",
+        "//tools/external:zip",
     ],
 )
 
@@ -71,17 +71,17 @@ sh_test(
     name = "shunn_docx_filter_test",
     srcs = ["shunn_docx_filter_test.sh"],
     args = [
-        "$(rootpath //markdown/private/external:pandoc)",
-        "$(rootpath //markdown/private/external:strip_nondeterminism)",
-        "$(rootpath //markdown/private/external:zipinfo)",
+        "$(rootpath //tools/external:pandoc)",
+        "$(rootpath //tools/external:strip_nondeterminism)",
+        "$(rootpath //tools/external:zipinfo)",
         "$(rootpath shunn_docx_filter.lua)",
         "$(rootpath reference.docx)",
     ],
     data = [
         "reference.docx",
         "shunn_docx_filter.lua",
-        "//markdown/private/external:pandoc",
-        "//markdown/private/external:strip_nondeterminism",
-        "//markdown/private/external:zipinfo",
+        "//tools/external:pandoc",
+        "//tools/external:strip_nondeterminism",
+        "//tools/external:zipinfo",
     ],
 )

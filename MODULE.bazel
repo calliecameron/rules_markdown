@@ -179,10 +179,10 @@ use_repo(
     "zip",
 )
 
-hunspell_dicts = use_extension("//markdown/private/external:hunspell_dicts.bzl", "hunspell_dicts")
+hunspell_dicts = use_extension("//tools/external:hunspell_dicts.bzl", "hunspell_dicts")
 use_repo(hunspell_dicts, "hunspell_dicts")
 
-prosegrinder_pandoc_templates = use_extension("//markdown/private/external:prosegrinder_pandoc_templates.bzl", "prosegrinder_pandoc_templates")
+prosegrinder_pandoc_templates = use_extension("//tools/external:prosegrinder_pandoc_templates.bzl", "prosegrinder_pandoc_templates")
 use_repo(prosegrinder_pandoc_templates, "prosegrinder_pandoc_templates")
 
 markdown = use_extension("//markdown/extensions:markdown.bzl", "markdown", dev_dependency = True)

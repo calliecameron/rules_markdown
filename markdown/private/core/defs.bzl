@@ -446,12 +446,12 @@ md_file = rule(
             doc = "Set the document repo to this value, rather than the computed value. Should only be used for testing.",
         ),
         "_pandoc": attr.label(
-            default = "//markdown/private/external:pandoc",
+            default = "//tools/external:pandoc",
             executable = True,
             cfg = "exec",
         ),
         "_markdownlint": attr.label(
-            default = "//markdown/private/external:markdownlint",
+            default = "//tools/external:markdownlint",
             executable = True,
             cfg = "exec",
         ),
@@ -483,16 +483,16 @@ md_file = rule(
             default = "//markdown/private/core/spelling:spellcheck_filter.lua",
         ),
         "_hunspell": attr.label(
-            default = "//markdown/private/external:hunspell",
+            default = "//tools/external:hunspell",
             executable = True,
             cfg = "exec",
         ),
         "_hunspell_dicts": attr.label(
-            default = "//markdown/private/external:hunspell_dicts",
+            default = "//tools/external:hunspell_dicts",
         ),
         "_locale_archive": attr.label(
             allow_single_file = True,
-            default = "//markdown/private/external:locale_archive",
+            default = "//tools/external:locale_archive",
         ),
         "_spellcheck": attr.label(
             default = "//markdown/private/core/spelling:spellcheck",

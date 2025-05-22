@@ -45,10 +45,10 @@ sh_binary(
     name = "bindump",
     srcs = ["bindump.sh"],
     args = [
-        "$(rootpath //markdown/private/external:hexdump)",
+        "$(rootpath //tools/external:hexdump)",
     ],
     data = [
-        "//markdown/private/external:hexdump",
+        "//tools/external:hexdump",
     ],
     visibility = ["//visibility:public"],
 )
@@ -70,12 +70,12 @@ sh_binary(
     name = "pdfdump",
     srcs = ["pdfdump.sh"],
     args = [
-        "$(rootpath //markdown/private/external:pdfinfo)",
+        "$(rootpath //tools/external:pdfinfo)",
         "$(rootpath pdf2txt)",
     ],
     data = [
         ":pdf2txt",
-        "//markdown/private/external:pdfinfo",
+        "//tools/external:pdfinfo",
     ],
     visibility = ["//visibility:public"],
 )
@@ -84,10 +84,10 @@ sh_binary(
     name = "zipdump",
     srcs = ["zipdump.sh"],
     args = [
-        "$(rootpath //markdown/private/external:unzip)",
+        "$(rootpath //tools/external:unzip)",
     ],
     data = [
-        "//markdown/private/external:unzip",
+        "//tools/external:unzip",
     ],
     visibility = ["//visibility:public"],
 )

@@ -212,7 +212,7 @@ md_doc = rule(
                     cfg = "exec",
                 ),
                 "_unoconv_bin": attr.label(
-                    default = "//markdown/private/external:unoconv",
+                    default = "//tools/external:unoconv",
                     executable = True,
                     cfg = "exec",
                 ),
@@ -314,7 +314,7 @@ md_shunnmodern_docx = rule(
                     cfg = "exec",
                 ),
                 "_md2short_bin": attr.label(
-                    default = "//markdown/private/external:md2short",
+                    default = "//tools/external:md2short",
                     executable = True,
                     cfg = "exec",
                 ),
@@ -323,7 +323,7 @@ md_shunnmodern_docx = rule(
                     default = "//markdown/private/formats/word:shunn_docx_filter.lua",
                 ),
                 "_strip_nondeterminism": attr.label(
-                    default = "//markdown/private/external:strip_nondeterminism",
+                    default = "//tools/external:strip_nondeterminism",
                     executable = True,
                     cfg = "exec",
                 ),

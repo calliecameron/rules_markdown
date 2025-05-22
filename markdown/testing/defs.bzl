@@ -45,11 +45,11 @@ def _zip_cleaned_test(target, extension, variant):
         srcs = [Label("//markdown/testing:zip_cleaned_test.sh")],
         data = [
             "output/%s.%s" % (target, ext_var_dot(extension, variant)),
-            Label("//markdown/private/external:zipinfo"),
+            Label("//tools/external:zipinfo"),
         ],
         args = [
             "$(rootpath output/%s.%s)" % (target, ext_var_dot(extension, variant)),
-            "$(rootpath %s)" % Label("//markdown/private/external:zipinfo"),
+            "$(rootpath %s)" % Label("//tools/external:zipinfo"),
         ],
     )
 
@@ -104,8 +104,8 @@ def _zip_tests(target, extension, variant, reproducible):
         reproducible,
         "$(rootpath %s)" % Label("//markdown/private/utils:zipdump"),
         Label("//markdown/private/utils:zipdump"),
-        [Label("//markdown/private/external:unzip")],
-        ["$(rootpath %s)" % Label("//markdown/private/external:unzip")],
+        [Label("//tools/external:unzip")],
+        ["$(rootpath %s)" % Label("//tools/external:unzip")],
     )
     _zip_cleaned_test(
         target,
@@ -122,11 +122,11 @@ def _pdf_tests(target, extension, variant, reproducible):
         "$(rootpath %s)" % Label("//markdown/private/utils:pdfdump"),
         Label("//markdown/private/utils:pdfdump"),
         [
-            Label("//markdown/private/external:pdfinfo"),
+            Label("//tools/external:pdfinfo"),
             Label("//markdown/private/utils:pdf2txt"),
         ],
         [
-            "$(rootpath %s)" % Label("//markdown/private/external:pdfinfo"),
+            "$(rootpath %s)" % Label("//tools/external:pdfinfo"),
             "$(rootpath %s)" % Label("//markdown/private/utils:pdf2txt"),
         ],
     )
@@ -139,8 +139,8 @@ def _bin_tests(target, extension, variant):
         variant,
         "$(rootpath %s)" % Label("//markdown/private/utils:bindump"),
         Label("//markdown/private/utils:bindump"),
-        [Label("//markdown/private/external:hexdump")],
-        ["$(rootpath %s)" % Label("//markdown/private/external:hexdump")],
+        [Label("//tools/external:hexdump")],
+        ["$(rootpath %s)" % Label("//tools/external:hexdump")],
     )
 
 def _doc_tests(target, extension, variant):

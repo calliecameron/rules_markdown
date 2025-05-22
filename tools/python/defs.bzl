@@ -94,7 +94,7 @@ def _py_lint(name, type_stub_deps = None, **kwargs):
 
     native_test(
         name = name + "_ruff_lint_test",
-        src = "//markdown/private/external:ruff",
+        src = "//tools/external:ruff",
         out = name + "_ruff_lint",
         args = [
             "check",
@@ -107,7 +107,7 @@ def _py_lint(name, type_stub_deps = None, **kwargs):
 
     native_test(
         name = name + "_ruff_format_test",
-        src = "//markdown/private/external:ruff",
+        src = "//tools/external:ruff",
         out = name + "_ruff_format",
         args = [
             "format",

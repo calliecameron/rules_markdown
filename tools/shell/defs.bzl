@@ -54,16 +54,16 @@ def _sh_lint(name, **kwargs):
         name = name + "_shellcheck_test",
         srcs = ["//tools/shell:shellcheck_test.sh"],
         args = [
-            "$(rootpath //markdown/private/external:shellcheck)",
+            "$(rootpath //tools/external:shellcheck)",
         ] + ["$(location %s)" % src for src in srcs],
         data = [
-            "//markdown/private/external:shellcheck",
+            "//tools/external:shellcheck",
         ] + srcs,
     )
 
     native_test(
         name = name + "_shfmt_test",
-        src = "//markdown/private/external:shfmt",
+        src = "//tools/external:shfmt",
         out = name + "_shfmt",
         args = [
             "-l",

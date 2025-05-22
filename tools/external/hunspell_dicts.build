@@ -4,5 +4,5 @@ filegroup(
         "en/en_GB.aff",
         "en/en_GB.dic",
     ],
-    visibility = ["@rules_markdown//markdown/private/external:__pkg__"],
+    visibility = ["@rules_markdown//tools/external:__pkg__"],
 )
