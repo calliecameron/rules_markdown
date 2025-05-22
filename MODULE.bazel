@@ -128,10 +128,6 @@ nix_pkg.attr(
     attr = "poppler_utils",
     repo = "@nixpkgs",
 )
-nix_pkg.attr(
-    attr = "ruff",
-    repo = "@nixpkgs",
-)
 nix_pkg.expr(
     name = "texlive",
     attr = "",
@@ -162,7 +158,6 @@ use_repo(
     "pandoc",
     "perl538Packages.strip-nondeterminism",
     "poppler_utils",
-    "ruff",
     "texlive",
     "unoconv",
     "unzip",

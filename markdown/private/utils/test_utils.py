@@ -63,7 +63,7 @@ class PandocFilterBase:
         j = json.loads(output.stdout)
         sys.stderr.write(f"Pandoc AST: {j}\n")
         sys.stderr.write(f"Pandoc stderr: {output.stderr}\n")
-        return cast(dict[str, Any], j)
+        return cast("dict[str, Any]", j)
 
     def run(
         self,
@@ -105,7 +105,7 @@ class TestCase(unittest.TestCase):
     @staticmethod
     def load_json(filename: str) -> dict[str, Any]:
         with open(filename, encoding="utf-8") as f:
-            return cast(dict[str, Any], json.load(f))
+            return cast("dict[str, Any]", json.load(f))
 
     @staticmethod
     def dump_json(filename: str, content: Mapping[str, Any]) -> None:
@@ -139,7 +139,7 @@ class RunnerTestCase(TestCase, Generic[T]):
     def _runner(cls) -> T:
         if not cls._runner_instance:
             raise ValueError("Runner missing")
-        return cast(T, cls._runner_instance)
+        return cast("T", cls._runner_instance)
 
     @classmethod
     def test_args(cls) -> tuple[str, ...]:

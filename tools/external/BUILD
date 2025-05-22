@@ -79,12 +79,6 @@ native_binary(
 )
 
 native_binary(
-    name = "ruff",
-    src = "@ruff//:bin/ruff",
-    visibility = ["//:__subpackages__"],
-)
-
-native_binary(
     name = "strip_nondeterminism",
     src = "@perl538Packages.strip-nondeterminism//:bin/strip-nondeterminism",
     visibility = [
