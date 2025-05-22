@@ -1,7 +1,15 @@
 """Shell rules."""
 
+load("@aspect_rules_lint//lint:lint_test.bzl", "lint_test")
+load("@aspect_rules_lint//lint:shellcheck.bzl", "lint_shellcheck_aspect")
 load("@bazel_skylib//rules:native_binary.bzl", "native_test")
-load("//tools/lint:linters.bzl", "shellcheck_test")
+
+_shellcheck = lint_shellcheck_aspect(
+    binary = "@multitool//tools/shellcheck",
+    config = Label("//:.shellcheckrc"),
+)
+
+_shellcheck_test = lint_test(aspect = _shellcheck)
 
 visibility("//...")
 
@@ -58,7 +66,7 @@ def sh_source(name, src, visibility = None):
     )
 
 def _sh_lint(name, srcs, target):
-    shellcheck_test(
+    _shellcheck_test(
         name = name + "_shellcheck_test",
         srcs = [target],
     )
