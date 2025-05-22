@@ -132,10 +132,6 @@ nix_pkg.attr(
     attr = "ruff",
     repo = "@nixpkgs",
 )
-nix_pkg.attr(
-    attr = "shfmt",
-    repo = "@nixpkgs",
-)
 nix_pkg.expr(
     name = "texlive",
     attr = "",
@@ -167,7 +163,6 @@ use_repo(
     "perl538Packages.strip-nondeterminism",
     "poppler_utils",
     "ruff",
-    "shfmt",
     "texlive",
     "unoconv",
     "unzip",

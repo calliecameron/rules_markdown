@@ -86,7 +86,7 @@ native_binary(
 
 native_binary(
     name = "shfmt",
-    src = "@shfmt//:bin/shfmt",
+    src = "@aspect_rules_lint//format:shfmt",
     visibility = ["//:__subpackages__"],
 )
 
