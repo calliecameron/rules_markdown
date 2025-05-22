@@ -5,10 +5,9 @@ load("@pip//:requirements.bzl", "requirement")
 load("@rules_python//python:py_binary.bzl", _py_binary = "py_binary")
 load("@rules_python//python:py_library.bzl", _py_library = "py_library")
 load("@rules_python//python:py_test.bzl", _py_test = "py_test")
+load(":python_version.bzl", "PYTHON_VERSION")
 
 visibility("//...")
-
-PYTHON_VERSION = "3.13.2"
 
 def py_library(name, type_stub_deps = None, **kwargs):
     _py_lint(

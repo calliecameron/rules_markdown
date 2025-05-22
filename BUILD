@@ -67,12 +67,12 @@ sh_test(
         "$(rootpath MODULE.bazel)",
         "$(rootpath .python-version)",
         "$(rootpath pyproject.toml)",
-        "$(rootpath //tools/python:defs.bzl)",
+        "$(rootpath //tools/python:python_version.bzl)",
     ],
     data = [
         ".python-version",
         "MODULE.bazel",
         "pyproject.toml",
-        "//tools/python:defs.bzl",
+        "//tools/python:python_version.bzl",
     ],
 )

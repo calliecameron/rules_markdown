@@ -8,7 +8,7 @@ py_source(
 
 exports_files(
     [
-        "defs.bzl",
+        "python_version.bzl",
     ],
     visibility = ["//:__pkg__"],
 )
