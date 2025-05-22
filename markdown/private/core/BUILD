@@ -1,8 +1,8 @@
 load("@crates//:defs.bzl", "all_crate_deps")
 load("@pip//:requirements.bzl", "requirement")
 load("@rules_rust//rust:defs.bzl", "rust_binary", "rust_test")
-load("//markdown/private/support/python:defs.bzl", "py_binary")
 load("//markdown/private/utils:defs.bzl", "script_py_test")
+load("//tools/python:defs.bzl", "py_binary")
 
 rust_binary(
     name = "preprocess",

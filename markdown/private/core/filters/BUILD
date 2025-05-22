@@ -1,5 +1,5 @@
-load("//markdown/private/support/lua:defs.bzl", "lua_source")
 load("//markdown/private/utils:defs.bzl", "pandoc_filter_py_test")
+load("//tools/lua:defs.bzl", "lua_source")
 
 lua_source(
     name = "validate_ids",

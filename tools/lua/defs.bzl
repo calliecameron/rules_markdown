@@ -27,7 +27,7 @@ def lua_source(name, src, visibility = None):
 
     native_test(
         name = name + "_luaformat_test",
-        src = "//markdown/private/support/lua:lua_format_stub.sh",
+        src = "//tools/lua:lua_format_stub.sh",
         out = name + "_luaformat",
         args = [
             "$(rootpath //markdown/private/external:lua_format)",

@@ -1,4 +1,4 @@
-load("//markdown/private/support/shell:defs.bzl", "sh_source")
+load("//tools/shell:defs.bzl", "sh_source")
 
 sh_source(
     name = "run_tests",

@@ -76,8 +76,8 @@ def _py_lint(name, type_stub_deps = None, **kwargs):
 
     _py_test(
         name = name + "_mypy_test",
-        srcs = ["//markdown/private/support/python:mypy_stub.py"],
-        main = "//markdown/private/support/python:mypy_stub.py",
+        srcs = ["//tools/python:mypy_stub.py"],
+        main = "//tools/python:mypy_stub.py",
         deps = deps + type_stub_deps + [requirement("mypy")],
         args = [
             "--config-file=$(rootpath //:pyproject.toml)",

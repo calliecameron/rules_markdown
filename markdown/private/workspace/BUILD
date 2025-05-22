@@ -1,4 +1,4 @@
-load("//markdown/private/support/shell:defs.bzl", "sh_source", "sh_test")
+load("//tools/shell:defs.bzl", "sh_source", "sh_test")
 
 exports_files(
     [

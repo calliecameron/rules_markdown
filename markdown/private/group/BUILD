@@ -1,7 +1,7 @@
 load("@crates//:defs.bzl", "all_crate_deps")
 load("@rules_rust//rust:defs.bzl", "rust_binary")
-load("//markdown/private/support/shell:defs.bzl", "sh_binary")
 load("//markdown/private/utils:defs.bzl", "script_py_test")
+load("//tools/shell:defs.bzl", "sh_binary")
 
 rust_binary(
     name = "group_summary",

@@ -1,5 +1,5 @@
-load("//markdown/private/support/python:defs.bzl", "py_source")
-load("//markdown/private/support/shell:defs.bzl", "sh_test")
+load("//tools/python:defs.bzl", "py_source")
+load("//tools/shell:defs.bzl", "sh_test")
 
 py_source(
     name = "find_git_repos",

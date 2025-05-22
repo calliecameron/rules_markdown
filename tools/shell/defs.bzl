@@ -52,7 +52,7 @@ def _sh_lint(name, **kwargs):
 
     native.sh_test(
         name = name + "_shellcheck_test",
-        srcs = ["//markdown/private/support/shell:shellcheck_test.sh"],
+        srcs = ["//tools/shell:shellcheck_test.sh"],
         args = [
             "$(rootpath //markdown/private/external:shellcheck)",
         ] + ["$(location %s)" % src for src in srcs],

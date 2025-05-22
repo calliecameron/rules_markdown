@@ -1,8 +1,8 @@
 load("@crates//:defs.bzl", "all_crate_deps")
 load("@rules_rust//rust:defs.bzl", "rust_binary")
-load("//markdown/private/support/lua:defs.bzl", "lua_source")
-load("//markdown/private/support/shell:defs.bzl", "sh_binary", "sh_test")
 load("//markdown/private/utils:defs.bzl", "pandoc_filter_py_test", "script_py_test")
+load("//tools/lua:defs.bzl", "lua_source")
+load("//tools/shell:defs.bzl", "sh_binary", "sh_test")
 
 exports_files(
     [

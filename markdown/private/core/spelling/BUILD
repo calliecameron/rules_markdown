@@ -1,6 +1,6 @@
-load("//markdown/private/support/lua:defs.bzl", "lua_source")
-load("//markdown/private/support/shell:defs.bzl", "sh_binary")
 load("//markdown/private/utils:defs.bzl", "pandoc_filter_py_test", "script_py_test")
+load("//tools/lua:defs.bzl", "lua_source")
+load("//tools/shell:defs.bzl", "sh_binary")
 
 exports_files(
     [

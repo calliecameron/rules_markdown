@@ -48,7 +48,7 @@ EXPECTED_PYTHON_BZL_VERSION="${PYTHON_VERSION}"
 ACTUAL_PYTHON_BZL_VERSION="$(grep '^PYTHON_VERSION = ' "${PYTHON_BZL}" | grep -E -o '[0-9]+\.[0-9]+\.[0-9]+')"
 
 if [ "${ACTUAL_PYTHON_BZL_VERSION}" != "${EXPECTED_PYTHON_BZL_VERSION}" ]; then
-    echo "PYTHON_VERSION in markdown/private/support/python/defs.bzl must be ${EXPECTED_PYTHON_BZL_VERSION}; got ${ACTUAL_PYTHON_BZL_VERSION}"
+    echo "PYTHON_VERSION in tools/python/defs.bzl must be ${EXPECTED_PYTHON_BZL_VERSION}; got ${ACTUAL_PYTHON_BZL_VERSION}"
     FAIL='t'
 fi
 

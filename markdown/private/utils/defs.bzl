@@ -2,7 +2,7 @@
 
 load("@bazel_skylib//lib:shell.bzl", "shell")
 load("@pip//:requirements.bzl", "requirement")
-load("//markdown/private/support/python:defs.bzl", "py_test")
+load("//tools/python:defs.bzl", "py_test")
 
 visibility(["//markdown/private/...", "//readme", "//"])
 

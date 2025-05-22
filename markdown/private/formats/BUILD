@@ -1,5 +1,5 @@
-load("//markdown/private/support/shell:defs.bzl", "sh_binary")
 load("//markdown/private/utils:defs.bzl", "script_py_test")
+load("//tools/shell:defs.bzl", "sh_binary")
 
 sh_binary(
     name = "write_open_script",

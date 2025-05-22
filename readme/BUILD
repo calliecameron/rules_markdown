@@ -1,6 +1,6 @@
 load("@markdown//:defs.bzl", "md_document")
-load("//markdown/private/support/shell:defs.bzl", "sh_source")
 load("//markdown/testing:defs.bzl", "output_test")
+load("//tools/shell:defs.bzl", "sh_source")
 load("defs.bzl", "wrap_file")
 
 sh_source(
