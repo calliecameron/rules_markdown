@@ -85,12 +85,6 @@ native_binary(
 )
 
 native_binary(
-    name = "shellcheck",
-    src = "@shellcheck//:bin/shellcheck",
-    visibility = ["//:__subpackages__"],
-)
-
-native_binary(
     name = "shfmt",
     src = "@shfmt//:bin/shfmt",
     visibility = ["//:__subpackages__"],

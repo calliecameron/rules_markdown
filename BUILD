@@ -37,6 +37,7 @@ exports_files(
         "pyproject.toml",
         ".luacheckrc",
         ".lua-format",
+        ".shellcheckrc",
     ],
     visibility = ["//:__subpackages__"],
 )

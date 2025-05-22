@@ -133,10 +133,6 @@ nix_pkg.attr(
     repo = "@nixpkgs",
 )
 nix_pkg.attr(
-    attr = "shellcheck",
-    repo = "@nixpkgs",
-)
-nix_pkg.attr(
     attr = "shfmt",
     repo = "@nixpkgs",
 )
@@ -171,13 +167,24 @@ use_repo(
     "perl538Packages.strip-nondeterminism",
     "poppler_utils",
     "ruff",
-    "shellcheck",
     "shfmt",
     "texlive",
     "unoconv",
     "unzip",
     "zip",
 )
+
+bazel_dep(
+    name = "aspect_rules_lint",
+    version = "1.4.2",
+)
+bazel_dep(
+    name = "rules_multitool",
+    version = "1.3.0",
+)
+
+multitool = use_extension("@rules_multitool//multitool:extension.bzl", "multitool")
+use_repo(multitool, "multitool")
 
 hunspell_dicts = use_extension("//tools/external:hunspell_dicts.bzl", "hunspell_dicts")
 use_repo(hunspell_dicts, "hunspell_dicts")
