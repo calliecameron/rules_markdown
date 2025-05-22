@@ -85,12 +85,6 @@ native_binary(
 )
 
 native_binary(
-    name = "shfmt",
-    src = "@aspect_rules_lint//format:shfmt",
-    visibility = ["//:__subpackages__"],
-)
-
-native_binary(
     name = "strip_nondeterminism",
     src = "@perl538Packages.strip-nondeterminism//:bin/strip-nondeterminism",
     visibility = [

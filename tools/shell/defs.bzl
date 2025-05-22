@@ -76,7 +76,7 @@ def _sh_lint(name, srcs, target):
 
     native_test(
         name = name + "_shfmt_test",
-        src = "//tools/external:shfmt",
+        src = "@aspect_rules_lint//format:shfmt",
         out = name + "_shfmt",
         args = [
             "-l",
