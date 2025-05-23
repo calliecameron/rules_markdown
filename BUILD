@@ -1,7 +1,12 @@
 load("@markdown//:defs.bzl", "md_git_repo", "md_workspace")
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
 load("//markdown/private/utils:defs.bzl", "required_files")
+load("//tools/format:defs.bzl", "format")
 load("//tools/shell:defs.bzl", "sh_test")
+
+format(
+    name = "format",
+)
 
 compile_pip_requirements(
     name = "requirements",

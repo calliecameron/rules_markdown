@@ -103,17 +103,3 @@ def _py_lint(name, type_stub_deps = None, **kwargs):
             "//:pyproject.toml",
         ] + srcs + deps,
     )
-
-    native_test(
-        name = name + "_ruff_format_test",
-        src = "@multitool//tools/ruff",
-        out = name + "_ruff_format",
-        args = [
-            "format",
-            "--config=$(rootpath //:pyproject.toml)",
-            "--diff",
-        ] + ["$(location %s)" % src for src in srcs],
-        data = [
-            "//:pyproject.toml",
-        ] + srcs + deps,
-    )
