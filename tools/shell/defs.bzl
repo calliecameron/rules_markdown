@@ -3,14 +3,14 @@
 load("@aspect_rules_lint//lint:lint_test.bzl", "lint_test")
 load("@aspect_rules_lint//lint:shellcheck.bzl", "lint_shellcheck_aspect")
 
+visibility("//...")
+
 _shellcheck = lint_shellcheck_aspect(
     binary = "@multitool//tools/shellcheck",
     config = Label("//:.shellcheckrc"),
 )
 
 _shellcheck_test = lint_test(aspect = _shellcheck)
-
-visibility("//...")
 
 def sh_library(name, srcs = [], **kwargs):
     native.sh_library(
@@ -51,13 +51,13 @@ def sh_source(name, src, visibility = None):
         visibility = visibility or ["//visibility:private"],
     )
     native.sh_library(
-        name = name + "_lib_for_shellcheck",
+        name = name + "_lint_lib",
         srcs = [src],
         visibility = ["//visibility:private"],
     )
     _sh_lint(
         name = name,
-        target = name + "_lib_for_shellcheck",
+        target = name + "_lint_lib",
     )
 
 def _sh_lint(name, target):
