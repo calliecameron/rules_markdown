@@ -10,18 +10,18 @@ exports_files(
 
 sh_source(
     name = "refresh",
-    src = "refresh",
+    src = "refresh.sh",
     visibility = ["//visibility:public"],
 )
 
 sh_source(
     name = "summarise_publications",
-    src = "summarise_publications",
+    src = "summarise_publications.sh",
     visibility = ["//visibility:public"],
 )
 
 sh_source(
     name = "summarise_contents",
-    src = "summarise_contents",
+    src = "summarise_contents.sh",
     visibility = ["//visibility:public"],
 )

@@ -16,12 +16,12 @@ def md_summary(name = None):  # buildifier: disable=unused-variable
 
     copy = [
         (
-            Label("//markdown/private/summary:summarise_contents"),
+            Label("//markdown/private/summary:summarise_contents.sh"),
             "summarise_contents",
             "700",
         ),
         (
-            Label("//markdown/private/summary:summarise_publications"),
+            Label("//markdown/private/summary:summarise_publications.sh"),
             "summarise_publications",
             "700",
         ),
@@ -35,7 +35,7 @@ def md_summary(name = None):  # buildifier: disable=unused-variable
             ),
             (
                 Label("//markdown/private/summary:refresh"),
-                subpackage_name + "/refresh",
+                subpackage_name + "/refresh.sh",
                 "700",
             ),
         ]

@@ -46,7 +46,7 @@ def md_git_repo(
 
     native.genrule(
         name = "precommit",
-        srcs = [Label("//markdown/private/git:precommit_template")],
+        srcs = [Label("//markdown/private/git:precommit_template.sh")],
         outs = ["precommit.sh"],
         cmd = "sed 's/@@@@@/%s/g' <$< >$@" % ("t" if precommit_build_all else ""),
     )
@@ -68,7 +68,7 @@ def md_git_repo(
             "600",
         ),
         (
-            Label("//markdown/private/git:run_tests"),
+            Label("//markdown/private/git:run_tests.sh"),
             ".git/hooks/markdown_run_tests",
             "700",
         ),

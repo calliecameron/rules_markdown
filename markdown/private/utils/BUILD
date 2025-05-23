@@ -120,13 +120,13 @@ sh_test(
 
 py_source(
     name = "git_repo_version",
-    src = "git_repo_version",
+    src = "git_repo_version.py",
     visibility = ["//visibility:public"],
 )
 
 sh_test(
     name = "git_repo_version_test",
     srcs = ["git_repo_version_test.sh"],
-    args = ["$(rootpath git_repo_version)"],
-    data = ["git_repo_version"],
+    args = ["$(rootpath git_repo_version.py)"],
+    data = ["git_repo_version.py"],
 )

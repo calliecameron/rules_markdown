@@ -10,7 +10,7 @@ def _markdown_impl(module_ctx):
 
     result = module_ctx.execute(
         [
-            str(module_ctx.path(Label("//markdown/extensions/private:find_git_repos"))),
+            str(module_ctx.path(Label("//markdown/extensions/private:find_git_repos.py"))),
             str(root),
         ],
     )

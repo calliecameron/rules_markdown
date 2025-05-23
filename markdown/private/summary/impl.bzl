@@ -14,7 +14,7 @@ def md_summary_impl(contents, md_group):
                 "600",
             ),
             (
-                Label("//markdown/private/summary:refresh"),
+                Label("//markdown/private/summary:refresh.sh"),
                 "refresh",
                 "700",
             ),

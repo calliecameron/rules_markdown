@@ -46,12 +46,12 @@ def md_workspace(name = None, extra_bazelrc_lines = None):  # buildifier: disabl
         name = "workspace",
         copy = [
             (
-                Label("//markdown/private/workspace:workspace_status"),
+                Label("//markdown/private/workspace:workspace_status.sh"),
                 ".markdown_workspace/workspace_status",
                 "700",
             ),
             (
-                Label("//markdown/private/utils:git_repo_version"),
+                Label("//markdown/private/utils:git_repo_version.py"),
                 ".markdown_workspace/git_repo_version",
                 "700",
             ),

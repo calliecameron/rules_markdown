@@ -11,13 +11,13 @@ exports_files(
 
 sh_source(
     name = "precommit_template",
-    src = "precommit_template",
+    src = "precommit_template.sh",
     visibility = ["//visibility:public"],
 )
 
 sh_source(
     name = "run_tests",
-    src = "run_tests",
+    src = "run_tests.sh",
     visibility = ["//visibility:public"],
 )
 

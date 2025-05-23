@@ -23,7 +23,7 @@ sh_test(
 
 sh_source(
     name = "workspace_status",
-    src = "workspace_status",
+    src = "workspace_status.sh",
     visibility = ["//visibility:public"],
 )
 
@@ -31,11 +31,11 @@ sh_test(
     name = "workspace_status_test",
     srcs = ["workspace_status_test.sh"],
     args = [
-        "$(rootpath workspace_status)",
-        "$(rootpath //markdown/private/utils:git_repo_version)",
+        "$(rootpath workspace_status.sh)",
+        "$(rootpath //markdown/private/utils:git_repo_version.py)",
     ],
     data = [
-        "workspace_status",
-        "//markdown/private/utils:git_repo_version",
+        "workspace_status.sh",
+        "//markdown/private/utils:git_repo_version.py",
     ],
 )

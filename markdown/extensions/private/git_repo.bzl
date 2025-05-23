@@ -51,7 +51,7 @@ git_repo = repository_rule(
     attrs = {
         "root": attr.string(mandatory = True),
         "_git_repo_version": attr.label(
-            default = "//markdown/private/utils:git_repo_version",
+            default = "//markdown/private/utils:git_repo_version.py",
             executable = True,
             cfg = "exec",
         ),
