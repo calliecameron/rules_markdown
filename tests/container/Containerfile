@@ -4,7 +4,6 @@ ENV TZ UTC
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
-    catdoc \
     g++ \
     gcc \
     git \

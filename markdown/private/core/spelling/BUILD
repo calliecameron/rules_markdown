@@ -43,6 +43,7 @@ script_py_test(
     name = "spellcheck_test",
     src = "spellcheck_test.py",
     args = [
+        "$(rootpath //markdown/private/external:perl)",
         "$(rootpath //markdown/private/external:hunspell)",
         "$(rootpath //markdown/private/external:locale_archive)",
         "$(rootpaths //markdown/private/external:hunspell_dicts)",
@@ -51,6 +52,7 @@ script_py_test(
         "//markdown/private/external:hunspell",
         "//markdown/private/external:hunspell_dicts",
         "//markdown/private/external:locale_archive",
+        "//markdown/private/external:perl",
     ],
     script = ":spellcheck",
 )

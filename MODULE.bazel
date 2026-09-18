@@ -82,10 +82,20 @@ nix_repo.github(
     sha256 = "aa9cb576b2ccfc2a8e9dfe632352aca8caec9acc69ec56f338f8588a846e73e0",
 )
 use_repo(nix_repo, "nixpkgs")
+nix_repo.github(
+    name = "nixpkgsCatdoc",
+    commit = "b1b875982b17dabde9b4a37f3e229e74913e6db3",  # unstable as of 2026/09/18
+    sha256 = "625050a6882ac975c534258fb3ab4697ab9af35e8b8085ba4605ec6bfa09aa3d",
+)
+use_repo(nix_repo, "nixpkgsCatdoc")
 
 nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg", isolate = True)
 nix_pkg.attr(
     attr = "calibre",
+)
+nix_pkg.attr(
+    attr = "catdoc",
+    repo = "@nixpkgsCatdoc",
 )
 nix_pkg.attr(
     attr = "glibcLocales",
@@ -111,6 +121,9 @@ nix_pkg.attr(
 )
 nix_pkg.attr(
     attr = "pandoc",
+)
+nix_pkg.attr(
+    attr = "perl",
 )
 nix_pkg.attr(
     attr = "perl538Packages.strip-nondeterminism",
@@ -144,6 +157,7 @@ nix_pkg.attr(
 use_repo(
     nix_pkg,
     "calibre",
+    "catdoc",
     "glibcLocales",
     "hexdump",
     "hunspell",
@@ -151,6 +165,7 @@ use_repo(
     "luaformatter",
     "markdownlint-cli",
     "pandoc",
+    "perl",
     "perl538Packages.strip-nondeterminism",
     "poppler_utils",
     "ruff",

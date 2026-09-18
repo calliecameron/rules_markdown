@@ -7,6 +7,12 @@ native_binary(
 )
 
 native_binary(
+    name = "catdoc",
+    src = "@catdoc//:bin/catdoc",
+    visibility = ["//visibility:public"],
+)
+
+native_binary(
     name = "hexdump",
     src = "@hexdump//:bin/hexdump",
     visibility = ["//visibility:public"],
@@ -69,6 +75,15 @@ native_binary(
     visibility = [
         "//markdown/private/core:__subpackages__",
         "//markdown/private/formats:__subpackages__",
+    ],
+)
+
+native_binary(
+    name = "perl",
+    src = "@perl//:bin/perl",
+    visibility = [
+        "//markdown/private/core:__pkg__",
+        "//markdown/private/core/spelling:__pkg__",
     ],
 )
 

@@ -21,7 +21,7 @@ Output formats include:
 
   ```shell
   # Ubuntu 22.04
-  sudo apt-get install catdoc g++ gcc git
+  sudo apt-get install g++ gcc git
   ```
 
 * [Nix](https://nixos.org/)
@@ -99,8 +99,8 @@ must be in this target's `deps`:
 
 ## Current limitations
 
+* On NixOS, Bazel has to be wrapped in `buildFHSEnv`, and may also need the modules `programs.nix-ld` and `services.envfs` to be enabled.
 * Spellchecking language is hardcoded to en_GB.
 * Lint settings can't be customised.
 * Templates for pdf, epub etc. can't be customised.
 * All files must be in the same workspace -- no cross-workspace dependencies.
-* Catdoc must be installed as a system package, because the version in nixpkgs doesn't work.

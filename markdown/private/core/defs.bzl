@@ -155,6 +155,7 @@ def _spellcheck(ctx):
     ctx.actions.run(
         outputs = [spellcheck_ok],
         inputs = [
+            ctx.executable._perl,
             ctx.executable._hunspell,
             ctx.file._locale_archive,
             custom_dictionary,
@@ -162,6 +163,7 @@ def _spellcheck(ctx):
         ] + ctx.files._hunspell_dicts,
         executable = ctx.executable._spellcheck,
         arguments = [
+            ctx.executable._perl.path,
             ctx.executable._hunspell.path,
             ctx.files._hunspell_dicts[0].dirname,
             ctx.file._locale_archive.path,
@@ -493,6 +495,11 @@ md_file = rule(
         "_locale_archive": attr.label(
             allow_single_file = True,
             default = "//markdown/private/external:locale_archive",
+        ),
+        "_perl": attr.label(
+            default = "//markdown/private/external:perl",
+            executable = True,
+            cfg = "exec",
         ),
         "_spellcheck": attr.label(
             default = "//markdown/private/core/spelling:spellcheck",

@@ -1,9 +1,9 @@
 bazel
 bazelisk
-catdoc
 epub
 etc
 md
+NixOS
 nixpkgs
 pandoc
 Shunn

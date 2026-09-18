@@ -850,7 +850,7 @@
     "@@rules_nixpkgs_core~//extensions:package.bzl%nix_pkg%rules_markdown@_~nix_pkg": {
       "general": {
         "bzlTransitiveDigest": "uAGqafYVHfrpValToJbVqUKuhSWG/ISg8w7II/Z+5ao=",
-        "usagesDigest": "ZwdF05o2INhkQ3JSskWn9VtpNDTZkmlKztD2+CtVRuE=",
+        "usagesDigest": "8O+uBdPjIFw4qd1ZbCex0uOx+00k9HrBuq/Hyom5cx4=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -864,6 +864,22 @@
               "nix_file_deps": {},
               "nix_file_content": "",
               "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
+              "repositories": {},
+              "build_file_content": "",
+              "nixopts": [],
+              "quiet": false,
+              "fail_not_supported": true
+            }
+          },
+          "catdoc": {
+            "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
+            "ruleClassName": "_nixpkgs_package",
+            "attributes": {
+              "unmangled_name": "catdoc",
+              "attribute_path": "catdoc",
+              "nix_file_deps": {},
+              "nix_file_content": "",
+              "repository": "@@rules_nixpkgs_core~~_nix_repo~rules_markdown~~nix_repo~nixpkgsCatdoc//:nixpkgsCatdoc",
               "repositories": {},
               "build_file_content": "",
               "nixopts": [],
@@ -973,6 +989,22 @@
             "attributes": {
               "unmangled_name": "pandoc",
               "attribute_path": "pandoc",
+              "nix_file_deps": {},
+              "nix_file_content": "",
+              "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
+              "repositories": {},
+              "build_file_content": "",
+              "nixopts": [],
+              "quiet": false,
+              "fail_not_supported": true
+            }
+          },
+          "perl": {
+            "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
+            "ruleClassName": "_nixpkgs_package",
+            "attributes": {
+              "unmangled_name": "perl",
+              "attribute_path": "perl",
               "nix_file_deps": {},
               "nix_file_content": "",
               "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
@@ -1165,6 +1197,57 @@
               "strip_prefix": "nixpkgs-24.05",
               "integrity": "",
               "sha256": "911314b81780f26fdaf87e17174210bdbd40c86bac1795212f257cdc236a1e78"
+            }
+          }
+        },
+        "moduleExtensionMetadata": {
+          "explicitRootModuleDirectDeps": [],
+          "explicitRootModuleDirectDevDeps": [],
+          "useAllRepos": "NO",
+          "reproducible": false
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_nixpkgs_core~",
+            "bazel_skylib",
+            "bazel_skylib~"
+          ],
+          [
+            "rules_nixpkgs_core~",
+            "bazel_tools",
+            "bazel_tools"
+          ]
+        ]
+      }
+    },
+    "@@rules_nixpkgs_core~//extensions:repository.bzl%nix_repo%rules_markdown@_~nix_repo": {
+      "general": {
+        "bzlTransitiveDigest": "0Ht4ap98u2/ZoeBB9bC10VcHVLEy3YCtLhz580evslw=",
+        "usagesDigest": "p4ulBrj08APB/phZpY5hTNRQ7n1k/o5gj/hwS5roRVs=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "nixpkgs": {
+            "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
+            "ruleClassName": "_nixpkgs_http_repository",
+            "attributes": {
+              "unmangled_name": "nixpkgs",
+              "url": "https://github.com/NixOS/nixpkgs/archive/138474277cc4b56b5e1ca7fad0e113aff93e8780.tar.gz",
+              "strip_prefix": "nixpkgs-138474277cc4b56b5e1ca7fad0e113aff93e8780",
+              "integrity": "",
+              "sha256": "aa9cb576b2ccfc2a8e9dfe632352aca8caec9acc69ec56f338f8588a846e73e0"
+            }
+          },
+          "nixpkgsCatdoc": {
+            "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
+            "ruleClassName": "_nixpkgs_http_repository",
+            "attributes": {
+              "unmangled_name": "nixpkgsCatdoc",
+              "url": "https://github.com/NixOS/nixpkgs/archive/b1b875982b17dabde9b4a37f3e229e74913e6db3.tar.gz",
+              "strip_prefix": "nixpkgs-b1b875982b17dabde9b4a37f3e229e74913e6db3",
+              "integrity": "",
+              "sha256": "625050a6882ac975c534258fb3ab4697ab9af35e8b8085ba4605ec6bfa09aa3d"
             }
           }
         },

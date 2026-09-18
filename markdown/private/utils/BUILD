@@ -56,6 +56,12 @@ sh_binary(
 sh_binary(
     name = "docdump",
     srcs = ["docdump.sh"],
+    args = [
+        "$(rootpath //markdown/private/external:catdoc)",
+    ],
+    data = [
+        "//markdown/private/external:catdoc",
+    ],
     visibility = ["//visibility:public"],
 )
 

@@ -13,9 +13,10 @@ Test text baz Quux shouldn’t fail
 
 class TestWriteDictionary(test_utils.ScriptTestCase):
     def run_spellcheck(self, doc: str, dictionary: Sequence[str]) -> str:
-        hunspell = self.test_args()[0]
-        locale_archive = self.test_args()[1]
-        dict_dir = os.path.dirname(self.test_args()[2])
+        perl = self.test_args()[0]
+        hunspell = self.test_args()[1]
+        locale_archive = self.test_args()[2]
+        dict_dir = os.path.dirname(self.test_args()[3])
 
         in_file = os.path.join(self.tmpdir(), "in.md")
         self.dump_file(in_file, doc)
@@ -27,6 +28,7 @@ class TestWriteDictionary(test_utils.ScriptTestCase):
 
         self.run_script(
             args=[
+                perl,
                 hunspell,
                 dict_dir,
                 locale_archive,

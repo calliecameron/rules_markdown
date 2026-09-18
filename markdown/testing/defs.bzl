@@ -151,6 +151,8 @@ def _doc_tests(target, extension, variant):
         variant,
         "$(rootpath %s)" % Label("//markdown/private/utils:docdump"),
         Label("//markdown/private/utils:docdump"),
+        [Label("//markdown/private/external:catdoc")],
+        ["$(rootpath %s)" % Label("//markdown/private/external:catdoc")],
     )
 
 def output_test(target, reproducible, name = None):  # buildifier: disable=unused-variable
