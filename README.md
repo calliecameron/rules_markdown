@@ -58,7 +58,7 @@ module(
 
 bazel_dep(
     name = "rules_markdown",
-    version = "0.18.2",
+    version = "0.18.3",
 )
 archive_override(
     module_name = "rules_markdown",

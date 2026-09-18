@@ -850,7 +850,7 @@
     "@@rules_nixpkgs_core~//extensions:package.bzl%nix_pkg%rules_markdown@_~nix_pkg": {
       "general": {
         "bzlTransitiveDigest": "uAGqafYVHfrpValToJbVqUKuhSWG/ISg8w7II/Z+5ao=",
-        "usagesDigest": "8O+uBdPjIFw4qd1ZbCex0uOx+00k9HrBuq/Hyom5cx4=",
+        "usagesDigest": "KkLI+geB2Frpm+La/o4Amk+SEEzMuo7Kd7Na4YDwmtQ=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -1223,7 +1223,7 @@
     "@@rules_nixpkgs_core~//extensions:repository.bzl%nix_repo%rules_markdown@_~nix_repo": {
       "general": {
         "bzlTransitiveDigest": "0Ht4ap98u2/ZoeBB9bC10VcHVLEy3YCtLhz580evslw=",
-        "usagesDigest": "p4ulBrj08APB/phZpY5hTNRQ7n1k/o5gj/hwS5roRVs=",
+        "usagesDigest": "6+KRPHKlrr5TMMQD2HjhIF70F3PamukoMX4cRDTFju0=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
